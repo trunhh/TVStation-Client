@@ -1,0 +1,39 @@
+.loading-container {
+    /* width: 100%; */
+    width: fit-content;
+    /* height: 100vh; */
+    position: relative;
+    margin: auto;
+}
+
+.loading-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    /* right: 0; */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 4;
+    background-color: white;
+    opacity: .65;
+}
+
+.loading-main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* margin-top: -16rem; */
+    /* align-items: center; */
+}
+
+/* Nếu dùng align items: center cho loading-man thí không cần đoạn này */
+.loading-main img {
+    width: 320px;
+    height: 211px;
+    margin: auto;
+}
+.loading-main h4 {
+    text-align: center;
+}

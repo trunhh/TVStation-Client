@@ -1,0 +1,65 @@
+.signin-container {
+    max-width: 400px;
+    width: 400px;
+    margin: auto;
+    margin-top: 1.5rem;
+}
+
+.signin-header h1 {
+    text-align: center;
+    font-weight: 400;
+    font-size: 1.6rem;
+}
+
+.signin-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #9c27b0;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.remember-me {
+    margin-top: 1rem;
+}
+
+.btn-submit {
+    margin-top: 2rem;
+}
+
+.group-link {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.35rem;
+}
+
+.group-link a{
+    color: #1976d2;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    font-size: 0.875rem;
+}
+
+.copy-right {
+    color: rgba(0, 0, 0, .6);
+    font-weight: 400;
+    letter-spacing: 0.01071em;
+    font-size: 0.875rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.copy-right a {
+    color: rgba(0, 0, 0, .6);
+}
+
+.signin-main > p:first-child {
+    color:  red;
+    font-size: .8rem;
+    text-align: center;
+    margin-top: .8rem;
+}

@@ -1,0 +1,19 @@
+/* h1 {
+    color: red;
+} */
+
+.h3 {
+    color: orange
+}
+
+/* .h3.hide {
+    display: none;
+} */
+
+.hide {
+    display: none;
+}
+
+.demo .h3 {
+    color: aqua;
+}

@@ -1,0 +1,77 @@
+
+.formcontrol-input {
+    position: relative;
+}
+
+.input-item {
+    position: relative;
+}
+
+input {
+    width: 100%;
+    height: 3rem;
+    background: none;
+    /* border: 0; */
+    outline: none;
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, .87);
+    border: 1px solid rgba(0, 0, 0, .23);
+    border-radius: 4px;
+    padding: 0 14px;
+}
+
+input.active,  input.allowed{
+    border-color: transparent;
+}
+
+.label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba(0, 0, 0, .5);
+    transform: translate(14px, 14px);
+    text-align: center;
+    pointer-events: none;
+    transition: transform .3s ease-in-out;
+    background: transparent;
+}
+
+.label.active {
+    transform: translate(8px, -8px) scale(.88);
+    color: rgb(25, 118, 210);
+}
+
+.label.allowed {
+    transform: translate(8px, -8px) scale(.88);
+}
+
+fieldset {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: -10px;
+    pointer-events: none;
+    width: 100%;
+    border-color: rgb(25, 118, 210);
+    border-radius: 4px;
+    display: none;
+    padding: 0 15px 0 8px;
+}
+
+fieldset.active {
+    display: initial;
+}
+
+fieldset.allowed {
+    display: initial;
+    border: 1px solid rgba(0, 0, 0, .23)
+}
+
+fieldset span {
+    font-size: .88rem;
+    padding: 0 5px 0 5px;
+    visibility: hidden;
+}
+

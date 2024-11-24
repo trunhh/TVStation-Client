@@ -1,0 +1,20 @@
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
+import viewReducer from './reducers/viewReducer';
+import userReducer from './reducers/userReducers';
+import authReducer from './reducers/authReducers';
+import groupReducer from './reducers/groupReducers';
+
+const rootReducer = combineReducers({
+    view: viewReducer,
+    user: userReducer,
+    auth: authReducer,
+    group: groupReducer,
+})
+
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+
+const store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)))
+
+export default store;
+

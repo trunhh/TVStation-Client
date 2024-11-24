@@ -1,0 +1,14 @@
+.checkbox {
+    display: flex;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.checkbox-checked {
+    color: rgb(25, 118, 210);
+}
+
+.checkbox span{
+    margin-left: .5rem;
+    margin-top: 2px;
+}
