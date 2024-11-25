@@ -9,9 +9,9 @@ const initialStateUser = {
         email: '',
         password: ''
     },
-    errorMessage: null,
+    errorMessageLoadUser: null,
     errorMessageChangePassword: null,
-    messageChangePasswordSuccess: null,
+    successMessageChangePassword: null,
 }
 
 const userReducer = (state = initialStateUser, action) => {
@@ -25,7 +25,7 @@ const userReducer = (state = initialStateUser, action) => {
         case userConstants.GET_USER_INFO_FAIL:
             return {
                 ...state,
-                errorMessage: action.payload
+                errorMessageLoadUser: action.payload
             }
 
         //Update user info
@@ -36,20 +36,20 @@ const userReducer = (state = initialStateUser, action) => {
         case userConstants.UPDATE_USER_INFO_FAIL:
             return {
                 ...state, 
-                errorMessage: action.payload
+                errorMessageLoadUser: action.payload
             }
 
         //Change password
         case userConstants.CHANGE_PASSWORD_REQUEST:
             return {
                 ...state, 
-                messageChangePasswordSuccess:  null,
+                successMessageChangePassword:  null,
                 errorMessageChangePassword: null
             }
         case userConstants.CHANGE_PASSWORD_SUCCESS:
             return {
                 ...state,
-                messageChangePasswordSuccess: 'Your password changed. Please re-active account by click the link which our system has just send to your email.'
+                successMessageChangePassword: 'Your password changed. Please re-active account by click the link which our system has just send to your email.'
             }
         case userConstants.CHANGE_PASSWORD_FAIL:
             return {

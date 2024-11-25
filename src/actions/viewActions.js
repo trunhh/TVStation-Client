@@ -7,19 +7,10 @@ const toggleSidebar = () => {
     }
 }
 
-const toggleFormGroup = (isOpen) => {
-    return {
-        type: viewConstants.TOGGLE_FROM_GROUP,
-        payload: {
-            toggleOpenFormGroup: isOpen
-        }
-    }
 
-}
 
 const viewActions = {
-    toggleSidebar,
-    toggleFormGroup
+    toggleSidebar
 }
 
 export default viewActions;

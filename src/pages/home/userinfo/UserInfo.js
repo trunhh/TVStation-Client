@@ -85,13 +85,13 @@ const UserInfo = (props) => {
                 </div>
                 <div className="content">
                     <form className="form-update">
-                        {props.errorMessage &&
+                        {props.errorMessageLoadUser &&
                             <div className="error">
-                                <p>Server response status code: {props.errorMessage.statusCode}.&nbsp; </p>
-                                <p>{props.errorMessage.message}</p>
+                                <p>Server response status code: {props.errorMessageLoadUser.statusCode}.&nbsp; </p>
+                                <p>{props.errorMessageLoadUser.message}</p>
                             </div>
                         }
-                        {   !props.errorMessage &&
+                        {   !props.errorMessageLoadUser &&
                             <div className="about-user">
                                 <h1>ABOUT USER</h1>
                                 <p>
@@ -302,7 +302,7 @@ const mapStateToProps = (state) => {
     return {
         isLoading: state.view.isLoading,
         user: state.user.user,
-        errorMessage: state.user.errorMessage,
+        errorMessageLoadUser: state.user.errorMessageLoadUser,
     }
 }
 

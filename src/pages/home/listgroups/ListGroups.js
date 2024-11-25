@@ -1,7 +1,4 @@
-import { Link } from 'react-router-dom'
 import './ListGroups.scss'
-
-//import { listGroups } from '../../data/data'
 
 import { MdEdit } from 'react-icons/md'
 
@@ -16,8 +13,6 @@ import { MdSearch } from 'react-icons/md'
 import FormGroupInfo from './FromGroupInfo'
 
 import { connect } from 'react-redux'
-
-import viewActions from '../../../actions/viewActions'
 
 import { useEffect, useState } from 'react'
 
@@ -228,7 +223,7 @@ const ListGroups = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        formGroupIsOpen: state.view.formGroupIsOpen,
+        formGroupIsOpen: state.group.formGroupIsOpen,
         isLoading: state.view.isLoading,
         listGroups: state.group.listGroups,
         totalPagesListGroups: state.group.totalPagesListGroups,
@@ -241,7 +236,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
     return {
         toggleFormGroup: (isOpen) => {
-            dispatch(viewActions.toggleFormGroup(isOpen))
+            dispatch(groupActions.toggleFormGroup(isOpen))
         },
         getListGroups: (groupFilterForm) => {
             dispatch(groupActions.getListGroups(groupFilterForm))

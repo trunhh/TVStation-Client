@@ -64,7 +64,7 @@ const PasswordChanging = (props) => {
                     </CustomButton>
                 </FormGroup>
                 <FormGroup>
-                    <p style={{color: 'blue'}}>{props.messageChangePasswordSuccess}</p>
+                    <p style={{color: 'blue'}}>{props.successMessageChangePassword}</p>
                     <p>{props.errorMessageChangePassword}</p>
                 </FormGroup>
             </form>
@@ -103,7 +103,7 @@ const mapStateToProps = (state) => {
     return {
         isLoading: state.view.isLoading,
         errorMessageChangePassword: state.user.errorMessageChangePassword,
-        messageChangePasswordSuccess: state.user.messageChangePasswordSuccess,
+        successMessageChangePassword: state.user.successMessageChangePassword,
     }
 }
 

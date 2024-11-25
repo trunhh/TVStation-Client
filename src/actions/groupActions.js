@@ -100,7 +100,7 @@ const updateGroup = (groupItem) => async(dispath) => {
         })
 
         //close form
-        dispath(viewActions.toggleFormGroup(false))
+        toggleFormGroup(false)
     }catch (error) {
         dispath({
             type: groupConstants.UPDATE_GROUP_FAIL,
@@ -143,7 +143,7 @@ const creatingGroup = (groupItem) => async(dispath) => {
         })
 
         //close form
-        dispath(viewActions.toggleFormGroup(false))
+        toggleFormGroup(false)
     }catch (error) {
         dispath({
             type: groupConstants.CREATE_GROUP_FAIL,
@@ -191,12 +191,22 @@ const deleteGroup = groupId => async(dispath) => {
     }
 }
 
+const toggleFormGroup = (isOpen) => {
+    return {
+        type: groupConstants.TOGGLE_FROM_GROUP,
+        payload: {
+            toggleOpenFormGroup: isOpen
+        }
+    }
+
+}
 
 const groupActions = {
     getListGroups,
     creatingGroup,
     updateGroup,
-    deleteGroup
+    deleteGroup,
+    toggleFormGroup
 }
 
 export default groupActions
