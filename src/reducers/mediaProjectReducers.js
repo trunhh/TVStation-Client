@@ -1,6 +1,6 @@
-import groupConstants from "../constants/groupConstants";
+import mediaProjectConstant from "../constants/mediaProjectConstant";
 
-const initialStateGroup = {
+const initialStateMediaProject = {
     errorMessageLoadMediaProject: null,
     mediaProjects: [],
     totalPagesMediaProject: 0,
@@ -12,66 +12,66 @@ const initialStateGroup = {
 }
 
 
-const groupReducer = (state = initialStateGroup, action) => {
+const mediaProjectReducer = (state = initialStateMediaProject, action) => {
     switch(action.type) {
-        //List groups
-        case groupConstants.GET_LIST_GROUP_SUCCESS:
+        //List mediaProjects
+        case mediaProjectConstant.GET_LIST_MEDIA_PROJECT_SUCCESS:
             return {
                 ...state,
                 mediaProjects: action.payload.mediaProjects,
                 totalPagesMediaProject: action.payload.totalPagesMediaProject
             }
-        case groupConstants.GET_LIST_GROUP_FAIL:
+        case mediaProjectConstant.GET_LIST_MEDIA_PROJECT_FAIL:
             return {
                 ...state, 
                 errorMessageLoadMediaProject: action.payload
             }
 
-        //Update group
-        case groupConstants.UPDATE_GROUP_SUCCESS:
+        //Update mediaProject
+        case mediaProjectConstant.UPDATE_MEDIA_PROJECT_SUCCESS:
             return {
                 ...state,
                 mediaProjectUpdated: true,
             }
-        case groupConstants.UPDATE_GROUP_FAIL:
+        case mediaProjectConstant.UPDATE_MEDIA_PROJECT_FAIL:
             return {
                 ...state, 
                 errorMessageLoadMediaProject: action.payload
             }
 
-        //Delete group
-        case groupConstants.DELETE_GROUP_REQUEST:
+        //Delete mediaProject
+        case mediaProjectConstant.DELETE_MEDIA_PROJECT_REQUEST:
             return {
                 ...state,
                 mediaProjectDeleted: false
             }
-        case groupConstants.DELETE_GROUP_SUCCESS:
+        case mediaProjectConstant.DELETE_MEDIA_PROJECT_SUCCESS:
             return {
                 ...state,
                 mediaProjectDeleted: true,
             }
-        case groupConstants.DELETE_GROUP_FAIL:
+        case mediaProjectConstant.DELETE_MEDIA_PROJECT_FAIL:
             return {
                 ...state, 
                 errorMessageLoadMediaProject: action.payload
             }
 
-        //Create group
-        case groupConstants.CREATE_GROUP_SUCCESS:
+        //Create mediaProject
+        case mediaProjectConstant.CREATE_MEDIA_PROJECT_SUCCESS:
             return {
                 ...state,
                 mediaProjectCreated: true,
                 mediaProjectFormClosed: true
             }
-        case groupConstants.CREATE_GROUP_FAIL:
+        case mediaProjectConstant.CREATE_MEDIA_PROJECT_FAIL:
             return {
                 ...state,
                 errorMessageLoadMediaProject: action.payload
             }
-        case groupConstants.TOGGLE_FROM_GROUP:
+        case mediaProjectConstant.TOGGLE_MEDIA_PROJECT_FORM:
             return {
                 ...state,
-                mediaProjectFormOpened: payload?.toggleOpenFormGroup ?? !state.mediaProjectFormOpened,
+                mediaProjectFormOpened: action.payload?.toggleMediaProjectForm ?? !state.mediaProjectFormOpened,
             };
         default:
             return state
@@ -79,4 +79,4 @@ const groupReducer = (state = initialStateGroup, action) => {
         
 }
 
-export default groupReducer;
+export default mediaProjectReducer;

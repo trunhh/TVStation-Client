@@ -1,66 +1,60 @@
 import '../PlanListPage.scss'
 
 import { MdEdit } from 'react-icons/md'
-
 import { MdOutlineDeleteForever } from 'react-icons/md'
-
 import { MdAddToPhotos } from 'react-icons/md'
-
 import { MdOutlineClose } from 'react-icons/md'
-
 import { MdSearch } from 'react-icons/md'
 
-import FormGroupInfo from './FromGroupInfo'
+//import MediaProjectForm from './MediaProjectForm'
 
 import { connect } from 'react-redux'
 
 import { useEffect, useState } from 'react'
 
-import  DatePicker from 'react-datepicker'
+import DatePicker from 'react-datepicker'
 
 import "react-datepicker/dist/react-datepicker.css"
 
 import ReactPaginate from 'react-paginate'
 
-import groupActions from '../../../actions/groupActions'
+import mediaProjectActions from '../../../actions/mediaProjectActions'
 
-const ListGroups = (props) => {
-    const [groupItem, setGroupItem] = useState({})
+const MediaProjectList = (props) => {
+    const [mediaProjectItem, setMediaProjectItem] = useState({})
     const [buttonText, setButtonText] = useState('Create')
     const [selectChanged, setSelectChanged] = useState(false)
     const [type, setType] = useState('Type')
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
-    const [pageCount, setPageCount] = useState(props.totalPagesListGroups)
+    const [pageCount, setPageCount] = useState(props.totalPagesMediaProject)
     const PAGE_NUMBER = 1
     const PAGE_SIZE = 10
     const SORT = 'id,asc'
 
-    const handleClickAddGroup = () => {
-        setGroupItem({
+    const handleClickAddProject = () => {
+        setMediaProjectItem({
             name: '',
             type: '',
             createdAt: '',
             totalMember: ''
         })
         setButtonText('Create')
-
-        props.toggleFormGroup(true)
+        props.toggleMediaProjectForm(true)
     }
 
     const handleClickEdit = (item) => {
         setButtonText('Save')
+        props.toggleMediaProjectForm(true)
 
-        props.toggleFormGroup(true)
+        let projectIndex = props.mediaProjects.findIndex(x => x.id == item.id)
 
-        let groupIndex = props.listGroups.findIndex(x => x.id == item.id)
-
-        setGroupItem(props.listGroups[groupIndex])
+        setMediaProjectItem(props.mediaProjects[projectIndex])
     }
 
     const handleClickDelete = (item) => {
         console.log(item);
-        props.deleteGroup(item.id);
+        props.deleteMediaProject(item.id);
     }
 
     const handleClickIconClose = () => {
@@ -82,11 +76,11 @@ const ListGroups = (props) => {
     }
 
     useEffect(() => {
-        props.getListGroups()
-    }, [props.updateCompleted, props.createdGroupSuccessfully, props.groupDeleted])
+        props.getListMediaProject()
+    }, [props.mediaProjectUpdated, props.mediaProjectCreated, props.mediaProjectDeleted])
 
     const _clickSearch = () => {
-        let groupFilterForm = {
+        let projectFilterForm = {
             type: type === 'Type' ? null : type,
             startDate: startDate,
             endDate: endDate,
@@ -94,59 +88,59 @@ const ListGroups = (props) => {
             pageSize: PAGE_SIZE,
             sort: SORT
         }
-        props.getListGroups(groupFilterForm)
+        props.getListMediaProject(projectFilterForm)
     }
 
     useEffect(() => {
         props.showLoading(props.isLoading)
     }, [props.isLoading])
 
-    console.log('List group rerender...')
-    return(
+    console.log('Media Project list rerender...')
+    return (
         <div className="plan-list">
-            <div className='content'>
-                {   
-                    props.formGroupIsOpen && <FormGroupInfo groupItem={groupItem} buttonText={buttonText}/>
-                }
-                <div className='filter-form'>
-                    <div className='type-filter'>
+            <div className="content">
+                {/* {   
+                    props.mediaProjectFormOpened && <MediaProjectForm mediaProjectItem={mediaProjectItem} buttonText={buttonText}/>
+                } */}
+                <div className="filter-form">
+                    <div className="type-filter">
                         <select 
-                            className='form-control-filter' 
+                            className="form-control-filter" 
                             value={type} 
                             onChange={onSelectChange}
                         >
                             <option value="Type" hidden>Type</option>
-                            <option value="BACKEND">BACKEND</option>
-                            <option value="FRONTEND">FRONTEND</option>
-                            <option value="FULLSTACK">FULLSTACK</option>
+                            <option value="VIDEO">VIDEO</option>
+                            <option value="AUDIO">AUDIO</option>
+                            <option value="GRAPHIC">GRAPHIC</option>
                         </select>
                         {   
-                            selectChanged && <MdOutlineClose onClick={handleClickIconClose} className='icon-close'/>
+                            selectChanged && <MdOutlineClose onClick={handleClickIconClose} className="icon-close"/>
                         }
                     </div>
                     <DatePicker
-                        className='form-control-filter'
-                        selected={ startDate }
-                        onChange={ handleStartDateChange }
+                        className="form-control-filter"
+                        selected={startDate}
+                        onChange={handleStartDateChange}
                         name="startDate"
                         dateFormat="dd/MM/yyyy"
-                        placeholderText='Start Date'
+                        placeholderText="Start Date"
                     />
                     <DatePicker
-                        className='form-control-filter'
-                        selected={ endDate }
-                        onChange={ handleEndDateChange }
-                        name="endtDate"
+                        className="form-control-filter"
+                        selected={endDate}
+                        onChange={handleEndDateChange}
+                        name="endDate"
                         dateFormat="dd/MM/yyyy"
-                        placeholderText='End Date'
+                        placeholderText="End Date"
                     />
-                    <div className='icon-search'>
+                    <div className="icon-search">
                         <MdSearch onClick={_clickSearch} fontSize="1.2rem"/>
                     </div>
                 </div>
-                <div className='icon-add'>
-                    <MdAddToPhotos fontSize="1.2rem" style={{cursor: 'pointer'}}
-                        onClick={handleClickAddGroup}
+                <div className="icon-add">
+                    <MdAddToPhotos fontSize="1.2rem" style={{ cursor: 'pointer' }}
+                        onClick={handleClickAddProject}
                     />
                 </div>
                 <table>
@@ -162,7 +156,7 @@ const ListGroups = (props) => {
                     </thead>
                     <tbody>
                         {
-                            props.listGroups && props.listGroups.map((item, index) => {
+                            props.mediaProjects && props.mediaProjects.map((item, index) => {
                                 return (
                                     <tr key={item.id}>
                                         <td>{index + 1}</td>
@@ -172,11 +166,11 @@ const ListGroups = (props) => {
                                         <td>{item.totalMember}</td>
                                         <td>
                                             <MdEdit fontSize="1.2rem"
-                                                style={{marginRight: '10px', cursor: 'pointer'}}
+                                                style={{ marginRight: '10px', cursor: 'pointer' }}
                                                 onClick={() => handleClickEdit(item)}
                                             />
                                             <MdOutlineDeleteForever fontSize="1.2rem"
-                                                style={{marginLeft: '10px', cursor: 'pointer'}}
+                                                style={{ marginLeft: '10px', cursor: 'pointer' }}
                                                 onClick={() => handleClickDelete(item)}
                                             />
                                         </td>
@@ -186,10 +180,9 @@ const ListGroups = (props) => {
                         }
                     </tbody>
                 </table>
-                <div className='paging'>
+                <div className="paging">
                     <ReactPaginate
                         nextLabel="next >"
-                        //onPageChange={handlePageClick}
                         pageRangeDisplayed={2}
                         marginPagesDisplayed={2}
                         pageCount={pageCount}
@@ -215,28 +208,28 @@ const ListGroups = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        formGroupIsOpen: state.group.formGroupIsOpen,
         isLoading: state.view.isLoading,
-        listGroups: state.group.listGroups,
-        totalPagesListGroups: state.group.totalPagesListGroups,
-        updateCompleted: state.group.updateCompleted,
-        createdGroupSuccessfully: state.group.createdGroupSuccessfully,
-        groupDeleted: state.group.groupDeleted
+        mediaProjects: state.mediaProject.mediaProjects,
+        totalPagesMediaProject: state.mediaProject.totalPagesMediaProject,
+        mediaProjectUpdated: state.mediaProject.mediaProjectUpdated,
+        mediaProjectCreated: state.mediaProject.mediaProjectCreated,
+        mediaProjectDeleted: state.mediaProject.mediaProjectDeleted,
+        mediaProjectFormOpened: state.mediaProject.mediaProjectFormOpened
     }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        toggleFormGroup: (isOpen) => {
-            dispatch(groupActions.toggleFormGroup(isOpen))
+        toggleMediaProjectForm: (isOpen) => {
+            dispatch(mediaProjectActions.toggleMediaProjectForm(isOpen))
         },
-        getListGroups: (groupFilterForm) => {
-            dispatch(groupActions.getListGroups(groupFilterForm))
+        getListMediaProject: (filterForm) => {
+            dispatch(mediaProjectActions.getListMediaProject(filterForm))
         },
-        deleteGroup: (id) => {
-            dispatch(groupActions.deleteGroup(id))
+        deleteMediaProject: (id) => {
+            dispatch(mediaProjectActions.deleteMediaProject(id))
         }
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListGroups)
+export default connect(mapStateToProps, mapDispatchToProps)(MediaProjectList)

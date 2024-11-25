@@ -1,6 +1,5 @@
 import axios from "axios";
 import mediaProjectConstants from "../constants/mediaProjectConstant";
-
 const token = localStorage.getItem('token');
 
 const getMediaProject = (mediaProjectId) => async (dispatch) => {
@@ -24,7 +23,7 @@ const getMediaProject = (mediaProjectId) => async (dispatch) => {
         });
 
         // Open form
-        dispatch(viewActions.toggleMediaProjectForm(true));
+        toggleMediaProjectForm(true);
     } catch (error) {
         dispatch({
             type: mediaProjectConstants.GET_MEDIA_PROJECT_FAIL,
@@ -109,7 +108,7 @@ const createMediaProject = (mediaProject) => async (dispatch) => {
         });
 
         // Close form
-        dispatch(viewActions.toggleMediaProjectForm(false));
+        toggleMediaProjectForm(false);
     } catch (error) {
         dispatch({
             type: mediaProjectConstants.CREATE_MEDIA_PROJECT_FAIL,
@@ -143,7 +142,7 @@ const updateMediaProject = (mediaProject) => async (dispatch) => {
         });
 
         // Close form
-        dispatch(viewActions.toggleMediaProjectForm(false));
+        toggleMediaProjectForm(false);
     } catch (error) {
         dispatch({
             type: mediaProjectConstants.UPDATE_MEDIA_PROJECT_FAIL,
@@ -204,6 +203,7 @@ const mediaProjectActions = {
     createMediaProject,
     updateMediaProject,
     deleteMediaProject,
+    toggleMediaProjectForm
 };
 
 export default mediaProjectActions;

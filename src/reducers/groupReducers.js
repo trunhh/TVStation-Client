@@ -71,7 +71,7 @@ const groupReducer = (state = initialStateGroup, action) => {
         case groupConstants.TOGGLE_FROM_GROUP:
             return {
                 ...state,
-                formGroupIsOpen: payload?.toggleOpenFormGroup ?? !state.formGroupIsOpen,
+                formGroupIsOpen: action.payload?.toggleOpenFormGroup ?? !state.formGroupIsOpen,
             };
         default:
             return state

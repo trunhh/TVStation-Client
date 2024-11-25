@@ -19,7 +19,7 @@ import ListGroups from './pages/home/listgroups/ListGroups';
 import Settings from './pages/home/settings/Settings';
 import { useNavigate } from "react-router-dom";
 import PasswordChanging from './pages/home/password changing/PasswordChanging';
-import MediaProjectList from './pages/home/listgroups/MediaProjectList';
+import MediaProjectList from './pages/home/mediaProject/MediaProjectList';
 
 const SignupWithLoading = WithLoading(Signup);
 const SigninWithLoading = WithLoading(Signin);
