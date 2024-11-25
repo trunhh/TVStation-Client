@@ -20,7 +20,7 @@ const GroupLink = styled.div `
     }
 
     .menu-item.active {
-        color: #39f !important;
+        color: white !important;
     }
 
     .menu-item span {

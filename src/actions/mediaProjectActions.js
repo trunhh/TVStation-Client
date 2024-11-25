@@ -41,7 +41,7 @@ const getListMediaProject = (mediaProjectQuery) => async (dispatch) => {
     });
 
     try {
-        let url = 'https://localhost:7031/api/MediaProject?';
+        let url = '/api/MediaProject?';
 
         // Construct query parameters
         const params = new URLSearchParams({
@@ -71,7 +71,7 @@ const getListMediaProject = (mediaProjectQuery) => async (dispatch) => {
         dispatch({
             type: mediaProjectConstants.GET_LIST_MEDIA_PROJECT_SUCCESS,
             payload: {
-                listMediaProjects: response.data.content, // Array of media projects
+                mediaProjects: response.data.content, // Array of media projects
                 totalPages: response.data.totalPages,
             },
         });

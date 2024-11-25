@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    background-color: #303c54;
+    background-color: #1E1E2D;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -44,7 +44,7 @@
 }
 
 .sidebar-menu {
-    background-color: #3c4b64;
+    background-color: none;
     flex: 1;
 }
 

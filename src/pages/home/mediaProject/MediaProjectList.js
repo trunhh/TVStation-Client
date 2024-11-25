@@ -5,32 +5,63 @@ import { MdOutlineDeleteForever } from 'react-icons/md'
 import { MdAddToPhotos } from 'react-icons/md'
 import { MdOutlineClose } from 'react-icons/md'
 import { MdSearch } from 'react-icons/md'
-
 //import MediaProjectForm from './MediaProjectForm'
-
 import { connect } from 'react-redux'
-
 import { useEffect, useState } from 'react'
-
 import DatePicker from 'react-datepicker'
-
 import "react-datepicker/dist/react-datepicker.css"
-
 import ReactPaginate from 'react-paginate'
-
 import mediaProjectActions from '../../../actions/mediaProjectActions'
+import { SectorConst, StatusConst } from '../../../constants/constants'
 
 const MediaProjectList = (props) => {
     const [mediaProjectItem, setMediaProjectItem] = useState({})
     const [buttonText, setButtonText] = useState('Create')
-    const [selectChanged, setSelectChanged] = useState(false)
-    const [type, setType] = useState('Type')
-    const [startDate, setStartDate] = useState(null)
-    const [endDate, setEndDate] = useState(null)
+
+    const currentYear = new Date().getFullYear()
+    const [year, setYear] = useState(currentYear)
+    const minDate = new Date(year, 0, 1)
+    const maxDate = new Date(year, 11, 31)
+    const [dateRange, setDateRange] = useState([minDate, maxDate])
+    const [startDate, endDate] = dateRange
+
+    const [sector, setSector] = useState(null)
+
+    const [status, setStatus] = useState(null)
+
+    const [keyword, setKeyword] = useState('');
+
     const [pageCount, setPageCount] = useState(props.totalPagesMediaProject)
     const PAGE_NUMBER = 1
     const PAGE_SIZE = 10
-    const SORT = 'id,asc'
+    const handleKeywordChange = (e) => {
+        setKeyword(e.target.value);
+    }
+
+    const handleSectorChange = (e) => {
+        setSector(e.target.value);
+    }
+    
+    const handleStatusChange = (e) => {
+        setStatus(e.target.value);
+    }
+
+    const handleYearChange = (selectedYear) => {
+        setYear(selectedYear);
+
+        // Update default dates for the new year
+        const newStartDate = new Date(selectedYear, 0, 1);
+        const newEndDate = new Date(selectedYear, 11, 31);
+        setDateRange([newStartDate, newEndDate]);
+    };
+
+    const handleDateRangeChange = (dates) => {
+        if (dates[0] === null && dates[1] === null) {
+            setDateRange([minDate, maxDate]);
+        } else {
+            setDateRange(dates);
+        }
+    };
 
     const handleClickAddProject = () => {
         setMediaProjectItem({
@@ -57,36 +88,25 @@ const MediaProjectList = (props) => {
         props.deleteMediaProject(item.id);
     }
 
-    const handleClickIconClose = () => {
-        setType('Type')
-        setSelectChanged(false)
-    }
-
-    const onSelectChange = (e) => {
-        setType(e.target.value)
-        setSelectChanged(true)
-    }
-
-    const handleStartDateChange = (date) => {
-        setStartDate(date)
-    }
-
-    const handleEndDateChange = (date) => {
-        setEndDate(date)
-    }
 
     useEffect(() => {
         props.getListMediaProject()
     }, [props.mediaProjectUpdated, props.mediaProjectCreated, props.mediaProjectDeleted])
 
-    const _clickSearch = () => {
+    useEffect(() => {
+        handleClickSearch(); // Call the search function on page load
+      }, []);
+
+    const handleClickSearch = () => {
         let projectFilterForm = {
-            type: type === 'Type' ? null : type,
+            keyword: keyword,
+            sector: sector,
+            status: status,
             startDate: startDate,
+            isPersonal: false,
             endDate: endDate,
-            pageNumber: PAGE_NUMBER,
-            pageSize: PAGE_SIZE,
-            sort: SORT
+            pageIndex: PAGE_NUMBER,
+            pageSize: PAGE_SIZE
         }
         props.getListMediaProject(projectFilterForm)
     }
@@ -103,39 +123,71 @@ const MediaProjectList = (props) => {
                     props.mediaProjectFormOpened && <MediaProjectForm mediaProjectItem={mediaProjectItem} buttonText={buttonText}/>
                 } */}
                 <div className="filter-form">
-                    <div className="type-filter">
-                        <select 
-                            className="form-control-filter" 
-                            value={type} 
-                            onChange={onSelectChange}
-                        >
-                            <option value="Type" hidden>Type</option>
-                            <option value="VIDEO">VIDEO</option>
-                            <option value="AUDIO">AUDIO</option>
-                            <option value="GRAPHIC">GRAPHIC</option>
-                        </select>
-                        {   
-                            selectChanged && <MdOutlineClose onClick={handleClickIconClose} className="icon-close"/>
-                        }
-                    </div>
+                    <select 
+                        className="form-control-filter" 
+                        value={year} 
+                        onChange={(e) => handleYearChange(Number(e.target.value))}
+                    >
+                        <option value="Year" hidden>Năm</option>
+                        {Array.from({ length: 6 }, (_, index) => {
+                            const currentYear = new Date().getFullYear();
+                            const yearValue = currentYear + index;
+                            return (
+                                <option key={yearValue} value={yearValue}>
+                                    Năm {yearValue}
+                            </option>
+                            );
+                        })}
+                    </select>
                     <DatePicker
-                        className="form-control-filter"
+                        className="react-datepicker__input-container"
                         selected={startDate}
-                        onChange={handleStartDateChange}
-                        name="startDate"
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="Start Date"
+                        onChange={handleDateRangeChange}
+                        startDate={startDate}
+                        endDate={endDate}
+                        selectsRange
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        dateFormat="dd/MM"
+                        placeholderText="Select a date range"
+                        isClearable
                     />
-                    <DatePicker
-                        className="form-control-filter"
-                        selected={endDate}
-                        onChange={handleEndDateChange}
-                        name="endDate"
-                        dateFormat="dd/MM/yyyy"
-                        placeholderText="End Date"
+                    
+                    <select 
+                        className="form-control-filter" 
+                        value={sector} 
+                        onChange={handleSectorChange}
+                    >
+                        <option value="">Loại hình báo chí</option>
+                        {Object.keys(SectorConst).map((key) => (
+                            <option key={key} value={key}>
+                                {SectorConst[key]} {}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select 
+                        className="form-control-filter" 
+                        value={status} 
+                        onChange={handleStatusChange}
+                    >
+                        <option value="">Trạng thái</option>
+                        {Object.keys(StatusConst).map((key) => (
+                            <option key={key} value={key}>
+                                {StatusConst[key]} {}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type="text"
+                        placeholder="Tìm kiếm..."
+                        value={keyword}
+                        onChange={handleKeywordChange} 
+                        className="search-bar" 
                     />
+
                     <div className="icon-search">
-                        <MdSearch onClick={_clickSearch} fontSize="1.2rem"/>
+                        <MdSearch onClick={handleClickSearch} fontSize="1.2rem"/>
                     </div>
                 </div>
                 <div className="icon-add">
@@ -146,12 +198,12 @@ const MediaProjectList = (props) => {
                 <table>
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Created Date</th>
-                            <th>Total Member</th>
-                            <th></th>
+                            <th>#</th>
+                            <th>Tên</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Người tạo</th>
+                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,17 +212,17 @@ const MediaProjectList = (props) => {
                                 return (
                                     <tr key={item.id}>
                                         <td>{index + 1}</td>
-                                        <td>{item.name}</td>
-                                        <td>{item.type}</td>
-                                        <td>{item.createdAt}</td>
-                                        <td>{item.totalMember}</td>
+                                        <td>{item.title}</td>
                                         <td>
-                                            <MdEdit fontSize="1.2rem"
-                                                style={{ marginRight: '10px', cursor: 'pointer' }}
-                                                onClick={() => handleClickEdit(item)}
-                                            />
+                                            <span className={`status-box ${item.status.toLowerCase()}`}>
+                                                {StatusConst[item.status]}
+                                            </span>
+                                        </td>
+                                        <td>{new Intl.DateTimeFormat('en-GB').format(new Date(item.createdDate))}</td>
+                                        <td>{item.creator}</td>
+                                        <td>
                                             <MdOutlineDeleteForever fontSize="1.2rem"
-                                                style={{ marginLeft: '10px', cursor: 'pointer' }}
+                                                style={{ cursor: 'pointer' }}
                                                 onClick={() => handleClickDelete(item)}
                                             />
                                         </td>
