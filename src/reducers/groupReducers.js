@@ -15,25 +15,25 @@ const initialStateGroup = {
 const groupReducer = (state = initialStateGroup, action) => {
     switch(action.type) {
         //List groups
-        case groupConstants.GET_LIST_GROUP_SUCCESS:
+        case groupConstants.GET_LIST_GROUP_SUCCEED:
             return {
                 ...state,
                 listGroups: action.payload.listGroups,
                 totalPagesListGroups: action.payload.totalPagesListGroups
             }
-        case groupConstants.GET_LIST_GROUP_FAIL:
+        case groupConstants.GET_LIST_GROUP_FAILED:
             return {
                 ...state, 
                 errorMessageGroup: action.payload
             }
 
         //Update group
-        case groupConstants.UPDATE_GROUP_SUCCESS:
+        case groupConstants.UPDATE_GROUP_SUCCEED:
             return {
                 ...state,
                 updateCompleted: true,
             }
-        case groupConstants.UPDATE_GROUP_FAIL:
+        case groupConstants.UPDATE_GROUP_FAILED:
             return {
                 ...state, 
                 errorMessageGroup: action.payload
@@ -45,25 +45,25 @@ const groupReducer = (state = initialStateGroup, action) => {
                 ...state,
                 groupDeleted: false
             }
-        case groupConstants.DELETE_GROUP_SUCCESS:
+        case groupConstants.DELETE_GROUP_SUCCEED:
             return {
                 ...state,
                 groupDeleted: true,
             }
-        case groupConstants.DELETE_GROUP_FAIL:
+        case groupConstants.DELETE_GROUP_FAILED:
             return {
                 ...state, 
                 errorMessageGroup: action.payload
             }
 
         //Create group
-        case groupConstants.CREATE_GROUP_SUCCESS:
+        case groupConstants.CREATE_GROUP_SUCCEED:
             return {
                 ...state,
                 createdGroupSuccessfully: true,
                 closeFormGroup: true
             }
-        case groupConstants.CREATE_GROUP_FAIL:
+        case groupConstants.CREATE_GROUP_FAILED:
             return {
                 ...state,
                  errorMessageGroup: action.payload

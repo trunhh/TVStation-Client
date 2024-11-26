@@ -17,23 +17,23 @@ const initialStateUser = {
 const userReducer = (state = initialStateUser, action) => {
     switch(action.type) {
         //Get user info
-        case userConstants.GET_USER_INFO_SUCCESS:
+        case userConstants.GET_USER_INFO_SUCCEED:
             return {
                 ...state,
                 user: action.payload
             }
-        case userConstants.GET_USER_INFO_FAIL:
+        case userConstants.GET_USER_INFO_FAILED:
             return {
                 ...state,
                 errorMessageLoadUser: action.payload
             }
 
         //Update user info
-        case userConstants.UPDATE_USER_INFO_SUCCESS:
+        case userConstants.UPDATE_USER_INFO_SUCCEED:
             return {
                 ...state,
             }
-        case userConstants.UPDATE_USER_INFO_FAIL:
+        case userConstants.UPDATE_USER_INFO_FAILED:
             return {
                 ...state, 
                 errorMessageLoadUser: action.payload
@@ -46,12 +46,12 @@ const userReducer = (state = initialStateUser, action) => {
                 successMessageChangePassword:  null,
                 errorMessageChangePassword: null
             }
-        case userConstants.CHANGE_PASSWORD_SUCCESS:
+        case userConstants.CHANGE_PASSWORD_SUCCEED:
             return {
                 ...state,
                 successMessageChangePassword: 'Your password changed. Please re-active account by click the link which our system has just send to your email.'
             }
-        case userConstants.CHANGE_PASSWORD_FAIL:
+        case userConstants.CHANGE_PASSWORD_FAILED:
             return {
                 ...state,
                 errorMessageChangePassword: action.payload

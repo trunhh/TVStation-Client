@@ -13,7 +13,7 @@ const registerUser = (user) => async(dispath) => {
             ...user
         })
         dispath({
-            type: authConstants.REGISTER_USER_SUCCESS,
+            type: authConstants.REGISTER_USER_SUCCEED,
             payload: response.data
         })
 
@@ -22,7 +22,7 @@ const registerUser = (user) => async(dispath) => {
     }catch (error) {
         console.log(error)
         dispath({
-            type: authConstants.REGISTER_USER_FAIL,
+            type: authConstants.REGISTER_USER_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: error.response.data
@@ -51,7 +51,7 @@ const signin = (username, password) => async(dispath) => {
         localStorage.setItem('role', response.data.role)
 
         dispath({
-            type: authConstants.SIGNIN_SUCCESS,
+            type: authConstants.SIGNIN_SUCCEED,
             payload: response.data
         })
 
@@ -60,7 +60,7 @@ const signin = (username, password) => async(dispath) => {
     }catch (error) {
         console.log(error);
         dispath({
-            type: authConstants.SIGNIN_FAIL,
+            type: authConstants.SIGNIN_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: error.response.data

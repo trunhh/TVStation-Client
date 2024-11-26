@@ -1,159 +1,226 @@
-.plan-list {
-    background-color: white;
-    padding: 32px;
-    
-    .content {
-        width: fit-content;
-        min-width: 600px;
-        margin: auto;
-        font-family: "Inter", sans-serif;
-        table {
-            width: 100%;
-            border: none;
-            border-collapse: collapse;
+$border-radius: .425rem;
+$icon-padding: 24px;
+$font-color: #4B5675;
+$font-size: .95rem;
+$font-weight: 550;
+$light-gray: lightgray;
+$focus-border-color: #39f;
 
-            td, th {
-                padding: 10px;
-                text-align: center;
-            }
+/* Mixins for reusability */
+@mixin icon-style($color, $bg-color) {
+    color: $color;
+    background-color: $bg-color;
+    padding: $icon-padding;
+    border-radius: $border-radius;
+}
 
-            tbody {
-                tr:nth-child(even) {
-                    background-color: rgba(0, 0, 0, 0.05);
-                }
+@mixin input-style {
+    outline: none;
+    border-radius: $border-radius;
+    padding: .55rem .75rem;
+    border: 1px solid $light-gray;
+    color: $font-color;
+    font-size: $font-size !important;
+    font-weight: $font-weight;
+}
 
-                tr:hover {
-                    background-color: #e6e7e9;
-                }
-            }
+@mixin focus-style {
+    border-color: $focus-border-color;
+    outline: none;
+}
 
-            thead {
-                th:last-child {
-                    min-width: 100px;
-                }
+.plan-page {
+    .plan-summary {
+        border-radius: $border-radius;
+        gap: 10px;
+        margin-bottom: 10px;
+        display: flex;
 
-                th:nth-child(n+2) {
-                    min-width: 150px;
-                }
-            }
-        }
-
-        .icon-add {
-            text-align: right;
-        }
-
-        .filter-form {
-            position: relative;
+        .summary-box {
             display: flex;
-            width: fit-content;
-            justify-content: space-around;
-            gap: 10px;
-        }
+            background-color: white;
+            border-radius: $border-radius;
+            padding: 16px;
+            gap: 16px;
 
-        .type-filter {
-            position: relative;
-            display: flex;
-            width: fit-content;
-
-            select {
-                width: 150px;
+            .title-text {
+                color:#8A8A8A;
+                font-weight : 500;
+                height: 30%;
             }
         }
 
-        .form-control-filter {
-            outline: none;
-            border-radius: .425rem;
-            padding: .55rem .75rem;
-            border: 1px solid lightgray;
-            font-size: 13px !important;
-            font-weight: 400;
+        .icon-total {
+            @include icon-style(#9748FF, #F6EDFF);
         }
 
-        .search-bar {
-            padding: .55rem .75rem;
-            border: 1px solid lightgray;
-            border-radius: .425rem;
-          }
-          
-          .search-bar:focus {
-            border-color: #4CAF50; /* Change border color when focused */
-            outline: none;
-          }
+        .icon-in-progress {
+            @include icon-style(#039EF7, #E7F6FF);
+        }
 
-        .react-datepicker__input-container {
-            width: 150px !important;
+        .icon-waiting-approval {
+            @include icon-style(#FE9A02, #FFF5E7);
+        }
 
-            input {
-                outline: none;
-                border-radius: .425rem;
-                border: 1px solid lightgray;
-                padding: .55rem .75rem;
+        .icon-approved {
+            @include icon-style(#149143, #E8F5ED);
+        }
+    }
+
+    .plan-summary > * {
+        flex: 1; /* Make all child elements equal size */
+        display: flex; /* Ensure content is displayed correctly inside each child */
+    }
+
+    .plan-list {
+        background-color: white;
+        padding: 32px;
+        border-radius: $border-radius;
+        gap: 10px;
+
+        .content {
+            width: fit-content;
+            min-width: 600px;
+            margin: auto;
+            font-family: "Inter", sans-serif;
+
+            table {
                 width: 100%;
+                border: none;
+                border-collapse: collapse;
+
+                td, th {
+                    padding: 10px;
+                    text-align: center;
+                }
+
+                tbody {
+                    tr:nth-child(even) {
+                        background-color: rgba(0, 0, 0, 0.05);
+                    }
+
+                    tr:hover {
+                        background-color: #e6e7e9;
+                    }
+                }
+
+                thead {
+                    color: $font-color;
+                }
             }
-        }
 
-        .icon-close {
-            position: absolute;
-            font-size: 11px;
-            cursor: pointer;
-            top: 10px;
-            right: 20px;
-            color: gray;
-        }
+            .icon-add {
+                text-align: right;
+            }
 
-        .icon-search {
-            display: flex;
-            align-items: center;
-            margin-left: 10px;
+            .filter-form {
+                position: relative;
+                display: flex;
+                width: fit-content;
+                justify-content: space-around;
+                gap: 10px;
+            }
 
-            svg {
+            .type-filter {
+                position: relative;
+                display: flex;
+                width: fit-content;
+
+                select {
+                    width: 150px;
+                }
+            }
+
+            .form-control-filter {
+                @include input-style;
+            }
+
+            .form-control-filter:focus {
+                @include focus-style;
+            }
+
+            .search-bar {
+                @include input-style;
+            }
+
+            .search-bar:focus {
+                @include focus-style;
+            }
+
+            .react-datepicker__input-container {
+                input {
+                    @include input-style;
+                }
+            }
+
+            .react-datepicker__input-container:focus {
+                @include focus-style;
+            }
+
+            .icon-close {
+                position: absolute;
+                font-size: 11px;
                 cursor: pointer;
+                top: 10px;
+                right: 20px;
+                color: gray;
             }
-        }
 
-        .paging {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 5px;
+            .icon-search {
+                display: flex;
+                align-items: center;
+                margin-left: 10px;
 
-            .page-item.active .page-link {
-                background-color: #3399ff !important;
-                border-color: transparent !important;
+                svg {
+                    cursor: pointer;
+                }
             }
-        }
 
-        .status-box {
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: #fff;
-            font-weight: bold;
-            display: inline-block;
-        }
-        
-        .status-box.in_progress {
-            background-color: #FFD700;
-        }
-        
-        .status-box.waiting_for_approval {
-            background-color: #FFF5E6;
-            color: #F90;
-        }
-        
-        .status-box.approved {
-            background-color: #E3FAE1;
-            color: #119143;
-        }
-        
-        .status-box.returned {
-            background-color: #FF4500;
-        }
-        
-        .status-box.retrieved {
-            background-color: #1E90FF;
-        }
-        
-        .status-box.cancelled {
-            background-color: #DC143C;
+            .paging {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 5px;
+
+                .page-item.active .page-link {
+                    background-color: #3399ff !important;
+                    border-color: transparent !important;
+                }
+            }
+
+            /* Status Box */
+            .status-box {
+                padding: 5px 10px;
+                border-radius: 5px;
+                color: #fff;
+                font-weight: bold;
+                display: inline-block;
+
+                &.in_progress {
+                    background-color: #FFD700;
+                }
+
+                &.waiting_for_approval {
+                    background-color: #FFF5E6;
+                    color: #F90;
+                }
+
+                &.approved {
+                    background-color: #E3FAE1;
+                    color: #119143;
+                }
+
+                &.returned {
+                    background-color: #FF4500;
+                }
+
+                &.retrieved {
+                    background-color: #1E90FF;
+                }
+
+                &.cancelled {
+                    background-color: #DC143C;
+                }
+            }
         }
     }
 }

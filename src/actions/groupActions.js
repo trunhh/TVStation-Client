@@ -36,7 +36,7 @@ const getListGroups = (groupFilterForm) => async(dispath) => {
             })
 
             dispath({
-                type: groupConstants.GET_LIST_GROUP_SUCCESS,
+                type: groupConstants.GET_LIST_GROUP_SUCCEED,
                 payload: {
                     listGroups: response.data.content,// Array group
                     totalPagesListGroups: response.data.totalPages 
@@ -52,7 +52,7 @@ const getListGroups = (groupFilterForm) => async(dispath) => {
             })
 
             dispath({
-                type: groupConstants.GET_LIST_GROUP_SUCCESS,
+                type: groupConstants.GET_LIST_GROUP_SUCCEED,
                 payload: {
                     listGroups: response.data,
                     totalPagesListGroups: response.data.length // Array group
@@ -61,7 +61,7 @@ const getListGroups = (groupFilterForm) => async(dispath) => {
         }
     }catch (error) {
         dispath({
-            type: groupConstants.GET_LIST_GROUP_FAIL,
+            type: groupConstants.GET_LIST_GROUP_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: "Get list groups fail"
@@ -95,7 +95,7 @@ const updateGroup = (groupItem) => async(dispath) => {
         console.log(response.data)
 
         dispath({
-            type: groupConstants.UPDATE_GROUP_SUCCESS,
+            type: groupConstants.UPDATE_GROUP_SUCCEED,
             payload: response.data
         })
 
@@ -103,7 +103,7 @@ const updateGroup = (groupItem) => async(dispath) => {
         toggleFormGroup(false)
     }catch (error) {
         dispath({
-            type: groupConstants.UPDATE_GROUP_FAIL,
+            type: groupConstants.UPDATE_GROUP_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: "Update group fail!"
@@ -138,7 +138,7 @@ const creatingGroup = (groupItem) => async(dispath) => {
         console.log(response.data)
 
         dispath({
-            type: groupConstants.CREATE_GROUP_SUCCESS,
+            type: groupConstants.CREATE_GROUP_SUCCEED,
             payload: response.data
         })
 
@@ -146,7 +146,7 @@ const creatingGroup = (groupItem) => async(dispath) => {
         toggleFormGroup(false)
     }catch (error) {
         dispath({
-            type: groupConstants.CREATE_GROUP_FAIL,
+            type: groupConstants.CREATE_GROUP_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: "Create group fail!"
@@ -176,13 +176,13 @@ const deleteGroup = groupId => async(dispath) => {
         console.log(response.data)
 
         dispath({
-            type: groupConstants.DELETE_GROUP_SUCCESS,
+            type: groupConstants.DELETE_GROUP_SUCCEED,
             payload: response.data
         })
 
     }catch (error) {
         dispath({
-            type: groupConstants.DELETE_GROUP_FAIL,
+            type: groupConstants.DELETE_GROUP_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: "Create group fail!"

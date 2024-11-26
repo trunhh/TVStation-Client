@@ -11,7 +11,7 @@ const viewReducer = (state = initialState, action) => {
     // Generic isLoading logic
     if (type.endsWith('_REQUEST')) {
         return { ...state, isLoading: true };
-    } else if (type.endsWith('_SUCCESS') || type.endsWith('_FAIL')) {
+    } else if (type.endsWith('_SUCCEED') || type.endsWith('_FAILED')) {
         return { ...state, isLoading: false };
     }
 

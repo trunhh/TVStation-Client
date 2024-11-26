@@ -16,7 +16,7 @@ const getUserInfo = (username) => async(dispath) => {
             }
         })
         dispath({
-            type: userConstants.GET_USER_INFO_SUCCESS,
+            type: userConstants.GET_USER_INFO_SUCCEED,
             payload: response.data
         })
     }catch (error) {
@@ -30,7 +30,7 @@ const getUserInfo = (username) => async(dispath) => {
             messageError = `You don not have permission to access / on the server. Forbidden!`
         }
         dispath({
-            type: userConstants.GET_USER_INFO_FAIL,
+            type: userConstants.GET_USER_INFO_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: messageError
@@ -76,7 +76,7 @@ const updateUserInfo = (user, avatarUploadFile) => async(dispatch) => {
             localStorage.setItem('avatarUrl', responseUpload.data )
 
             dispatch({
-                type: userConstants.UPDATE_USER_INFO_SUCCESS,
+                type: userConstants.UPDATE_USER_INFO_SUCCEED,
                 payload: responseUpload.data 
             })
         }else {
@@ -98,13 +98,13 @@ const updateUserInfo = (user, avatarUploadFile) => async(dispatch) => {
                 }
             })
             dispatch({
-                type: userConstants.UPDATE_USER_INFO_SUCCESS,
+                type: userConstants.UPDATE_USER_INFO_SUCCEED,
                 payload: response.data 
             })
         }
     }catch (error) {
         dispatch({
-            type: userConstants.UPDATE_USER_INFO_FAIL,
+            type: userConstants.UPDATE_USER_INFO_FAILED,
             payload: 'Update user info fail'
         })
         if (error.response) {
@@ -143,13 +143,13 @@ const changePassword = (username, newPassword) => async(dispath) => {
         console.log(response.data)
 
         dispath({
-            type: userConstants.CHANGE_PASSWORD_SUCCESS,
+            type: userConstants.CHANGE_PASSWORD_SUCCEED,
             payload: response.data
         })
 
     }catch (error) {
         dispath({
-            type: userConstants.CHANGE_PASSWORD_FAIL,
+            type: userConstants.CHANGE_PASSWORD_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: error.response.data

@@ -4,14 +4,14 @@ import viewReducer from './reducers/viewReducer';
 import userReducer from './reducers/userReducers';
 import authReducer from './reducers/authReducers';
 import groupReducer from './reducers/groupReducers';
-import mediaProjectReducer from './reducers/mediaProjectReducers';
+import planReducer from './reducers/planReducers';
 
 const rootReducer = combineReducers({
     view: viewReducer,
     user: userReducer,
     auth: authReducer,
     group: groupReducer,
-    mediaProject: mediaProjectReducer
+    plan: planReducer
 })
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
