@@ -39,7 +39,6 @@ const getList = (route,query) => async (dispatch) => {
     });
 
     try {
-        let url = route + '?';
 
         // Construct query parameters
         const params = new URLSearchParams({
@@ -52,7 +51,7 @@ const getList = (route,query) => async (dispatch) => {
                 : null
         });
 
-        url += params.toString();
+        let url = route + '?' + params.toString();
 
         const response = await axios.get(url, {
             headers: {
@@ -67,33 +66,6 @@ const getList = (route,query) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: planConstant.GET_LIST_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to retrieve data',
-            },
-        });
-    }
-};
-
-const getListInit = (route) => async (dispatch) => {
-    dispatch({
-        type: planConstant.GET_LIST_INIT_REQUEST,
-    });
-
-    try {
-        const response = await axios.get(route +' ?pageIndex=1', {
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-        });
-
-        dispatch({
-            type: planConstant.GET_LIST_INIT_SUCCEED,
-            payload: response.data,
-        });
-    } catch (error) {
-        dispatch({
-            type: planConstant.GET_LIST_INIT_FAILED,
             payload: {
                 statusCode: error.response?.status || 500,
                 message: 'Failed to retrieve data',
@@ -173,15 +145,12 @@ const remove = (route,id) => async (dispatch) => {
 
     try {
         await axios({
-            url: route,
+            url: route + '/' + id,
             method: 'DELETE',
             headers: {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json',
-            },
-            params: {
-                id: id,
-            },
+            }
         });
 
         dispatch({
@@ -203,7 +172,6 @@ const remove = (route,id) => async (dispatch) => {
 export default {
     get,
     getList,
-    getListInit,
     create,
     update,
     remove

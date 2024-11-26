@@ -200,6 +200,19 @@ $focus-border-color: #39f;
                 z-index: 9999; 
             }
 
+            .blue-button {
+                @include input-style;
+                background-color: #39f; /* Bootstrap primary blue */
+                text-decoration: none;
+                color: white;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            
+            .blue-button:hover {
+                background-color: #0056b3; /* Darker blue on hover */
+            }
+
             .icon-close {
                 position: absolute;
                 font-size: 11px;
@@ -265,5 +278,55 @@ $focus-border-color: #39f;
                 }
             }
         }
+        .pagination-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px; /* Spacing between buttons */
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        
+            .page-item {
+                display: flex;
+        
+                .page-link {
+                    padding: 10px 15px;
+                    font-size: 14px;
+                    color: #007bff;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    text-decoration: none;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+        
+                    &:hover {
+                        background-color: #f0f0f0;
+                        border-color: #bbb;
+                    }
+                }
+        
+                &.active .page-link {
+                    background-color: #007bff;
+                    color: #fff;
+                    border-color: #007bff;
+                    font-weight: bold;
+                }
+        
+                &.disabled .page-link {
+                    color: #aaa;
+                    cursor: not-allowed;
+                    background-color: #f9f9f9;
+                }
+            }
+        
+            .break-item .page-link {
+                background: transparent;
+                border: none;
+                cursor: default;
+                color: #555;
+            }
+        }
+        
     }
 }

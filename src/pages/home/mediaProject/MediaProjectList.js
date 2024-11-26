@@ -14,6 +14,7 @@ import planActions from '../../../actions/planActions'
 import { SectorConst, StatusConst } from '../../../constants/constants'
 import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
 import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch'
+import { NavLink } from "react-router-dom";
 
 const MediaProjectList = (props) => {
     const [query, setQuery] = useState({
@@ -29,6 +30,7 @@ const MediaProjectList = (props) => {
             ...prevQuery,
             [name]: value
         }));
+        props.getList(query)
     };
     
     // Handle year change and update the date range in query
@@ -39,6 +41,7 @@ const MediaProjectList = (props) => {
             startDate: new Date(selectedYear, 0, 1),
             endDate: new Date(selectedYear, 11, 31)
         }));
+        props.getList(query)
     };
     
     // Handle date range change and update the query object
@@ -49,7 +52,16 @@ const MediaProjectList = (props) => {
           startDate: start,
           endDate: end, // If only one date is selected, set both to that date
         }));
+        props.getList(query)
       };
+
+    const handlePageClick = (selectedPage) => {
+        setQuery(prevQuery => ({
+            ...prevQuery,
+            pageIndex: selectedPage.selected + 1, // `selected` is zero-based
+        }));
+        props.getList({ ...query, pageIndex: selectedPage.selected + 1 });
+    };
 
 
 
@@ -61,13 +73,17 @@ const MediaProjectList = (props) => {
         props.getList(query)
     }
 
+    
+
 
     useEffect(() => {
-        props.getList()
-    }, [props.isUpdated, props.isCreated, props.isDeleted])
+        if (props.isDeleted || props.isUpdated || props.isCreated) {
+            props.getList(query); 
+        }
+    }, [props.isDeleted, props.isUpdated, props.isCreated, query]);
 
     useEffect(() => {
-        handleClickSearch(); // Call the search function on page load
+        props.getList(query);
       }, []);
 
     useEffect(() => {
@@ -82,7 +98,7 @@ const MediaProjectList = (props) => {
                     <i className="fa-solid fa-note-sticky icon-total"></i>
                     <div className="summary-text-container">
                         <p className="title-text">Tổng số</p>
-                        <p className="value-text-total">{query.totalCount}</p>
+                        <p className="value-text-total">{props.totalCount}</p>
                     </div>
                     
                 </div>
@@ -90,21 +106,21 @@ const MediaProjectList = (props) => {
                     <i className="fa-solid fa-pen-to-square icon-in-progress"></i>
                     <div className="summary-text-container">
                         <p className="title-text">Đang thực hiện</p>
-                        <p className="value-text-in-progress">{query.inProgressCount}</p>
+                        <p className="value-text-in-progress">{props.inProgressCount}</p>
                     </div>
                 </div>
                 <div className="summary-box">
                     <i className="fa-solid fa-spinner icon-waiting-approval"></i>
                     <div className="summary-text-container">
                         <p className="title-text">Chờ duyệt</p>
-                        <p className="value-text-waiting-approval">{query.waitingApproval}</p>
+                        <p className="value-text-waiting-approval">{props.waitingApprovalCount}</p>
                     </div>
                 </div>
                 <div className="summary-box">
                     <i className="fa-solid fa-circle-check icon-approved"></i>
                     <div className="summary-text-container">
                         <p className="title-text">Đã duyệt</p>
-                        <p className="value-text-approved">{query.approved}</p>
+                        <p className="value-text-approved">{props.approvedCount}</p>
                     </div>
                 </div>
             </div>
@@ -112,7 +128,7 @@ const MediaProjectList = (props) => {
                 <div className="content">
                     <div className="filter-form">
                         <select 
-                            className="form-control-filter" 
+                            className="form-control-filter"
                             value={query.year} 
                             onChange={(e) => handleYearChange(Number(e.target.value))}
                         >
@@ -136,12 +152,13 @@ const MediaProjectList = (props) => {
                             minDate={new Date(query.year, 0, 1)}
                             maxDate={new Date(query.year, 11, 31)}
                             dateFormat="dd/MM"
-                            placeholderText="Select a date range"
+                            placeholderText="Khoảng thời gian"
                             isClearable
                         />
 
                         <select 
                             className="form-control-filter" 
+                            name="sector"
                             value={query.sector} 
                             onChange={handleQueryChange}
                         >
@@ -155,6 +172,7 @@ const MediaProjectList = (props) => {
 
                         <select 
                             className="form-control-filter" 
+                            name="status"
                             value={query.status} 
                             onChange={handleQueryChange}
                         >
@@ -166,6 +184,7 @@ const MediaProjectList = (props) => {
                             ))}
                         </select>
                         <input
+                            name="keyword"
                             type="text"
                             placeholder="Tìm kiếm..."
                             value={query.keyword}
@@ -178,10 +197,13 @@ const MediaProjectList = (props) => {
                             handleChange={handleQueryChange}
                             label = "Cá nhân"
                         />
-
+                        <NavLink to="/MediaProject/Details" className="blue-button">
+                            Thêm +
+                        </NavLink>
+{/* 
                         <div className="icon-search">
                             <MdSearch onClick={handleClickSearch} fontSize="1.2rem"/>
-                        </div>
+                        </div> */}
                     </div>
                     <table>
                         <thead>
@@ -221,26 +243,29 @@ const MediaProjectList = (props) => {
                         </tbody>
                     </table>
                     <div className="paging">
-                        <ReactPaginate
-                            nextLabel="next >"
-                            pageRangeDisplayed={2}
-                            marginPagesDisplayed={2}
-                            pageCount={query.pageCount}
-                            previousLabel="< previous"
-                            pageClassName="page-item"
-                            pageLinkClassName="page-link"
-                            previousClassName="page-item"
-                            previousLinkClassName="page-link"
-                            nextClassName="page-item"
-                            nextLinkClassName="page-link"
-                            breakLabel="..."
-                            breakClassName="page-item"
-                            breakLinkClassName="page-link"
-                            containerClassName="pagination"
-                            activeClassName="active"
-                            renderOnZeroPageCount={null}
-                        />
+                        {props.pageCount > 1 && ( // Conditionally render the pagination row
+                            <ReactPaginate
+                                nextLabel="Next >"
+                                previousLabel="< Previous"
+                                pageRangeDisplayed={5}
+                                marginPagesDisplayed={1}
+                                pageCount={props.pageCount}
+                                onPageChange={handlePageClick}
+                                containerClassName="pagination-row"
+                                pageClassName="page-item"
+                                pageLinkClassName="page-link"
+                                previousClassName="page-item"
+                                previousLinkClassName="page-link"
+                                nextClassName="page-item"
+                                nextLinkClassName="page-link"
+                                breakClassName="page-item"
+                                breakLinkClassName="page-link"
+                                activeClassName="active"
+                                disabledClassName="disabled"
+                            />
+                        )}
                     </div>
+
                 </div>
             </div>
         </div>

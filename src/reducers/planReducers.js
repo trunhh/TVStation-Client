@@ -23,20 +23,17 @@ const planReducer = (state = initState, action) => {
                 ...action.payload,
             }
 
-        case planConstant.GET_LIST_INIT_SUCCEED:
-            return {
-                ...state,
-                ...action.payload,
-            };
-
         case planConstant.GET_LIST_SUCCEED:
             return {
                 ...state,
-                data: action.payload.data,
+                ...action.payload,    
+                isUpdated: false,
+                isDeleted: false,
+                isCreated: false
             };
 
+        case planConstant.GET_FAILED:
         case planConstant.GET_LIST_FAILED:
-        case planConstant.GET_LIST_INIT_FAILED:
             return {
                 ...state,
                 errorMessage: action.payload,

@@ -20,6 +20,7 @@ import Settings from './pages/home/settings/Settings';
 import { useNavigate } from "react-router-dom";
 import PasswordChanging from './pages/home/password changing/PasswordChanging';
 import MediaProjectList from './pages/home/mediaProject/MediaProjectList';
+import MediaProjectDetail from './pages/home/mediaProject/MediaProjectDetail';
 
 const SignupWithLoading = WithLoading(Signup);
 const SigninWithLoading = WithLoading(Signin);
@@ -29,6 +30,7 @@ const ListGroupsWithLoading = WithLoading(ListGroups)
 const PasswordChangingWithLoading = WithLoading(PasswordChanging)
 const SettingsWithLoading = WithLoading(Settings)
 const MediaProjectWithLoading = WithLoading(MediaProjectList)
+const MediaProjectDetailWithLoading = WithLoading(MediaProjectDetail)
 
 function App() {
     
@@ -87,6 +89,7 @@ function App() {
                     <Route path="/password-changing" element={<PasswordChangingWithLoading />} />
                     <Route path="/settings" element={<SettingsWithLoading />} />
                     <Route path="/MediaProject" element={<MediaProjectWithLoading />} />
+                    <Route path="/MediaProject/Details" element={<MediaProjectDetailWithLoading />} />
             </Route>
 
             {/* <Route path="/" element={<Home />} /> */}
