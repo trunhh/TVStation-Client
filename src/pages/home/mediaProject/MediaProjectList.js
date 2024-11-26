@@ -13,6 +13,7 @@ import ReactPaginate from 'react-paginate'
 import planActions from '../../../actions/planActions'
 import { SectorConst, StatusConst } from '../../../constants/constants'
 import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
+import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch'
 
 const MediaProjectList = (props) => {
     const [query, setQuery] = useState({
@@ -43,13 +44,12 @@ const MediaProjectList = (props) => {
     // Handle date range change and update the query object
     const handleDateRangeChange = (dates) => {
         const [start, end] = dates;
-        setQuery(prevQuery => ({
-            ...prevQuery,
-            startDate: start || prevQuery.startDate,
-            endDate: end || prevQuery.endDate
+        setQuery((prevQuery) => ({
+          ...prevQuery,
+          startDate: start,
+          endDate: end, // If only one date is selected, set both to that date
         }));
-    };
-
+      };
 
 
 
@@ -80,19 +80,32 @@ const MediaProjectList = (props) => {
             <div className="plan-summary">
                 <div className="summary-box">
                     <i className="fa-solid fa-note-sticky icon-total"></i>
-                    <p className="title-text">Tổng số</p>
+                    <div className="summary-text-container">
+                        <p className="title-text">Tổng số</p>
+                        <p className="value-text-total">{query.totalCount}</p>
+                    </div>
+                    
                 </div>
                 <div className="summary-box">
                     <i className="fa-solid fa-pen-to-square icon-in-progress"></i>
-                    <p className="title-text">Đang thực hiện</p>
+                    <div className="summary-text-container">
+                        <p className="title-text">Đang thực hiện</p>
+                        <p className="value-text-in-progress">{query.inProgressCount}</p>
+                    </div>
                 </div>
                 <div className="summary-box">
                     <i className="fa-solid fa-spinner icon-waiting-approval"></i>
-                    <p className="title-text">Chờ duyệt</p>
+                    <div className="summary-text-container">
+                        <p className="title-text">Chờ duyệt</p>
+                        <p className="value-text-waiting-approval">{query.waitingApproval}</p>
+                    </div>
                 </div>
                 <div className="summary-box">
                     <i className="fa-solid fa-circle-check icon-approved"></i>
-                    <p className="title-text">Đã duyệt</p>
+                    <div className="summary-text-container">
+                        <p className="title-text">Đã duyệt</p>
+                        <p className="value-text-approved">{query.approved}</p>
+                    </div>
                 </div>
             </div>
             <div className="plan-list">
@@ -115,7 +128,6 @@ const MediaProjectList = (props) => {
                             })}
                         </select>
                         <DatePicker
-                            className="react-datepicker__input-container"
                             selected={query.startDate}
                             onChange={handleDateRangeChange}
                             startDate={query.startDate}
@@ -159,6 +171,12 @@ const MediaProjectList = (props) => {
                             value={query.keyword}
                             onChange={handleQueryChange} 
                             className="search-bar" 
+                        />
+
+                        <ToggleSwitch
+                            value={query.isPersonal} 
+                            handleChange={handleQueryChange}
+                            label = "Cá nhân"
                         />
 
                         <div className="icon-search">

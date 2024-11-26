@@ -14,6 +14,13 @@ $focus-border-color: #39f;
     border-radius: $border-radius;
 }
 
+@mixin value-text-style($color) {
+    color: $color;
+    font-weight: $font-weight;
+    font-size: calc(1vw + 1rem);
+
+}
+
 @mixin input-style {
     outline: none;
     border-radius: $border-radius;
@@ -48,6 +55,31 @@ $focus-border-color: #39f;
                 font-weight : 500;
                 height: 30%;
             }
+        }
+        .summary-text-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-text-container > * {
+            flex-grow: 1;
+            display: flex;
+        }
+
+        .value-text-total {
+            @include value-text-style(#9748FF)
+        }
+
+        .value-text-in-progress {
+            @include value-text-style(#039EF7)
+        }
+
+        .value-text-waiting-approval {
+            @include value-text-style(#FE9A02)
+        }
+
+        .value-text-approved {
+            @include value-text-style(#149143)
         }
 
         .icon-total {
@@ -116,9 +148,13 @@ $focus-border-color: #39f;
             .filter-form {
                 position: relative;
                 display: flex;
-                width: fit-content;
-                justify-content: space-around;
+                flex-wrap: nowrap; 
+                width: fit-content; 
                 gap: 10px;
+            }
+            
+            .filter-form > * {
+                flex-shrink: 0;
             }
 
             .type-filter {
@@ -141,6 +177,7 @@ $focus-border-color: #39f;
 
             .search-bar {
                 @include input-style;
+                max-width: 192px;
             }
 
             .search-bar:focus {
@@ -150,11 +187,17 @@ $focus-border-color: #39f;
             .react-datepicker__input-container {
                 input {
                     @include input-style;
+                    max-width: 160px;
                 }
             }
 
             .react-datepicker__input-container:focus {
                 @include focus-style;
+            }
+
+            .react-datepicker__dropdown {
+                position: absolute;
+                z-index: 9999; 
             }
 
             .icon-close {

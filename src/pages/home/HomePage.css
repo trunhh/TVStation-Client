@@ -22,4 +22,5 @@
     background-color: #F4F6F9;
     padding: 32px;
     height: 100vh; /* Full viewport height */
+    overflow-x: auto;
 }

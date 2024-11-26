@@ -1,0 +1,52 @@
+/* Basic styles for the toggle switch */
+.toggle-switch {
+    display: flex;
+    align-items: center;
+}
+
+.toggle-switch-text {
+    color: #4B5675;
+    font-size: .95rem;
+    font-weight: 550;
+    margin-inline: 10px;
+}
+
+.toggle-switch label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    display: none; /* Hide the checkbox */
+}
+
+.toggle-switch .slider {
+    position: relative;
+    width: 64px;
+    height: 32px;
+    background-color: #ccc;
+    border-radius: 50px;
+    transition: 0.4s;
+}
+
+.toggle-switch .slider:before {
+    content: '';
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: white;
+    transition: 0.4s;
+    left: 2px;
+    top: 2px;
+}
+
+/* Change the background color and position of the slider when checked */
+.toggle-switch input:checked + .slider {
+    background-color: #39f;
+}
+
+.toggle-switch input:checked + .slider:before {
+    transform: translateX(32px);
+}
