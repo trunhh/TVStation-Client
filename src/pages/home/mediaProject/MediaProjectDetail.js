@@ -3,6 +3,7 @@ import 'react-quill/dist/quill.snow.css';
 import '../PlanDetailsPage.scss'
 import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
 const MediaProjectDetail = (props) => {
     const [editorContent, setEditorContent] = useState('');
 
@@ -22,6 +23,7 @@ const MediaProjectDetail = (props) => {
                     className="search-bar" 
                 />
                 <ReactQuill
+                    className="large-editor"
                     theme="snow"
                     value={editorContent}
                     onChange={handleContentChange}
@@ -43,6 +45,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        get: (id) => {
+            dispatch(planActions.get(MEDIA_PROJECT_API, id))
+        },
+        delete: (id) => {
+            dispatch(planActions.remove(MEDIA_PROJECT_API, id))
+        }
 
     }
 }
