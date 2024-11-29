@@ -37,6 +37,9 @@ $focus-border-color: #39f;
 }
 
 .plan-page {
+    display: flex;          /* Enable flexbox on the container */
+    flex-direction: column;  
+    justify-content: center; /* Center horizontally */
     .plan-summary {
         border-radius: $border-radius;
         gap: 10px;

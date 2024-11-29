@@ -2,7 +2,8 @@ import planConstant from "../constants/planConstant";
 
 const initState = {
     errorMessage: null,
-    data: [],
+    selected: null,
+    list: [],
     pageCount: 0,
     totalCount: 0,
     inProgressCount: 0,
@@ -82,6 +83,12 @@ const planReducer = (state = initState, action) => {
             return {
                 ...state,
                 errorMessage: action.payload,
+            };
+
+        case planConstant.CLEAR_DATA:
+            return {
+                ...state,
+                selected: null,
             };
 
         // Default case

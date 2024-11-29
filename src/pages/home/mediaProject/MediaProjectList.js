@@ -14,7 +14,7 @@ import planActions from '../../../actions/planActions'
 import { SectorConst, StatusConst } from '../../../constants/constants'
 import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
 import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch'
-import { NavLink } from "react-router-dom";
+import MediaProjectDetail from './MediaProjectDetail'
 
 const MediaProjectList = (props) => {
     const [query, setQuery] = useState({
@@ -23,6 +23,8 @@ const MediaProjectList = (props) => {
         startDate: new Date(new Date().getFullYear(), 0, 1),
         endDate: new Date(new Date().getFullYear(), 11, 31)
     });
+
+    const [isModalOpen, setModalOpen] = useState(false);
 
     const handleQueryChange = (e) => {
         const { name, value } = e.target;
@@ -63,13 +65,27 @@ const MediaProjectList = (props) => {
         props.getList({ ...query, pageIndex: selectedPage.selected + 1 });
     };
 
+    const handleRowClick = (id) => {
+        props.get(id);
+        setModalOpen(true);
+    };
 
+    const handleAddNewClick = () => {
+        props.clearSelected();
+        setModalOpen(true);
+    };
 
-    const handleClickDelete = (item) => {
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        props.clearSelected();
+    };
+
+    const handleDeleteClick = (item) => {
         props.remove(item.id);
+        props.clearSelected();
     }
 
-    const handleClickSearch = () => {
+    const handleSearchClick = () => {
         props.getList(query)
     }
 
@@ -197,12 +213,15 @@ const MediaProjectList = (props) => {
                             handleChange={handleQueryChange}
                             label = "Cá nhân"
                         />
-                        <NavLink to="/MediaProject/Details" className="blue-button">
+                        <button
+                            className="blue-button"
+                            onClick={handleAddNewClick}
+                        >
                             Thêm +
-                        </NavLink>
+                        </button>
 {/* 
                         <div className="icon-search">
-                            <MdSearch onClick={handleClickSearch} fontSize="1.2rem"/>
+                            <MdSearch onClick={handleSearchClick} fontSize="1.2rem"/>
                         </div> */}
                     </div>
                     <table>
@@ -218,9 +237,9 @@ const MediaProjectList = (props) => {
                         </thead>
                         <tbody>
                             {
-                                props.data && props.data.map((item, index) => {
+                                props.list && props.list.map((item, index) => {
                                     return (
-                                        <tr key={item.id}>
+                                        <tr key={item.id} onClick={() => handleRowClick(item.id)}>
                                             <td>{index + 1}</td>
                                             <td>{item.title}</td>
                                             <td>
@@ -233,7 +252,10 @@ const MediaProjectList = (props) => {
                                             <td>
                                                 <MdOutlineDeleteForever fontSize="1.2rem"
                                                     style={{ cursor: 'pointer' }}
-                                                    onClick={() => handleClickDelete(item)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        handleDeleteClick(item)
+                                                    }}
                                                 />
                                             </td>
                                         </tr>
@@ -265,9 +287,14 @@ const MediaProjectList = (props) => {
                             />
                         )}
                     </div>
-
                 </div>
             </div>
+            {isModalOpen && (
+                <MediaProjectDetail
+                    onClose={handleCloseModal}
+                    selected={props.selected}
+                />
+            )}
         </div>
         
     )
@@ -282,12 +309,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (query) => {
-            dispatch(planActions.getList(MEDIA_PROJECT_API, query))
-        },
-        remove: (id) => {
-            dispatch(planActions.remove(MEDIA_PROJECT_API, id))
-        }
+        getList: (query) => dispatch(planActions.getList(MEDIA_PROJECT_API, query)),
+        get: (id) => dispatch(planActions.get(MEDIA_PROJECT_API, id)),
+        remove: (id) => dispatch(planActions.remove(MEDIA_PROJECT_API, id)),
+        clearSelected: () => dispatch(planActions.clearSelected)
     }
 }
 

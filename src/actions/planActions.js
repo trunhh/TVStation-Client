@@ -113,7 +113,7 @@ const update = (route,object) => async (dispatch) => {
 
     try {
         const response = await axios({
-            url: route + '/' + object.id,
+            url: route,
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -168,11 +168,17 @@ const remove = (route,id) => async (dispatch) => {
     }
 };
 
+const clearSelected = () => (dispatch) => {
+    dispatch({
+        type: planConstant.CLEAR_SELECTED,
+    });
+};
 
 export default {
     get,
     getList,
     create,
     update,
-    remove
+    remove,
+    clearSelected
 }
