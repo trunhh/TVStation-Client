@@ -26,6 +26,21 @@ const MediaProjectList = (props) => {
 
     const [isModalOpen, setModalOpen] = useState(false);
 
+    useEffect(() => {
+        if (isModalOpen) {
+            // Disable background scrolling
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Restore background scrolling
+            document.body.style.overflow = '';
+        }
+
+        // Cleanup when component unmounts or modal state changes
+        return () => {
+            document.body.style.overflow = ''; // Reset when modal is closed or component is unmounted
+        };
+    }, [isModalOpen]);
+
     const handleQueryChange = (e) => {
         const { name, value } = e.target;
         setQuery(prevQuery => ({
@@ -213,17 +228,21 @@ const MediaProjectList = (props) => {
                             handleChange={handleQueryChange}
                             label = "Cá nhân"
                         />
-                        <button
-                            className="blue-button"
-                            onClick={handleAddNewClick}
-                        >
-                            Thêm +
-                        </button>
+                        
 {/* 
                         <div className="icon-search">
                             <MdSearch onClick={handleSearchClick} fontSize="1.2rem"/>
                         </div> */}
                     </div>
+                    <div className="blue-button-container">
+                    <button
+                            className="blue-button"
+                            onClick={handleAddNewClick}
+                        >
+                            Thêm +
+                        </button>
+                    </div>
+                    
                     <table>
                         <thead>
                             <tr>

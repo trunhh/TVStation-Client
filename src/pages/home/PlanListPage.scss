@@ -36,6 +36,7 @@ $focus-border-color: #39f;
     outline: none;
 }
 
+
 .plan-page {
     display: flex;          /* Enable flexbox on the container */
     flex-direction: column;  
@@ -114,8 +115,9 @@ $focus-border-color: #39f;
         gap: 10px;
 
         .content {
-            width: fit-content;
-            min-width: 600px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
             margin: auto;
             font-family: "Inter", sans-serif;
 
@@ -123,6 +125,7 @@ $focus-border-color: #39f;
                 width: 100%;
                 border: none;
                 border-collapse: collapse;
+                table-layout: fixed;
 
                 td, th {
                     padding: 10px;
@@ -151,14 +154,32 @@ $focus-border-color: #39f;
             .filter-form {
                 position: relative;
                 display: flex;
-                flex-wrap: nowrap; 
+                flex-wrap: wrap; 
                 width: fit-content; 
                 gap: 10px;
             }
             
             .filter-form > * {
-                flex-shrink: 0;
+                flex: 1 1 calc(20% - 10px); /* 20% width for 5 items per row, accounting for gap */
+                box-sizing: border-box;
             }
+
+            @media (max-width: 1024px) {
+                .filter-form > * {
+                    flex: 1 1 calc(33.33% - 10px); /* 3 items per row */
+                }
+            }
+            @media (max-width: 768px) {
+                .filter-form > * {
+                    flex: 1 1 calc(50% - 10px); /* 2 items per row */
+                }
+            }
+            @media (max-width: 480px) {
+                .filter-form > * {
+                    flex: 1 1 100%; /* 1 item per row */
+                }
+            }
+            
 
             .type-filter {
                 position: relative;
@@ -180,7 +201,6 @@ $focus-border-color: #39f;
 
             .search-bar {
                 @include input-style;
-                max-width: 192px;
             }
 
             .search-bar:focus {
@@ -190,7 +210,6 @@ $focus-border-color: #39f;
             .react-datepicker__input-container {
                 input {
                     @include input-style;
-                    max-width: 160px;
                 }
             }
 
@@ -201,6 +220,11 @@ $focus-border-color: #39f;
             .react-datepicker__dropdown {
                 position: absolute;
                 z-index: 9999; 
+            }
+
+            .blue-button-container {
+                padding: 8px;
+                text-align: right;
             }
 
             .blue-button {

@@ -28,7 +28,6 @@ $focus-border-color: #39f;
         transition: filter 0.3s ease-in-out;
     }
     
-    /* Optional: Style for the modal backdrop */
     .modal-backdrop {
         position: fixed;
         top: 0;
@@ -40,10 +39,9 @@ $focus-border-color: #39f;
     }
 
     .plan-details {
-        position: absolute;
-        top: 75%;                 /* Vertically center */
+        top: 50%;                 /* Vertically center */
         left: 50%;                /* Horizontally center */
-        transform: translate(-50%, -50%); /* Adjust to exact center */
+        transform: translate(50%, -50%); /* Adjust to exact center */
         background-color: white;
         padding: 32px;
         border: 1px solid $light-gray;

@@ -1,5 +1,11 @@
 .home-container {
     display: flex;
+    
+}
+.home-container > * {
+    flex-shrink: 1;  /* Allow the items to shrink */
+    flex-grow: 0;    /* Don't let the items grow (keep their original width/height ratio) */
+    flex-basis: auto; /* Allow the items to shrink based on their content size */
 }
 
 .home-main {
@@ -9,8 +15,22 @@
     transition: margin-left 350ms cubic-bezier(0.165, 0.84, 0.44, 1) 0ms;
     display: flex;
     flex-direction: column;
-    position: relative;
-    /* height: 100vh; */
+    height: 100%;
+    width: 100%;
+}
+
+.home-main > * {
+    flex-shrink: 1;  /* Allow the items to shrink */
+    flex-grow: 0;    /* Don't let the items grow (keep their original width/height ratio) */
+    flex-basis: auto;
+    overflow: hidden; /* Allow the items to shrink based on their content size */
+}
+
+/* Mobile view: Remove the margin-left for smaller screens */
+@media (max-width: 768px) {
+    .home-main {
+        margin-left: 0; /* Set margin-left to 0 on mobile */
+    }
 }
 
 .home-main.sidebar-close {
@@ -22,5 +42,4 @@
     background-color: #F4F6F9;
     padding: 32px;
     height: 100vh; /* Full viewport height */
-    overflow-x: auto;
 }

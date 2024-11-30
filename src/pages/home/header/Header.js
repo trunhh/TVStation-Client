@@ -10,6 +10,8 @@ import './Header.css';
 import { connect } from 'react-redux';
 
 import viewActions from '../../../actions/viewActions';
+import { NavLink, useLocation } from 'react-router-dom';
+
 
 const Header = (props) => {
     const [sideIsOpen, setSidebarIsOpen] = useState(false)
@@ -30,11 +32,37 @@ const Header = (props) => {
     const handleClickOutSideDropdown = () => {
         setDropdownIsOpen(false)
     }
+
+    const location = useLocation();
+
+    const pageNames = {
+        '/': 'Home',
+        'about': 'About Us',
+        'contact': 'Contact',
+        'dashboard': 'Dashboard',
+        "MediaProject": "Hậu kì"
+    }
+
+
+
+    const pathSegments = location.pathname.split('/').filter(segment => segment);
+
+    const pageDetails = {
+        fullPath: pathSegments
+            .map(segment => pageNames[segment] || segment)
+            .join(' '),
+        pageName: pageNames[pathSegments[pathSegments.length - 1]]  , // Last segment of the path
+    };
+
+
     return (
         <div className='header'>
             <div className='row-1'>
                 <div className='nav-left'>
                     <MdMenu className='menu-icon' onClick={clickMenuIcon} />
+                    <NavLink to="/" className="logo-link">
+                        <img src="../../images/logo-ktv.png" alt="Logo" className="logo-image" />
+                    </NavLink>
                 </div>
                 <div className='nav-right'>
                     <div className='header-avatar' onClick={_onClickAvatar}>
@@ -46,7 +74,9 @@ const Header = (props) => {
                 </div>
             </div>
             <div className='row-2'>
-                
+                <h1 className="page-title">{pageDetails.pageName}</h1>
+                <h1 className="page-path">|</h1>
+                <h1 className="page-path">{pageDetails.fullPath}</h1>
             </div>
         </div>
     )
