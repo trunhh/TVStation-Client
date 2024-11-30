@@ -50,6 +50,7 @@ const CustomInputNonOutline = (props) => {
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 onChange={handleInputChange}
+                placeholder={props.placeholder}
             />
         </InputNonOutline>
     )

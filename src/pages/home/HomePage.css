@@ -3,9 +3,10 @@
     
 }
 .home-container > * {
-    flex-shrink: 1;  /* Allow the items to shrink */
-    flex-grow: 0;    /* Don't let the items grow (keep their original width/height ratio) */
-    flex-basis: auto; /* Allow the items to shrink based on their content size */
+    flex-shrink: 1;  
+    flex-grow: 0;    
+    flex-basis: auto;
+    overflow: hidden;
 }
 
 .home-main {
@@ -20,10 +21,10 @@
 }
 
 .home-main > * {
-    flex-shrink: 1;  /* Allow the items to shrink */
-    flex-grow: 0;    /* Don't let the items grow (keep their original width/height ratio) */
+    flex-shrink: 1;  
+    flex-grow: 0;    
     flex-basis: auto;
-    overflow: hidden; /* Allow the items to shrink based on their content size */
+    overflow: hidden;
 }
 
 /* Mobile view: Remove the margin-left for smaller screens */

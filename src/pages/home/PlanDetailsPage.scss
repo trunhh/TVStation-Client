@@ -22,7 +22,9 @@ $focus-border-color: #39f;
     outline: none;
 }
 
-.plan-page {
+.plan-detail-page {
+
+
     .blurred {
         filter: blur(5px);  /* Adjust the blur value as needed */
         transition: filter 0.3s ease-in-out;
@@ -39,18 +41,16 @@ $focus-border-color: #39f;
     }
 
     .plan-details {
-        top: 50%;                 /* Vertically center */
-        left: 50%;                /* Horizontally center */
-        transform: translate(50%, -50%); /* Adjust to exact center */
+        position: fixed;
+        top: 25%;                 /* Vertically center */
         background-color: white;
         padding: 32px;
         border: 1px solid $light-gray;
         border-radius: $border-radius;
         display: flex;
-        flex-direction: column; /* Align children vertically */
-        gap: 10px; /* Optional gap between items */
-        align-items: stretch; /* Force children to match the width of the parent */
-        width: 50%; /* Ensure this takes up full width of parent */
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
         z-index: 1000;
 
         .filter-form {

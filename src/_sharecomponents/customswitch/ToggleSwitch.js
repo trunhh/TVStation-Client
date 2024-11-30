@@ -1,18 +1,18 @@
 import React from 'react';
 import './ToggleSwitch.scss'; // Import custom styles
 
-const ToggleSwitch = ({ label, value, handleChange }) => {
+const ToggleSwitch = (props) => {
     return (
         <div className="toggle-switch">
             <label>
                 
                 <input
                     type="checkbox"
-                    checked={value}
-                    onChange={handleChange}
+                    checked={props.value}
+                    onChange={props.handleChange}
                 />
                 <span className="slider"></span>
-                <p className="toggle-switch-text">{label}</p>
+                <p className="toggle-switch-text">{props.label}</p>
             </label>
         </div>
     );

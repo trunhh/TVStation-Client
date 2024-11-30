@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
 import planActions from '../../../actions/planActions'
+import CustomInputNonOutline from '../../../_sharecomponents/custominput/CustomInputNonOutline';
 const MediaProjectDetail = (props) => {
     const [editorContent, setEditorContent] = useState('');
     const nullFormData = {
@@ -13,7 +14,7 @@ const MediaProjectDetail = (props) => {
         status: '',
         sector: '',
         createdDate: '',
-        creator: '',
+        creatorName: '',
         isPersonal: false,
     }
     const [formData, setFormData] = useState(nullFormData);
@@ -57,11 +58,11 @@ const MediaProjectDetail = (props) => {
     };
 
     return (
-        <div className="plan-page">
+        <div className="plan-detail-page">
             <div className="modal-backdrop" onClick={handleModalClose}></div>
             
             <div className="plan-details">
-                <input
+                <CustomInputNonOutline
                     name="keyword"
                     type="text"
                     placeholder="Tiêu đề"

@@ -56,7 +56,7 @@ const Header = (props) => {
 
 
     return (
-        <div className='header'>
+        <nav className='header'>
             <div className='row-1'>
                 <div className='nav-left'>
                     <MdMenu className='menu-icon' onClick={clickMenuIcon} />
@@ -78,7 +78,7 @@ const Header = (props) => {
                 <h1 className="page-path">|</h1>
                 <h1 className="page-path">{pageDetails.fullPath}</h1>
             </div>
-        </div>
+        </nav>
     )
 }
 
