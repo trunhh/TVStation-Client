@@ -1,12 +1,14 @@
+import routeConstants from "../constants/routeConstants"
+
 export const menuLinks = [
     {
         text: 'User Info',
-        link: '/user-info',
+        link: routeConstants.USER_INFO,
         icon: 'fa-solid fa-user'
     },
     {
         text: 'Change Password',
-        link: '/password-changing',
+        link: routeConstants.PASSWORD_CHANGING,
         icon: 'fa fa-key'
     },
     {
@@ -16,17 +18,17 @@ export const menuLinks = [
         subMenu: [
             {
                 text: 'Khung năm',
-                link: '/ProgramFrameYear',
+                link: routeConstants.PROGRAM_FRAME_YEAR,
                 icon: 'fa-solid fa-calendar-days'
             },
             {
                 text: 'Khung tuần',
-                link: '/ProgramFrameWeek',
+                link: routeConstants.PROGRAM_FRAME_WEEK,
                 icon: 'fa-solid fa-calendar-week'
             },
             {
                 text: 'Lịch phát sóng',
-                link: '/ProgramFrameBroadcast',
+                link: routeConstants.PROGRAM_FRAME_BROADCAST,
                 icon: 'fa-solid fa-calendar-day'
             }
         ]
@@ -38,19 +40,19 @@ export const menuLinks = [
         subMenu: [
             {
                 text: 'Tin bài phóng sự',
-                link: '/ProductionRegistration',
+                link: routeConstants.PRODUCTION_REGISTRATION,
                 icon: 'fa-solid fa-pen-ruler'
             },
             {
                 text: 'Kịch bản tác phẩm',
-                link: '/ScriptProgram',
+                link: routeConstants.SCRIPT_PROGRAM,
                 icon: 'fa-solid fa-pen-clip'
             }
         ]
     },
     {
         text: 'Hậu kì',
-        link: '/MediaProject',
+        link: routeConstants.MEDIA_PROJECT,
         icon: 'fa-solid fa-file-pen',
     }
 ]

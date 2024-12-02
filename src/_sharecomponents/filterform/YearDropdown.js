@@ -1,3 +1,4 @@
+import './FilterForm.scss'
 import React from 'react';
 
 const YearDropdown = (props) => {

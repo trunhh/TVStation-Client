@@ -22,6 +22,7 @@ $focus-border-color: #39f;
 }
 
 .plan-page {
+    margin: 32px;
     display: flex;          /* Enable flexbox on the container */
     flex-direction: column;  
     justify-content: center; /* Center horizontally */
@@ -117,12 +118,13 @@ $focus-border-color: #39f;
             }
 
             tbody {
-                tr:nth-child(even) {
-                    background-color: rgba(0, 0, 0, 0.05);
-                }
+                // tr:nth-child(even) {
+                //     background-color: rgba(0, 0, 0, 0.05);
+                // }
 
                 tr:hover {
-                    background-color: #e6e7e9;
+                    background-color: #e6e6e6;
+                    border-radius: $border-radius;
                 }
             }
 
@@ -213,41 +215,6 @@ $focus-border-color: #39f;
             }
         }
 
-        /* Status Box */
-        .status-box {
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: #fff;
-            font-weight: bold;
-            display: inline-block;
-
-            &.in_progress {
-                background-color: #FFD700;
-            }
-
-            &.waiting_for_approval {
-                background-color: #FFF5E6;
-                color: #F90;
-            }
-
-            &.approved {
-                background-color: #E3FAE1;
-                color: #119143;
-            }
-
-            &.returned {
-                background-color: #FF4500;
-            }
-
-            &.retrieved {
-                background-color: #1E90FF;
-            }
-
-            &.cancelled {
-                background-color: #DC143C;
-            }
-        }
-        
         .pagination-row {
             display: flex;
             justify-content: center;

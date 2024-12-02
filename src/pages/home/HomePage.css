@@ -1,12 +1,12 @@
 .home-container {
     display: flex;
-    
+    height: 100vh;
+    width: 100vw;
 }
 .home-container > * {
     flex-shrink: 1;  
     flex-grow: 0;    
     flex-basis: auto;
-    overflow: hidden;
 }
 
 .home-main {
@@ -20,12 +20,6 @@
     width: 100%;
 }
 
-.home-main > * {
-    flex-shrink: 1;  
-    flex-grow: 0;    
-    flex-basis: auto;
-    overflow: hidden;
-}
 
 /* Mobile view: Remove the margin-left for smaller screens */
 @media (max-width: 768px) {
@@ -41,6 +35,6 @@
 .main-content {
     height: 100%;
     background-color: #F4F6F9;
-    padding: 32px;
-    height: 100vh; /* Full viewport height */
+    height: 100%;
+    /* height: 100vh; Full viewport height */
 }

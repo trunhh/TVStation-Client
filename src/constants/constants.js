@@ -1,16 +1,16 @@
-export const SectorConst = {
-    TV: "Truyền hình",
-    BROADCAST: "Phát thanh"
-}
+export const SectorConst = [
+    { value: "TV", value_i18n: "Truyền hình" },
+    { value: "BROADCAST", value_i18n: "Phát thanh" }
+];
 
-export const StatusConst = {
-    IN_PROGRESS: "Đang thực hiện",
-    WAITING_FOR_APPROVAL: "Chờ xác nhận",
-    APPROVED: "Đã xác nhận",
-    RETURNED: "Trả lại",
-    RETRIEVED: "Thu hồi",
-    CANCELLED: "Đã hủy"
-}
+export const StatusConst = [
+    { value: "IN_PROGRESS", value_i18n: "Đang thực hiện" },
+    { value: "WAITING_FOR_APPROVAL", value_i18n: "Chờ xác nhận" },
+    { value: "APPROVED", value_i18n: "Đã xác nhận" },
+    { value: "RETURNED", value_i18n: "Trả lại" },
+    { value: "RETRIEVED", value_i18n: "Thu hồi" },
+    { value: "CANCELLED", value_i18n: "Đã hủy" }
+];
 
 export default {
     SectorConst,

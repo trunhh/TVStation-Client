@@ -2,17 +2,27 @@ import './FilterForm.scss'
 import React from 'react';
 
 const DropdownFilter = (props) => {
+    const {
+        name,
+        value,
+        onChange,
+        options,
+        placeholder,
+        valueKey = 'key', // Default value for key-value pair
+        displayKey = 'value', // Default value for key-value pair
+    } = props;
+
     return (
         <select 
             className="form-control-filter" 
-            name={props.name}
-            value={props.value} 
-            onChange={props.onChange}
+            name={name}
+            value={value} 
+            onChange={onChange}
         >
-            <option value="">{props.placeholder}</option>
-            {Object.keys(props.options).map(key => (
-                <option key={key} value={key}>
-                    {props.options[key]}
+            <option value="">{placeholder}</option>
+            {options.map((option, index) => (
+                <option key={index} value={option[valueKey]}>
+                    {option[displayKey]}
                 </option>
             ))}
         </select>

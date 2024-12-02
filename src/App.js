@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-do
 
 //import Home from './pages/home/Home';
 
+import routeConstants from './constants/routeConstants';
+
 import Signin from './pages/signin/Signin';
 import Signup from './pages/signup/Signup';
 import ForgotPassword from './pages/forgotpassword/ForgotPassword';
@@ -21,6 +23,8 @@ import { useNavigate } from "react-router-dom";
 import PasswordChanging from './pages/home/password changing/PasswordChanging';
 import MediaProjectList from './pages/home/mediaProject/MediaProjectList';
 import MediaProjectDetail from './pages/home/mediaProject/MediaProjectDetail';
+import ProductionRegistrationList from './pages/home/mediaProject/ProductionRegistrationList';
+import ProductionRegistrationDetail from './pages/home/mediaProject/ProductionRegistrationDetail';
 
 const SignupWithLoading = WithLoading(Signup);
 const SigninWithLoading = WithLoading(Signin);
@@ -29,8 +33,11 @@ const UserWithLoading = WithLoading(UserInfo)
 const ListGroupsWithLoading = WithLoading(ListGroups)
 const PasswordChangingWithLoading = WithLoading(PasswordChanging)
 const SettingsWithLoading = WithLoading(Settings)
+
 const MediaProjectWithLoading = WithLoading(MediaProjectList)
 const MediaProjectDetailWithLoading = WithLoading(MediaProjectDetail)
+const ProductionRegistrationWithLoading = WithLoading(ProductionRegistrationList)
+const ProductionRegistrationDetailWithLoading = WithLoading(ProductionRegistrationDetail)
 
 function App() {
     
@@ -84,12 +91,15 @@ function App() {
             <Route path="/forgot-password" element={ <ForgotPassword /> } />
 
             <Route path="/" element={ <HomePage /> }>
-                    <Route path="/user-info" element={<UserWithLoading />} />
+                    <Route path={routeConstants.USER_INFO} element={<UserWithLoading />} />
                     <Route path="/list-groups" element={<ListGroupsWithLoading />} />
-                    <Route path="/password-changing" element={<PasswordChangingWithLoading />} />
+                    <Route path={routeConstants.PASSWORD_CHANGING} element={<PasswordChangingWithLoading />} />
                     <Route path="/settings" element={<SettingsWithLoading />} />
-                    <Route path="/MediaProject" element={<MediaProjectWithLoading />} />
-                    <Route path="/MediaProject/Details" element={<MediaProjectDetailWithLoading />} />
+                    <Route path={routeConstants.MEDIA_PROJECT} element={<MediaProjectWithLoading />} />
+                    <Route path={routeConstants.MEDIA_PROJECT_DETAIL + "/:id"} element={<MediaProjectDetailWithLoading />} />
+                    <Route path={routeConstants.PRODUCTION_REGISTRATION} element={<ProductionRegistrationWithLoading />} />
+                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL} element={<ProductionRegistrationDetailWithLoading/>} />
+                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL + "/:id"} element={<ProductionRegistrationDetailWithLoading/>} />
             </Route>
 
             {/* <Route path="/" element={<Home />} /> */}

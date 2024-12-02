@@ -1,0 +1,38 @@
+/* Status Box */
+.status-box {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    display: inline-block;
+
+    &.in_progress {
+        background-color: #E7F6FF;
+        color: #039EF7;
+    }
+
+    &.waiting_for_approval {
+        background-color: #FFF5E7;
+        color: #FE9A02;
+    }
+
+    &.approved {
+        background-color: #E8F5ED;
+        color: #149143;
+    }
+
+    &.returned {
+        background-color: red;
+        color: black;
+    }
+
+    &.retrieved {
+        background-color: red;
+        color: black;
+    }
+
+    &.cancelled {
+        background-color: red;
+        color: black;
+    }
+}

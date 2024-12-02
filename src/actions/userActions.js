@@ -6,7 +6,7 @@ const token = localStorage.getItem('token')
 
 const getUserInfo = (username) => async(dispath) => {
     dispath({
-        type: userConstants.GET_USER_INFO_REQUEST
+        type: userConstants.GET_REQUEST
     })
 
     try {
@@ -16,7 +16,7 @@ const getUserInfo = (username) => async(dispath) => {
             }
         })
         dispath({
-            type: userConstants.GET_USER_INFO_SUCCEED,
+            type: userConstants.GET_SUCCEED,
             payload: response.data
         })
     }catch (error) {
@@ -30,7 +30,7 @@ const getUserInfo = (username) => async(dispath) => {
             messageError = `You don not have permission to access / on the server. Forbidden!`
         }
         dispath({
-            type: userConstants.GET_USER_INFO_FAILED,
+            type: userConstants.GET_FAILED,
             payload: {
                 statusCode: error.response.status,
                 message: messageError
@@ -40,7 +40,7 @@ const getUserInfo = (username) => async(dispath) => {
 }
 const updateUserInfo = (user, avatarUploadFile) => async(dispatch) => {
     dispatch({
-        type: userConstants.UPDATE_USER_INFO_REQUEST
+        type: userConstants.UPDATE_REQUEST
     })
 
     try {
@@ -76,7 +76,7 @@ const updateUserInfo = (user, avatarUploadFile) => async(dispatch) => {
             localStorage.setItem('avatarUrl', responseUpload.data )
 
             dispatch({
-                type: userConstants.UPDATE_USER_INFO_SUCCEED,
+                type: userConstants.UPDATE_SUCCEED,
                 payload: responseUpload.data 
             })
         }else {
@@ -98,13 +98,13 @@ const updateUserInfo = (user, avatarUploadFile) => async(dispatch) => {
                 }
             })
             dispatch({
-                type: userConstants.UPDATE_USER_INFO_SUCCEED,
+                type: userConstants.UPDATE_SUCCEED,
                 payload: response.data 
             })
         }
     }catch (error) {
         dispatch({
-            type: userConstants.UPDATE_USER_INFO_FAILED,
+            type: userConstants.UPDATE_FAILED,
             payload: 'Update user info fail'
         })
         if (error.response) {

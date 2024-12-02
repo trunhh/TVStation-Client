@@ -17,23 +17,23 @@ const initialStateUser = {
 const userReducer = (state = initialStateUser, action) => {
     switch(action.type) {
         //Get user info
-        case userConstants.GET_USER_INFO_SUCCEED:
+        case userConstants.GET_SUCCEED:
             return {
                 ...state,
                 user: action.payload
             }
-        case userConstants.GET_USER_INFO_FAILED:
+        case userConstants.GET_FAILED:
             return {
                 ...state,
                 errorMessageLoadUser: action.payload
             }
 
         //Update user info
-        case userConstants.UPDATE_USER_INFO_SUCCEED:
+        case userConstants.UPDATE_SUCCEED:
             return {
                 ...state,
             }
-        case userConstants.UPDATE_USER_INFO_FAILED:
+        case userConstants.UPDATE_FAILED:
             return {
                 ...state, 
                 errorMessageLoadUser: action.payload

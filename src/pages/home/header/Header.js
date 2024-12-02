@@ -40,7 +40,9 @@ const Header = (props) => {
         'about': 'About Us',
         'contact': 'Contact',
         'dashboard': 'Dashboard',
-        "MediaProject": "Hậu kì"
+        'MediaProject': 'Hậu kì',
+        'ProductionRegistration': 'Tin bài phóng sự',
+        'Detail': 'Chi tiết',
     }
 
 

@@ -6,18 +6,18 @@ import ReactPaginate from 'react-paginate'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
 import { SectorConst, StatusConst } from '../../../constants/constants'
-import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
+import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants'
 import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch'
-import YearDropdown from '../../../_sharecomponents/filterform/YearDropdown';
 import DateRangePicker from '../../../_sharecomponents/filterform/DateRangePicker';
 import DropdownFilter from '../../../_sharecomponents/filterform/DropdownFilter';
 import SearchInput from '../../../_sharecomponents/filterform/SearchInput';
+import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { MdOutlineDeleteForever } from 'react-icons/md'
-//Modal form
-import MediaProjectDetail from './MediaProjectDetail'
+import { useNavigate } from 'react-router-dom';
+import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants'
 
 
-const MediaProjectList = (props) => {
+const ProductionRegistrationList = (props) => {
     const [query, setQuery] = useState({
         pageIndex: 1,
         year: new Date().getFullYear(),
@@ -27,10 +27,8 @@ const MediaProjectList = (props) => {
         status: '', 
         keyword: '',
     });
-
-    const [isModalOpen, setModalOpen] = useState(false);
     
-
+    const navigate = useNavigate();
 
     const handleQueryChange = (e) => {
         const { name, value } = e.target;
@@ -41,15 +39,6 @@ const MediaProjectList = (props) => {
         props.getList(query)
     };
     
-    const handleYearChange = (selectedYear) => {
-        setQuery(prevQuery => ({
-            ...prevQuery,
-            year: selectedYear,
-            startDate: new Date(selectedYear, 0, 1),
-            endDate: new Date(selectedYear, 11, 31)
-        }));
-        props.getList(query)
-    };
     
     const handleDateRangeChange = (dates) => {
         const [start, end] = dates;
@@ -69,25 +58,19 @@ const MediaProjectList = (props) => {
         props.getList({ ...query, pageIndex: selectedPage.selected + 1 });
     };
 
-    const handleRowClick = (id) => {
-        props.get(id);
-        setModalOpen(true);
-    };
-
-    const handleAddNewClick = () => {
-        props.clearSelected();
-        setModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalOpen(false);
-        props.clearSelected();
-    };
 
     const handleDeleteClick = (item) => {
         props.remove(item.id);
         props.clearSelected();
     }
+
+    const handleRowClick = (id) => {
+        navigate(`${PRODUCTION_REGISTRATION_DETAIL}/${id}`);
+    };
+
+    const handleAddButtonClick = () => {
+        navigate(`${PRODUCTION_REGISTRATION_DETAIL}`);
+    };
 
     useEffect(() => {
         if (props.isDeleted || props.isUpdated || props.isCreated) {
@@ -134,10 +117,6 @@ const MediaProjectList = (props) => {
     const renderFilterForm = () => {
         return (
             <div className="filter-form">
-                <YearDropdown 
-                    value={query.year} 
-                    onChange={(e) => handleYearChange(Number(e.target.value))} 
-                />
                 <DateRangePicker 
                     startDate={query.startDate}
                     endDate={query.endDate}
@@ -198,14 +177,10 @@ const MediaProjectList = (props) => {
                 <tbody>
                     {props.list && props.list.map((item, index) => {
                         return (
-                            <tr key={item.id} onClick={() => handleRowClick(item.id)}>
+                            <tr key={item.id} onClick={handleRowClick}>
                                 <td>{index + 1}</td>
                                 <td>{item.title}</td>
-                                <td>
-                                    <span className={`status-box ${item.status.toLowerCase()}`}>
-                                        {StatusConst.find(status => status.value === item.status)?.value_i18n || "Unknown Status"}
-                                    </span>
-                                </td>
+                                <td><StatusBox status={item.status} /></td>
                                 <td>{new Intl.DateTimeFormat('en-GB').format(new Date(item.createdDate))}</td>
                                 <td>{item.creatorName}</td>
                                 <td>
@@ -224,14 +199,6 @@ const MediaProjectList = (props) => {
             </table>
         );
     };
-
-    const renderModal = () => {
-        return(
-        <MediaProjectDetail
-            onClose={handleCloseModal}
-            selected={props.selected}
-        />)
-    }
 
     console.log('Media Project list rerender...')
     return (
@@ -253,7 +220,7 @@ const MediaProjectList = (props) => {
                 <div className="blue-button-container">
                     <button
                         className="blue-button"
-                        onClick={handleAddNewClick}
+                        onClick={handleAddButtonClick}
                     >
                         Thêm +
                     </button>
@@ -275,7 +242,6 @@ const MediaProjectList = (props) => {
                     )}
                 </div>
             </div>
-            {isModalOpen && renderModal()}
         </div>
         
     )
@@ -291,12 +257,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (query) => dispatch(planActions.getList(MEDIA_PROJECT_API, query)),
-        get: (id) => dispatch(planActions.get(MEDIA_PROJECT_API, id)),
-        remove: (id) => dispatch(planActions.remove(MEDIA_PROJECT_API, id)),
+        getList: (query) => dispatch(planActions.getList(PRODUCTION_REGISTRATION_API, query)),
+        get: (id) => dispatch(planActions.get(PRODUCTION_REGISTRATION_API, id)),
+        remove: (id) => dispatch(planActions.remove(PRODUCTION_REGISTRATION_API, id)),
         clearSelected: () => dispatch(planActions.clearSelected),
         getSiteMaps: ()=>dispatch(siteMapActions.getList())
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MediaProjectList)
+export default connect(mapStateToProps, mapDispatchToProps)(ProductionRegistrationList)
