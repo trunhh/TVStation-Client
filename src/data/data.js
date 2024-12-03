@@ -7,11 +7,6 @@ export const menuLinks = [
         icon: 'fa-solid fa-user'
     },
     {
-        text: 'Change Password',
-        link: routeConstants.PASSWORD_CHANGING,
-        icon: 'fa fa-key'
-    },
-    {
         text: 'Kế hoạch',
         link: '',
         icon: 'fa-solid fa-calendar',

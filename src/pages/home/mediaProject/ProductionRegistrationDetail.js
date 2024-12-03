@@ -5,11 +5,18 @@ import '../PlanDetailsPage.scss';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants';
+import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants';
 import planActions from '../../../actions/planActions';
-import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
 import SearchInput from '../../../_sharecomponents/filterform/SearchInput';
-import DateRangePicker from '../../../_sharecomponents/filterform/DateRangePicker';
+
+import Toggle from 'rsuite/Toggle';
+import 'rsuite/Toggle/styles/index.css';
+import SelectPicker from 'rsuite/SelectPicker';
+import 'rsuite/SelectPicker/styles/index.css';
+
+import { CustomApproveButton, CustomSubmitButton, CustomDatePicker, CustomToggle } from '../../../_sharecomponents/customrsuite/CustomRsuite';
+
 const ProductionRegistrationDetail = (props) => {
     const nullForm = {
         title: '',
@@ -18,19 +25,12 @@ const ProductionRegistrationDetail = (props) => {
         airdate: '',
         content: '',
         isPersonal: false,
-    }
+    };
+
     const { id } = useParams(); // Extract id from URL
     const navigate = useNavigate(); // For navigation
-    const [editorContent, setEditorContent] = useState('');
-    const [formData, setFormData] = useState(nullForm);
 
-    const handleFormDataChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevForm => ({
-            ...prevForm,
-            [name]: value
-        }));
-    };
+    const [formData, setFormData] = useState(nullForm);
 
     // Fetch data on load if id is present
     useEffect(() => {
@@ -39,23 +39,28 @@ const ProductionRegistrationDetail = (props) => {
                 .then((data) => {
                     if (data) {
                         setFormData(data);
-                        setEditorContent(data.content || ''); // Set editor content
                     }
                 })
                 .catch((error) => {
                     console.error('Error fetching media project:', error);
-                    // Optionally navigate back if fetch fails
                 });
         } else {
-            // Reset form data for create mode
             setFormData(nullForm);
-            setEditorContent('');
         }
     }, [id, props]);
 
+    // Handle form data change - updated to match handleQueryChange pattern
+    const handleFormDataChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+    };
+
     // Handle form submission
     const handleSubmit = () => {
-        const saveData = { ...formData, content: editorContent };
+        const saveData = { ...formData };
         if (id) {
             // Update existing media project
             props.update(saveData)
@@ -72,7 +77,7 @@ const ProductionRegistrationDetail = (props) => {
                 .then((newData) => {
                     setFormData(newData);
                     alert('Media project created successfully!');
-                    navigate.push(`/MediaProject/Details/${newData.id}`); // Redirect to detail view
+                    navigate.push(`${PRODUCTION_REGISTRATION_DETAIL}/${newData.id}`); // Redirect to detail view
                 })
                 .catch((error) => {
                     console.error('Error creating media project:', error);
@@ -80,56 +85,67 @@ const ProductionRegistrationDetail = (props) => {
         }
     };
 
-    const handleContentChange = (content) => {
-        setEditorContent(content);
-    };
-
     return (
-        <div className="plan-detail-page ">
+        <div className="plan-detail-page">
             <div className="main-form">
-                <div className="plan-details">
-                    <div className="title-line">
+                <div className="content">
+                    <div className="inline-group">
                         <StatusBox status={formData.status} />
-                        <SearchInput 
-                            noOutline={true}
+                        <SearchInput
+                            name="title"
+                            value={formData.title}
                             placeholder="Đề tài chưa đặt tên"
+                            noOutline={true}
+                            onChange={handleFormDataChange} // Title change handler
                         />
                     </div>
-                    <div className="title-line">
-                        <DateRangePicker 
-                            year={2024}
-                            onChange={handleFormDataChange}
-                        />
-                        <DateRangePicker 
-                            year={2024}
-                            onChange={handleFormDataChange}
-                        />
+                    <div className="inline-group">
+                        <div className="component-label-group">
+                            <p className="label-text">Thể loại</p>
+                            <SelectPicker
+                                name="sector"
+                                value={formData.sector}
+                                onChange={(value) => handleFormDataChange({ target: { name: 'sector', value } })}
+                            />
+                        </div>
+                        <div className="component-label-group">
+                            <p className="label-text">Dự kiến phát sóng</p>
+                            <CustomDatePicker
+                                name="airdate"
+                                value={formData.airdate}
+                                onChange={(value) => handleFormDataChange({ target: { name: 'airdate', value } })}
+                            />
+                        </div>
                     </div>
-                    
-                    <ToggleSwitch
-                        label = "Chia sẻ"
-                    />
+                    <div>
+                        <CustomToggle
+                            name="isPersonal"
+                            checked={formData.isPersonal}
+                            onChange={(value) => handleFormDataChange({ target: { name: 'isPersonal', value } })}
+                        >
+                            Chia sẻ
+                        </CustomToggle>
+                    </div>
                     <p className="label-text">Nội dung</p>
                     <ReactQuill
+                        name="content"
                         className="large-editor"
                         theme="snow"
-                        value={editorContent}
-                        onChange={handleContentChange}
+                        value={formData.content}
+                        onChange={(content) => handleFormDataChange({ target: { name: 'content', value: content } })}
                         placeholder="Nội dung..."
                     />
-                    
                 </div>
             </div>
             <div className="side-bar">
-
-                <p className="label-text">Chức năng</p>
-                    <button
-                        type="button"
-                        className="blue-button"
-                        onClick={handleSubmit}
-                    >
-                        {id ? 'Lưu' : 'Thêm'}
-                    </button>
+                <div className="component-label-group">
+                    <p className="label-text">Luân chuyển</p>
+                    <CustomApproveButton type="button" onClick={handleSubmit} />
+                </div>
+                <div className="component-label-group">
+                    <p className="label-text">Chức năng</p>
+                    <CustomSubmitButton type="button" onClick={handleSubmit} />
+                </div>
             </div>
         </div>
     );

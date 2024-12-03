@@ -26,27 +26,18 @@ $focus-border-color: #39f;
     display: flex;
     height: 100%;
     width: 100%;
+    .component-label-group {
+        display: flex;
+        flex-direction: column;
+    }
     .side-bar {
         display: flex;
         flex-direction: column;
         background-color: white;
         width: 30%;
         padding: 24px;
-        .blue-button {
-            @include input-style;
-            background-color: #39f; /* Bootstrap primary blue */
-            text-decoration: none;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .blue-button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-        }
-
+        row-gap: 10px;
     }
-    
     .label-text {
                 
         color: $font-color;
@@ -57,9 +48,9 @@ $focus-border-color: #39f;
     .main-form {
         width: 70%;
         margin: 24px 32px;
-    
-        .plan-details {              /* Vertically center */
-            background-color: white;
+        background-color: white;
+        .content {
+            
             padding: 16px;
             border: 1px solid $light-gray;
             border-radius: $border-radius;
@@ -68,18 +59,18 @@ $focus-border-color: #39f;
             gap: 10px;
             align-items: stretch;
             z-index: 1000;
-
-            .title-line {
+    
+            .inline-group {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
                 gap: 10px;
             }
-
-            .title-line > * {
+    
+            .inline-group > * {
                 flex-grow: 1;
             }
-
+            
     
             .filter-form {
                 position: relative;
@@ -128,17 +119,27 @@ $focus-border-color: #39f;
               word-wrap: break-word !important;
               overflow-wrap: break-word !important; 
             }
-
-    
-    
-            
-            
         }
         
-
     }
+}
 
-    
+@media (max-width: 768px) {
+    .plan-detail-page  {
+        display: flex;
+        flex-direction: column;
+        .main-form {
+            width: 100%;
+            margin: 0;
+            .content {
+                border-radius: 0;
+                border:none;
+            }
+        }
+        .side-bar{
+            width: 100vw;
+        }
+    }
 }
 
 .plan-detail-page > * {

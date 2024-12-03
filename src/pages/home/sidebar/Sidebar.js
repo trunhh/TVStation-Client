@@ -9,23 +9,17 @@ import viewActions from '../../../actions/viewActions';  // Import your viewActi
 const Sidebar = (props) => {
     return (
         <div className={props.sidebarIsOpen ? 'sidebar' : 'sidebar close'}>
-            <div className='sidebar-header'>
-                <img src="../../../logo192.png" alt="Logo" />
-                <h3>REACT.JS</h3>
-                {/* Close button */}
+            <div className='sidebar-close-button'>
                 <button className='close-btn' onClick={props.toggleSidebar}>
                     <MdClose size="1.5rem" />
                 </button>
             </div>
-            <div className='sidebar-menu'>
-                <div className='dashboard'>
-                    <MdControlCamera size='1.5rem'/>
-                    <span>Dashboard</span>
-                </div>
-                <CustomLinks2 menuLinks={menuLinks} />
+            
+            <div className='sidebar-header'>
+                <img src="../../images/logo-tek4.png" alt="Logo" />
             </div>
-            <div className='sidebar-bottom'>
-                <h4>Creative</h4>
+            <div className='sidebar-menu'>
+                <CustomLinks2 menuLinks={menuLinks} />
             </div>
         </div>
     );
