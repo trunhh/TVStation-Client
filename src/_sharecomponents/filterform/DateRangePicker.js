@@ -4,17 +4,26 @@ import "react-datepicker/dist/react-datepicker.css";
 import './FilterForm.scss'
 
 const DateRangePicker = (props) => {
+
+    const {
+        onChange,
+        startDate,
+        endDate,
+        year,
+        dateFormat = "dd/MM",
+        placeholderText = "Khoảng thời gian"
+    } = props
     return (
         <DatePicker
-            selected={props.startDate}
-            onChange={props.onChange}
-            startDate={props.startDate}
-            endDate={props.endDate}
+            selected={startDate}
+            onChange={onChange}
+            startDate={startDate}
+            endDate={endDate}
             selectsRange
-            minDate={new Date(props.year, 0, 1)}
-            maxDate={new Date(props.year, 11, 31)}
-            dateFormat="dd/MM"
-            placeholderText="Khoảng thời gian"
+            minDate={new Date(year, 0, 1)}
+            maxDate={new Date(year, 11, 31)}
+            dateFormat={dateFormat}
+            placeholderText={placeholderText}
             isClearable
         />
     );

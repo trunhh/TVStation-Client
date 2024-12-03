@@ -2,13 +2,19 @@ import './FilterForm.scss'
 import React from 'react';
 
 const SearchInput = (props) => {
+    const {
+        value,
+        onChange,
+        placeholder= "Enter text",
+        noOutline= false
+    } = props
     return (
         <input
             type="text"
-            className="search-bar"
-            placeholder={props.placeholder}
-            value={props.value}
-            onChange={props.onChange}
+            className={`search-bar${noOutline ? ' no-outline' : ''}`}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
         />
     );
 };

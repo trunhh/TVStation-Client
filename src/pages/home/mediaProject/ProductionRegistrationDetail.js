@@ -8,21 +8,29 @@ import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants';
 import planActions from '../../../actions/planActions';
 import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
-import CustomInputNonOutline from '../../../_sharecomponents/custominput/CustomInputNonOutline';
-
+import SearchInput from '../../../_sharecomponents/filterform/SearchInput';
+import DateRangePicker from '../../../_sharecomponents/filterform/DateRangePicker';
 const ProductionRegistrationDetail = (props) => {
     const nullForm = {
         title: '',
         status: "IN_PROGRESS",
         sector: '',
-        createdDate: '',
-        creator: '',
+        airdate: '',
+        content: '',
         isPersonal: false,
     }
     const { id } = useParams(); // Extract id from URL
     const navigate = useNavigate(); // For navigation
     const [editorContent, setEditorContent] = useState('');
     const [formData, setFormData] = useState(nullForm);
+
+    const handleFormDataChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevForm => ({
+            ...prevForm,
+            [name]: value
+        }));
+    };
 
     // Fetch data on load if id is present
     useEffect(() => {
@@ -40,15 +48,7 @@ const ProductionRegistrationDetail = (props) => {
                 });
         } else {
             // Reset form data for create mode
-            setFormData({
-                id: '',
-                title: '',
-                status: "IN_PROGRESS",
-                sector: '',
-                createdDate: '',
-                creator: '',
-                isPersonal: false,
-            });
+            setFormData(nullForm);
             setEditorContent('');
         }
     }, [id, props]);
@@ -90,20 +90,26 @@ const ProductionRegistrationDetail = (props) => {
                 <div className="plan-details">
                     <div className="title-line">
                         <StatusBox status={formData.status} />
-                        <CustomInputNonOutline
-                            name="title"
-                            type="text"
-                            placeholder="Đề tài chưa đặt tên..."
-                            className="search-bar"
-                            value={formData.title}
-                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                        <SearchInput 
+                            noOutline={true}
+                            placeholder="Đề tài chưa đặt tên"
+                        />
+                    </div>
+                    <div className="title-line">
+                        <DateRangePicker 
+                            year={2024}
+                            onChange={handleFormDataChange}
+                        />
+                        <DateRangePicker 
+                            year={2024}
+                            onChange={handleFormDataChange}
                         />
                     </div>
                     
                     <ToggleSwitch
                         label = "Chia sẻ"
                     />
-                    <b>Nội dung</b>
+                    <p className="label-text">Nội dung</p>
                     <ReactQuill
                         className="large-editor"
                         theme="snow"
@@ -111,6 +117,12 @@ const ProductionRegistrationDetail = (props) => {
                         onChange={handleContentChange}
                         placeholder="Nội dung..."
                     />
+                    
+                </div>
+            </div>
+            <div className="side-bar">
+
+                <p className="label-text">Chức năng</p>
                     <button
                         type="button"
                         className="blue-button"
@@ -118,9 +130,7 @@ const ProductionRegistrationDetail = (props) => {
                     >
                         {id ? 'Lưu' : 'Thêm'}
                     </button>
-                </div>
             </div>
-            <div className="side-bar"></div>
         </div>
     );
 };

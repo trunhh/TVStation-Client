@@ -27,9 +27,31 @@ $focus-border-color: #39f;
     height: 100%;
     width: 100%;
     .side-bar {
+        display: flex;
+        flex-direction: column;
         background-color: white;
         width: 30%;
+        padding: 24px;
+        .blue-button {
+            @include input-style;
+            background-color: #39f; /* Bootstrap primary blue */
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .blue-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
 
+    }
+    
+    .label-text {
+                
+        color: $font-color;
+        font-size: $font-size !important;
+        font-weight: $font-weight;
     }
 
     .main-form {
@@ -55,8 +77,9 @@ $focus-border-color: #39f;
             }
 
             .title-line > * {
-                flex: 0 0 auto;
+                flex-grow: 1;
             }
+
     
             .filter-form {
                 position: relative;
@@ -105,45 +128,13 @@ $focus-border-color: #39f;
               word-wrap: break-word !important;
               overflow-wrap: break-word !important; 
             }
+
     
-            .search-bar {
-                @include input-style;
-            }
     
-            .search-bar:focus {
-                @include focus-style;
-            }
-    
-            .react-datepicker__input-container {
-                input {
-                    @include input-style;
-                    max-width: 160px;
-                }
-            }
-    
-            .react-datepicker__input-container:focus {
-                @include focus-style;
-            }
-    
-            .react-datepicker__dropdown {
-                position: absolute;
-                z-index: 9999; 
-            }
-    
-            .blue-button {
-                @include input-style;
-                background-color: #39f; /* Bootstrap primary blue */
-                text-decoration: none;
-                color: white;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
             
-            .blue-button:hover {
-                background-color: #0056b3; /* Darker blue on hover */
-            }
             
         }
+        
 
     }
 

@@ -42,7 +42,16 @@ $focus-border-color: #39f;
     @include input-style;
 }
 
+.search-bar.no-outline {
+    border: none;
+}
+
 .search-bar:focus {
+    border: 1px solid;
+    @include focus-style;
+}
+
+.search-bar.no-outline:focus {
     @include focus-style;
 }
 
