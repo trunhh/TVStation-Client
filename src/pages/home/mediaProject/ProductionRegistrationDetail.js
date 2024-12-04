@@ -8,29 +8,28 @@ import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants';
 import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants';
 import planActions from '../../../actions/planActions';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
-import SearchInput from '../../../_sharecomponents/filterform/SearchInput';
 
-import Toggle from 'rsuite/Toggle';
-import 'rsuite/Toggle/styles/index.css';
+
 import SelectPicker from 'rsuite/SelectPicker';
 import 'rsuite/SelectPicker/styles/index.css';
 
-import { CustomApproveButton, CustomSubmitButton, CustomDatePicker, CustomToggle } from '../../../_sharecomponents/customrsuite/CustomRsuite';
+import { CustomApproveButton, CustomSubmitButton, CustomDatePicker, CustomToggle, CustomInputNoOutline } from '../../../_sharecomponents/customrsuite/CustomRsuite';
 
 const ProductionRegistrationDetail = (props) => {
     const nullForm = {
         title: '',
         status: "IN_PROGRESS",
         sector: '',
-        airdate: '',
+        airdate: new Date(),
         content: '',
-        isPersonal: false,
+        isShared: false
     };
 
     const { id } = useParams(); // Extract id from URL
     const navigate = useNavigate(); // For navigation
 
     const [formData, setFormData] = useState(nullForm);
+    
 
     // Fetch data on load if id is present
     useEffect(() => {
@@ -49,41 +48,38 @@ const ProductionRegistrationDetail = (props) => {
         }
     }, [id, props]);
 
-    // Handle form data change - updated to match handleQueryChange pattern
-    const handleFormDataChange = (e) => {
-        const { name, value } = e.target;
+    useEffect(() => {
+        if (props.isCreated && props.selected) {
+            setFormData(props.selected);
+            navigate.push(`${PRODUCTION_REGISTRATION_DETAIL}/${props.newData.id}`); // Redirect to detail view
+        }
+    
+        if (props.isUpdated && props.selected) {
+            setFormData(props.selected);
+        }
+    }, [props.isCreated, props.isUpdated, props.selected]);
+
+    useEffect(() => {
+        props.showLoading(props.isLoading)
+    }, [props.isLoading])
+
+    const handleFormDataChange = (name, value) => {
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
         }));
     };
 
-    // Handle form submission
     const handleSubmit = () => {
-        const saveData = { ...formData };
-        if (id) {
-            // Update existing media project
-            props.update(saveData)
-                .then((updatedData) => {
-                    setFormData(updatedData);
-                    alert('Media project updated successfully!');
-                })
-                .catch((error) => {
-                    console.error('Error updating media project:', error);
-                });
-        } else {
-            // Create new media project
-            props.create(saveData)
-                .then((newData) => {
-                    setFormData(newData);
-                    alert('Media project created successfully!');
-                    navigate.push(`${PRODUCTION_REGISTRATION_DETAIL}/${newData.id}`); // Redirect to detail view
-                })
-                .catch((error) => {
-                    console.error('Error creating media project:', error);
-                });
-        }
+        const saveData = { 
+            ...formData,
+            isPersonal: !formData.isShared
+        };
+    
+        if (id) props.update(saveData)
+        else props.create(saveData)
     };
+    
 
     return (
         <div className="plan-detail-page">
@@ -91,48 +87,42 @@ const ProductionRegistrationDetail = (props) => {
                 <div className="content">
                     <div className="inline-group">
                         <StatusBox status={formData.status} />
-                        <SearchInput
-                            name="title"
+                        <CustomInputNoOutline
                             value={formData.title}
                             placeholder="Đề tài chưa đặt tên"
-                            noOutline={true}
-                            onChange={handleFormDataChange} // Title change handler
+                            onChange={(value) => handleFormDataChange("title", value)}
                         />
                     </div>
                     <div className="inline-group">
                         <div className="component-label-group">
                             <p className="label-text">Thể loại</p>
                             <SelectPicker
-                                name="sector"
                                 value={formData.sector}
-                                onChange={(value) => handleFormDataChange({ target: { name: 'sector', value } })}
+                                onChange={(value) => handleFormDataChange("sector", value)}
                             />
                         </div>
                         <div className="component-label-group">
                             <p className="label-text">Dự kiến phát sóng</p>
                             <CustomDatePicker
-                                name="airdate"
                                 value={formData.airdate}
-                                onChange={(value) => handleFormDataChange({ target: { name: 'airdate', value } })}
+                                onChange={(value) => handleFormDataChange("airdate", value)}
                             />
                         </div>
                     </div>
                     <div>
                         <CustomToggle
-                            name="isPersonal"
                             checked={formData.isPersonal}
-                            onChange={(value) => handleFormDataChange({ target: { name: 'isPersonal', value } })}
+                            onChange={(value) => handleFormDataChange("isPersonal", value)}
                         >
                             Chia sẻ
                         </CustomToggle>
                     </div>
                     <p className="label-text">Nội dung</p>
                     <ReactQuill
-                        name="content"
                         className="large-editor"
                         theme="snow"
                         value={formData.content}
-                        onChange={(content) => handleFormDataChange({ target: { name: 'content', value: content } })}
+                        onChange={(value) => handleFormDataChange("content", value)}
                         placeholder="Nội dung..."
                     />
                 </div>
@@ -153,13 +143,13 @@ const ProductionRegistrationDetail = (props) => {
 
 const mapStateToProps = (state) => ({
     ...state.plan,
-    isLoading: state.view.isLoading,
+    isLoading: state.view.isLoading
 });
 
 const mapDispatchToProps = (dispatch) => ({
     get: (id) => dispatch(planActions.get(PRODUCTION_REGISTRATION_API, id)),
     create: (data) => dispatch(planActions.create(PRODUCTION_REGISTRATION_API, data)),
-    update: (data) => dispatch(planActions.update(PRODUCTION_REGISTRATION_API, data)),
+    update: (id,data) => dispatch(planActions.update(PRODUCTION_REGISTRATION_API, id, data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductionRegistrationDetail);

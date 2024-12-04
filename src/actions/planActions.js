@@ -25,10 +25,7 @@ const get = (route,id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: planConstant.GET_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to retrieve object',
-            },
+            payload: error.response
         });
     }
 };
@@ -66,10 +63,7 @@ const getList = (route,query) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: planConstant.GET_LIST_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to retrieve data',
-            },
+            payload: error.response
         });
     }
 };
@@ -98,22 +92,19 @@ const create = (route,object) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: planConstant.CREATE_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to create object',
-            },
+            payload: error.response
         });
     }
 };
 
-const update = (route,object) => async (dispatch) => {
+const update = (route,id,object) => async (dispatch) => {
     dispatch({
         type: planConstant.UPDATE_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: route,
+            url: route + '/' + id,
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -130,10 +121,7 @@ const update = (route,object) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: planConstant.UPDATE_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to update object',
-            },
+            payload: error.response
         });
     }
 };

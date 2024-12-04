@@ -2,7 +2,8 @@ import viewConstants from "../constants/viewConstants";
 
 const initialState = {
     sidebarIsOpen: true,
-    isLoading: false
+    isLoading: false,
+    errorMessage: null
 };
 
 const viewReducer = (state = initialState, action) => {
@@ -10,9 +11,25 @@ const viewReducer = (state = initialState, action) => {
 
     // Generic isLoading logic
     if (type.endsWith('_REQUEST')) {
-        return { ...state, isLoading: true };
-    } else if (type.endsWith('_SUCCEED') || type.endsWith('_FAILED')) {
-        return { ...state, isLoading: false };
+        return { 
+            ...state, 
+            isLoading: true,
+            errorMessage: null
+        };
+    }
+    else if (type.endsWith('_FAILED')) {
+        return {
+            ...state,
+            isLoading: false,
+            errorMessage: payload.statusText,
+        };
+    }
+    else if (type.endsWith('_SUCCEED')) {
+        return { 
+            ...state, 
+            isLoading: false ,
+            errorMessage: null
+        };
     }
 
     // View-specific logic
@@ -22,6 +39,12 @@ const viewReducer = (state = initialState, action) => {
                 ...state,
                 sidebarIsOpen: !state.sidebarIsOpen,
             };
+
+        case viewConstants.CLEAR_ERROR_MESSAGE:
+            return {
+                ...state,
+                errorMessage: null
+            }
 
         
 

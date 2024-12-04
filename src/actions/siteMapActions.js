@@ -27,10 +27,7 @@ const get = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: siteMapConstant.GET_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to retrieve object',
-            },
+            payload: error.response
         });
     }
 };
@@ -54,10 +51,7 @@ const getList = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: siteMapConstant.GET_LIST_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to retrieve data',
-            },
+            payload: error.response
         });
     }
 };
@@ -86,10 +80,7 @@ const create = (object) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: siteMapConstant.CREATE_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to create object',
-            },
+            payload: error.response
         });
     }
 };
@@ -118,10 +109,7 @@ const update = (object) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: siteMapConstant.UPDATE_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to update object',
-            },
+            payload: error.response
         });
     }
 };
@@ -148,10 +136,7 @@ const remove = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: siteMapConstant.DELETE_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to delete object',
-            },
+            payload: error.response
         });
     }
 };

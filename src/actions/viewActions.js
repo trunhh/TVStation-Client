@@ -7,10 +7,16 @@ const toggleSidebar = () => {
     }
 }
 
-
+const clearErrorMessage = () => {
+    return {
+        type: viewConstants.CLEAR_ERROR_MESSAGE,
+        payload: null
+    }
+}
 
 const viewActions = {
-    toggleSidebar
+    toggleSidebar,
+    clearErrorMessage
 }
 
 export default viewActions;

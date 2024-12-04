@@ -1,7 +1,6 @@
 import planConstant from "../constants/planConstant";
 
 const initState = {
-    errorMessage: null,
     selected: null,
     list: [],
     pageCount: 0,
@@ -22,22 +21,19 @@ const planReducer = (state = initState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                isUpdated: false,
+                isDeleted: false,
+                isCreated: false
             }
 
         case planConstant.GET_LIST_SUCCEED:
             return {
                 ...state,
-                ...action.payload,    
+                ...action.payload,
+                selected: null, 
                 isUpdated: false,
                 isDeleted: false,
                 isCreated: false
-            };
-
-        case planConstant.GET_FAILED:
-        case planConstant.GET_LIST_FAILED:
-            return {
-                ...state,
-                errorMessage: action.payload,
             };
 
         // Update
@@ -47,30 +43,12 @@ const planReducer = (state = initState, action) => {
                 isUpdated: true,
             };
 
-        case planConstant.UPDATE_FAILED:
-            return {
-                ...state,
-                errorMessage: action.payload,
-            };
-
-        // Delete
-        case planConstant.DELETE_REQUEST:
-            return {
-                ...state,
-                isDeleted: false,
-            };
 
         case planConstant.DELETE_SUCCEED:
             return {
                 ...state,
                 isDeleted: true,
-            };
-
-        case planConstant.DELETE_FAILED:
-            return {
-                ...state,
-                errorMessage: action.payload,
-            };
+            };  
 
         // Create
         case planConstant.CREATE_SUCCEED:
@@ -79,11 +57,6 @@ const planReducer = (state = initState, action) => {
                 isCreated: true,
             };
 
-        case planConstant.CREATE_FAILED:
-            return {
-                ...state,
-                errorMessage: action.payload,
-            };
 
         case planConstant.CLEAR_DATA:
             return {

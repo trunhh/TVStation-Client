@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect} from 'react';
 import { Routes, Route, Outlet}  from 'react-router-dom';
 import Sidebar from './sidebar/Sidebar';
 import Header from './header/Header';
@@ -12,10 +12,8 @@ import WithLoading from '../../_sharecomponents/loading/WithLoading';
 import './HomePage.css';
 
 import { connect } from 'react-redux';
+import viewActions from '../../actions/viewActions';
 
-const UserWithLoading = WithLoading(UserInfo)
-const ListGroupsWithLoading = WithLoading(ListGroups)
-const SettingsWithLoading = WithLoading(Settings)
 
 
 const HomePage = (props) => {
@@ -23,6 +21,14 @@ const HomePage = (props) => {
     const handleClickMenuIcon = (sidebarIsOpen) => {
         //setSidebarIsOpen(sidebarIsOpen)
     }
+
+    useEffect(() => {
+        if (props.errorMessage) {
+            alert(props.errorMessage)
+            props.clearErrorMessage();
+        }
+            
+    }, [props.errorMessage])
 
     return(
         <div className='home-container'>
@@ -48,8 +54,12 @@ const HomePage = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        sidebarIsOpen: state.view.sidebarIsOpen
+        ...state.view
     }
 }
 
-export default connect(mapStateToProps, null)(HomePage);
+const mapDispatchToProps = (dispatch) => ({
+    clearErrorMessage: () => dispatch(viewActions.clearErrorMessage()), // Map clearError action to props
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
