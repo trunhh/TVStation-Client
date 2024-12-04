@@ -9,7 +9,7 @@ const get = (route,id) => async (dispatch) => {
 
     try {
         const response = await axios({
-            url: route + '/' + id,
+            url: "https://localhost:7031/" + route + '/' + id,
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -75,7 +75,7 @@ const create = (route,object) => async (dispatch) => {
 
     try {
         const response = await axios({
-            url: route,
+            url: "https://localhost:7031/" + route,
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -104,7 +104,7 @@ const update = (route,id,object) => async (dispatch) => {
 
     try {
         const response = await axios({
-            url: route + '/' + id,
+            url: "https://localhost:7031/" + route + '/' + id,
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + token,

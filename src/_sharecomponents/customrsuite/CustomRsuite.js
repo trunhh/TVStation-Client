@@ -39,6 +39,22 @@ export const CustomSubmitButton = ({ ...props }) => {
   );
 };
 
+export const CustomAddButton = ({ ...props }) => {
+  return (
+    <IconButton
+      {...props}
+      appearance='primary'
+      color='green'
+      icon={<CheckRound/>}
+      style={{
+        fontWeight: 'bold'
+      }}
+    >
+      Lưu
+    </IconButton>
+  );
+};
+
 export const CustomDatePicker = ({ ...props }) => {
   const today = new Date(); // Get the current date and time
   // Remove time parts to set the min date to midnight today

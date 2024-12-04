@@ -15,7 +15,11 @@ import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
 import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants'
+import Table from 'rsuite/Table';
 
+// (Optional) Import component styles. If you are using Less, import the `index.less` file. 
+import 'rsuite/Table/styles/index.css';
+const { Column, HeaderCell, Cell } = Table;
 
 const ProductionRegistrationList = (props) => {
     const [query, setQuery] = useState({
@@ -65,7 +69,8 @@ const ProductionRegistrationList = (props) => {
     }
 
     const handleRowClick = (id) => {
-        navigate(`${PRODUCTION_REGISTRATION_DETAIL}/${id}`);
+        console.log(1)
+    //    navigate(`${PRODUCTION_REGISTRATION_DETAIL}/${id}`);
     };
 
     const handleAddButtonClick = () => {
@@ -161,44 +166,6 @@ const ProductionRegistrationList = (props) => {
         );
     };
 
-    const renderTable = () => {
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Tên</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th>Người tạo</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {props.list && props.list.map((item, index) => {
-                        return (
-                            <tr key={item.id} onClick={handleRowClick}>
-                                <td>{index + 1}</td>
-                                <td>{item.title}</td>
-                                <td><StatusBox status={item.status} /></td>
-                                <td>{new Intl.DateTimeFormat('en-GB').format(new Date(item.createdDate))}</td>
-                                <td>{item.creatorName}</td>
-                                <td>
-                                    <MdOutlineDeleteForever fontSize="1.2rem"
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleDeleteClick(item)
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-        );
-    };
 
     console.log('Media Project list rerender...')
     return (
@@ -225,8 +192,59 @@ const ProductionRegistrationList = (props) => {
                         Thêm +
                     </button>
                 </div>
-                
-                {renderTable()}
+                <Table data={props.list} autoHeight = {true}>
+                  <Column flexGrow={1}>
+                    <HeaderCell>Id</HeaderCell>
+                    <Cell>
+                      {(rowData, rowIndex) => rowIndex + 1} {/* Render row index */}
+                    </Cell>
+                  </Column>
+
+                  <Column flexGrow={3}>
+                    <HeaderCell>Tên</HeaderCell>
+                    <Cell dataKey="title" />
+                  </Column>
+
+                  <Column flexGrow={2.5}>
+                    <HeaderCell>Trạng thái</HeaderCell>
+                    <Cell dataKey="status" >
+                        {rowData => <StatusBox status={rowData.status} />}
+                    </Cell>
+                  </Column >
+
+                  <Column flexGrow={2}>
+                    <HeaderCell>Dự kiến phát sóng</HeaderCell>
+                    <Cell>
+                        {rowData => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.airdate))}
+                    </Cell>
+                  </Column>
+
+                  <Column flexGrow={2}>
+                    <HeaderCell>Ngày tạo</HeaderCell>
+                    <Cell>
+                        {rowData => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.createdDate))}
+                    </Cell>
+                  </Column>
+
+                  <Column flexGrow={2}>
+                    <HeaderCell>Người tạo</HeaderCell>
+                    <Cell dataKey="creatorName" />
+                  </Column>
+
+                  <Column align="center" flexGrow={1}>
+                    <HeaderCell>Thao tác</HeaderCell>
+                    <Cell>
+                        {rowData => <MdOutlineDeleteForever fontSize="1.2rem"
+                            style={{ cursor: 'pointer' }}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                handleDeleteClick(rowData)
+                            }}
+                        />}
+                        
+                    </Cell>
+                  </Column>
+                </Table>
 
                 <div className="paging">
                     {props.pageCount > 1 && (
