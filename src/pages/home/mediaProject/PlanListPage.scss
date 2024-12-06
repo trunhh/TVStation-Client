@@ -94,7 +94,7 @@ $focus-border-color: #39f;
         display: flex;
     }
 
-    @media (max-width: 1024px) { /* Adjust max-width as needed */
+    @media (max-width: 1024px) {
         .plan-summary {
             display: none;
         }
@@ -106,36 +106,8 @@ $focus-border-color: #39f;
         border-radius: $border-radius;
         gap: 10px;
 
-        table {
-            width: 100%;
-            border: none;
-            border-collapse: collapse;
-            table-layout: fixed;
+        
 
-            td, th {
-                padding: 10px;
-                text-align: center;
-            }
-
-            tbody {
-                // tr:nth-child(even) {
-                //     background-color: rgba(0, 0, 0, 0.05);
-                // }
-
-                tr:hover {
-                    background-color: #e6e6e6;
-                    border-radius: $border-radius;
-                }
-            }
-
-            thead {
-                color: $font-color;
-            }
-        }
-
-        .icon-add {
-            text-align: right;
-        }
 //FILTER FORM
         .filter-form {
             position: relative;
@@ -145,45 +117,32 @@ $focus-border-color: #39f;
             gap: 10px;
         } 
         .filter-form > * {
-            flex: 1 1 calc(20% - 10px); /* 20% width for 5 items per row, accounting for gap */
-            box-sizing: border-box;
+            flex: 1 1;
         }
         @media (max-width: 1024px) {
+            .filter-form {
+                flex-wrap: wrap; 
+            } 
             .filter-form > * {
-                flex: 1 1 calc(33.33% - 10px); /* 3 items per row */
-            }
-        }
-        @media (max-width: 768px) {
-            .filter-form > * {
-                flex: 1 1 calc(50% - 10px); /* 2 items per row */
+                flex: 1 1 calc(50% - 10px);
             }
         }
         @media (max-width: 480px) {
+            .filter-form {
+                flex-wrap: wrap; 
+            }
             .filter-form > * {
                 flex: 1 1 100%; /* 1 item per row */
             }
         }
 //ADD BUTTON
         .blue-button-container {
-            padding: 8px;
-            text-align: right;
+            padding: 8px 0px;
+            text-align: right;  
         }
-        .blue-button {
-            outline: none;
-            border-radius: $border-radius;
-            border: none;
-            padding: .55rem .75rem;
-            color: $font-color;
-            font-size: $font-size !important;
-            font-weight: $font-weight;
-            background-color: #39f;
-            text-decoration: none;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }  
-        .blue-button:hover {
-            background-color: #0056b3;
+
+        .blue-button-container > * {
+             margin-left: 10px;
         }
 
         .icon-close {

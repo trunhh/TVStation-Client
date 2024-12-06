@@ -1,6 +1,6 @@
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
-import '../PlanDetailsPage.scss'
+import './PlanDetailsPage.scss'
 import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'

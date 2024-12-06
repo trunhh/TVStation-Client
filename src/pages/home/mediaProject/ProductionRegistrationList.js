@@ -1,46 +1,56 @@
-import '../PlanListPage.scss'
+import './PlanListPage.scss'
 
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
-import ReactPaginate from 'react-paginate'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
-import { SectorConst, StatusConst } from '../../../constants/constants'
 import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants'
-import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch'
-import DateRangePicker from '../../../_sharecomponents/filterform/DateRangePicker';
-import DropdownFilter from '../../../_sharecomponents/filterform/DropdownFilter';
-import SearchInput from '../../../_sharecomponents/filterform/SearchInput';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
 import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants'
 import Table from 'rsuite/Table';
-
-// (Optional) Import component styles. If you are using Less, import the `index.less` file. 
 import 'rsuite/Table/styles/index.css';
+import Pagination from 'rsuite/Pagination';
+import 'rsuite/Pagination/styles/index.css';
+import IconButton from 'rsuite/IconButton';
+import 'rsuite/IconButton/styles/index.css';
+import ShareRound from '@rsuite/icons/ShareRound';
+import { 
+    CustomAddButton,
+    CustomDateRangePicker,
+    CustomSectorPicker,
+    CustomStatusPicker, 
+    CustomSitemapPicker,
+    CustomUserPicker,
+    CustomObjectTypePicker,
+    CustomInputSearch ,
+    CustomToggle
+} from '../../../_sharecomponents/customrsuite/CustomRsuite'
+
 const { Column, HeaderCell, Cell } = Table;
 
 const ProductionRegistrationList = (props) => {
     const [query, setQuery] = useState({
         pageIndex: 1,
-        year: new Date().getFullYear(),
         startDate: new Date(new Date().getFullYear(), 0, 1),
         endDate: new Date(new Date().getFullYear(), 11, 31),
-        sector: '', 
-        status: '', 
-        keyword: '',
+        sector: null,
+        siteMapId: null,
+        userName: null,
+        objectType: null,
+        status: null,
+        keyword: null,
+        isPersonal: false
     });
     
     const navigate = useNavigate();
 
-    const handleQueryChange = (e) => {
-        const { name, value } = e.target;
+    const handleQueryChange = (name, value) => {
         setQuery(prevQuery => ({
             ...prevQuery,
             [name]: value
         }));
-        props.getList(query)
     };
     
     
@@ -51,7 +61,6 @@ const ProductionRegistrationList = (props) => {
           startDate: start,
           endDate: end,
         }));
-        props.getList(query)
       };
 
     const handlePageClick = (selectedPage) => {
@@ -69,19 +78,21 @@ const ProductionRegistrationList = (props) => {
     }
 
     const handleRowClick = (id) => {
-        console.log(1)
-    //    navigate(`${PRODUCTION_REGISTRATION_DETAIL}/${id}`);
+        navigate(`${PRODUCTION_REGISTRATION_DETAIL}/${id}`);
     };
 
     const handleAddButtonClick = () => {
         navigate(`${PRODUCTION_REGISTRATION_DETAIL}`);
     };
+    useEffect(() => {
+        props.getList(query);
+    }, [query]);
 
     useEffect(() => {
         if (props.isDeleted || props.isUpdated || props.isCreated) {
             props.getList(query); 
         }
-    }, [props.isDeleted, props.isUpdated, props.isCreated, query]);
+    }, [props.isDeleted, props.isUpdated, props.isCreated]);
 
     useEffect(() => {
         props.getList(query);
@@ -119,52 +130,6 @@ const ProductionRegistrationList = (props) => {
         }
     ];
     
-    const renderFilterForm = () => {
-        return (
-            <div className="filter-form">
-                <DateRangePicker 
-                    startDate={query.startDate}
-                    endDate={query.endDate}
-                    onChange={handleDateRangeChange}
-                    year={query.year}
-                />
-                <DropdownFilter
-                    value={query.sector}
-                    options={SectorConst}
-                    valueKey = "value"
-                    displayKey = "value_i18n"
-                    onChange={handleQueryChange}
-                    placeholder="Loại hình báo chí"
-                />
-                <DropdownFilter
-                    value={query.siteMapId}
-                    options={props.siteMaps}
-                    valueKey = "id"
-                    displayKey = "name"
-                    onChange={handleQueryChange}
-                    placeholder="Phòng ban"
-                />
-                <DropdownFilter
-                    value={query.status}
-                    options={StatusConst}
-                    valueKey = "value"
-                    displayKey = "value_i18n"
-                    onChange={handleQueryChange}
-                    placeholder="Trạng thái"
-                />
-                <SearchInput 
-                    value={query.keyword} 
-                    onChange={handleQueryChange} 
-                    placeholder="Tìm kiếm..."
-                />
-                <ToggleSwitch
-                    value={query.isPersonal} 
-                    handleChange={handleQueryChange}
-                    label = "Cá nhân"
-                />
-            </div>
-        );
-    };
 
 
     console.log('Media Project list rerender...')
@@ -182,83 +147,101 @@ const ProductionRegistrationList = (props) => {
                 ))}
             </div>
             <div className="plan-list">
-                {renderFilterForm()}
+                <div className="filter-form">
+                    <CustomDateRangePicker
+                        placeholder="Phát sóng"
+                        value={[query.startDate, query.endDate]}
+                        onChange={handleDateRangeChange}
+                    />
+                    <CustomSectorPicker
+                        value={query.sector}
+                        onChange={(value) => handleQueryChange("sector", value)}
+                    />
+                    <CustomSitemapPicker
+                        value={query.siteMapId}
+                        onChange={(value) => handleQueryChange("siteMapId", value)}
+                    />
+                    <CustomUserPicker
+                        value={query.userName}
+                        onChange={(value) => handleQueryChange("userName", value)}
+                    />
+                    <CustomObjectTypePicker
+                        value={query.objectType}
+                        onChange={(value) => handleQueryChange("objectType", value)}
+                    />
+                    <CustomStatusPicker
+                        value={query.status}
+                        onChange={(value) => handleQueryChange("status", value)}
+                    />
+                    <CustomInputSearch
+                        value={query.keyword}
+                        onChange={(value, e) => handleQueryChange("keyword", value)}
+                    />
+                </div>
 
                 <div className="blue-button-container">
-                    <button
-                        className="blue-button"
-                        onClick={handleAddButtonClick}
-                    >
-                        Thêm +
-                    </button>
+                    <CustomToggle>
+                        Cá nhân
+                    </CustomToggle>
+                    <CustomAddButton onClick={handleAddButtonClick}/>
                 </div>
-                <Table data={props.list} autoHeight = {true}>
-                  <Column flexGrow={1}>
+                <Table 
+                    data={props.list} 
+                    autoHeight = {true}
+                    onRowClick={(rowData) =>handleRowClick(rowData.id)}
+                >
+                  <Column flexGrow={1} minWidth={50} fixed>
                     <HeaderCell>Id</HeaderCell>
                     <Cell>
-                      {(rowData, rowIndex) => rowIndex + 1} {/* Render row index */}
+                      {(rowData, rowIndex) => rowIndex + 1}
                     </Cell>
                   </Column>
 
-                  <Column flexGrow={3}>
+                  <Column flexGrow={3} minWidth={150} fixed>
                     <HeaderCell>Tên</HeaderCell>
-                    <Cell dataKey="title" />
+                    <Cell style={{ fontWeight: "bold"}} dataKey="title" />
                   </Column>
 
-                  <Column flexGrow={2.5}>
+                  <Column flexGrow={2.5} minWidth={150}>
                     <HeaderCell>Trạng thái</HeaderCell>
-                    <Cell dataKey="status" >
+                    <Cell dataKey="status" style={{ marginTop: '-5px' }}>
                         {rowData => <StatusBox status={rowData.status} />}
                     </Cell>
                   </Column >
 
-                  <Column flexGrow={2}>
+                  <Column flexGrow={2} minWidth={120}>
                     <HeaderCell>Dự kiến phát sóng</HeaderCell>
                     <Cell>
                         {rowData => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.airdate))}
                     </Cell>
                   </Column>
 
-                  <Column flexGrow={2}>
+                  <Column flexGrow={2} minWidth={120}>
                     <HeaderCell>Ngày tạo</HeaderCell>
                     <Cell>
                         {rowData => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.createdDate))}
                     </Cell>
                   </Column>
 
-                  <Column flexGrow={2}>
+                  <Column flexGrow={2} minWidth={120}>
                     <HeaderCell>Người tạo</HeaderCell>
                     <Cell dataKey="creatorName" />
                   </Column>
 
-                  <Column align="center" flexGrow={1}>
+                  <Column align="center" flexGrow={1.5} minWidth={100}> 
                     <HeaderCell>Thao tác</HeaderCell>
                     <Cell>
-                        {rowData => <MdOutlineDeleteForever fontSize="1.2rem"
-                            style={{ cursor: 'pointer' }}
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                handleDeleteClick(rowData)
-                            }}
-                        />}
-                        
+                        <div style={{ display: 'flex', marginTop: '-10px' }}>
+                            <IconButton icon={<ShareRound />} appearance="link" />
+                            <IconButton icon={<ShareRound />} appearance="link" />
+                        </div>
                     </Cell>
                   </Column>
                 </Table>
 
-                <div className="paging">
-                    {props.pageCount > 1 && (
-                        <ReactPaginate
-                            nextLabel="Next >"
-                            previousLabel="< Previous"
-                            pageCount={props.pageCount}
-                            onPageChange={handlePageClick}
-                            containerClassName="pagination-row"
-                            activeClassName="active"
-                            disabledClassName="disabled"
-                        />
-                    )}
-                </div>
+                {props.pageCount > 0 && (
+                    <Pagination total={props.pageCount} limit={5} activePage={query.pageIndex} onChangePage={handlePageClick} />
+                )}
             </div>
         </div>
         

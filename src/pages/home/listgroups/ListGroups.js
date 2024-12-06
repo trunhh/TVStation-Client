@@ -1,4 +1,3 @@
-import '../PlanListPage.scss'
 
 import { MdEdit } from 'react-icons/md'
 

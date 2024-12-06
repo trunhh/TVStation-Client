@@ -1,18 +1,26 @@
+export const ObjectTypeConst = [
+    { value: "PRODUCTION_REGISTRATION", label: "Tin bài phóng sự"},
+    { value: "SCRIPT_PROGRAM", label: "Kịch bản tác phẩm"}
+]
+
+
+
 export const SectorConst = [
-    { value: "TV", value_i18n: "Truyền hình" },
-    { value: "BROADCAST", value_i18n: "Phát thanh" }
+    { value: "TV", label: "Truyền hình" },
+    { value: "BROADCAST", label: "Phát thanh" }
 ];
 
 export const StatusConst = [
-    { value: "IN_PROGRESS", value_i18n: "Đang thực hiện" },
-    { value: "WAITING_FOR_APPROVAL", value_i18n: "Chờ xác nhận" },
-    { value: "APPROVED", value_i18n: "Đã xác nhận" },
-    { value: "RETURNED", value_i18n: "Trả lại" },
-    { value: "RETRIEVED", value_i18n: "Thu hồi" },
-    { value: "CANCELLED", value_i18n: "Đã hủy" }
+    { value: "IN_PROGRESS", label: "Đang thực hiện" },
+    { value: "WAITING_FOR_APPROVAL", label: "Chờ xác nhận" },
+    { value: "APPROVED", label: "Đã xác nhận" },
+    { value: "RETURNED", label: "Trả lại" },
+    { value: "RETRIEVED", label: "Thu hồi" },
+    { value: "CANCELLED", label: "Đã hủy" }
 ];
 
 export default {
     SectorConst,
-    StatusConst
+    StatusConst,
+    ObjectTypeConst
 }

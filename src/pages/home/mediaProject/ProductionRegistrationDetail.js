@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import '../PlanDetailsPage.scss';
+import './PlanDetailsPage.scss';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants';
@@ -33,31 +33,21 @@ const ProductionRegistrationDetail = (props) => {
 
     // Fetch data on load if id is present
     useEffect(() => {
+        setFormData(nullForm);
         if (id) {
-            props.get(id)
-                .then((data) => {
-                    if (data) {
-                        setFormData(data);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error fetching media project:', error);
-                });
-        } else {
-            setFormData(nullForm);
+            props.get(id);
         }
-    }, [id, props]);
+    }, []);
 
     useEffect(() => {
-        if (props.isCreated && props.selected) {
-            setFormData(props.selected);
-            navigate.push(`${PRODUCTION_REGISTRATION_DETAIL}/${props.newData.id}`); // Redirect to detail view
+        if (props.isCreated) navigate.push(`${PRODUCTION_REGISTRATION_DETAIL}/${props.newData.id}`);
+        if (props.selected) {
+            setFormData((prevFormData) => ({
+            ...prevFormData,
+            ...props.selected
+        }));
         }
-    
-        if (props.isUpdated && props.selected) {
-            setFormData(props.selected);
-        }
-    }, [props.isCreated, props.isUpdated, props.selected]);
+    }, [props.selected]);
 
     useEffect(() => {
         props.showLoading(props.isLoading)
@@ -76,10 +66,12 @@ const ProductionRegistrationDetail = (props) => {
             isPersonal: !formData.isShared
         };
     
-        if (id) props.update(saveData)
+        if (id) props.update(id, saveData)
         else props.create(saveData)
     };
     
+
+    console.log(formData)
 
     return (
         <div className="plan-detail-page">

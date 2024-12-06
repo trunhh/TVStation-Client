@@ -20,7 +20,7 @@ const planReducer = (state = initState, action) => {
         case planConstant.GET_SUCCEED:
             return {
                 ...state,
-                ...action.payload,
+                selected: action.payload,
                 isUpdated: false,
                 isDeleted: false,
                 isCreated: false
@@ -40,6 +40,7 @@ const planReducer = (state = initState, action) => {
         case planConstant.UPDATE_SUCCEED:
             return {
                 ...state,
+                selected: action.payload,
                 isUpdated: true,
             };
 
@@ -54,6 +55,7 @@ const planReducer = (state = initState, action) => {
         case planConstant.CREATE_SUCCEED:
             return {
                 ...state,
+                selected: action.payload,
                 isCreated: true,
             };
 

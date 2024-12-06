@@ -1,4 +1,4 @@
-import '../PlanListPage.scss'
+import './PlanListPage.scss'
 
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'

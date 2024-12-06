@@ -37,17 +37,19 @@ const getList = (route,query) => async (dispatch) => {
 
     try {
 
-        // Construct query parameters
-        const params = new URLSearchParams({
-            ...query,
-            startDate: query.startDate
-                ? new Date(query.startDate).toISOString()
-                : null,
-            endDate: query.endDate
-                ? new Date(query.endDate).toISOString()
-                : null
-        });
-
+        const filteredQuery = Object.fromEntries(
+            Object.entries({
+                ...query,
+                startDate: query.startDate
+                    ? new Date(query.startDate).toISOString()
+                    : null,
+                endDate: query.endDate
+                    ? new Date(query.endDate).toISOString()
+                    : null
+            }).filter(([_, value]) => value !== null) // Remove entries with null values
+        );
+        
+        const params = new URLSearchParams(filteredQuery);
         let url = route + '?' + params.toString();
 
         const response = await axios.get(url, {
