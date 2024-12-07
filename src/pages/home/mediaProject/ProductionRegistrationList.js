@@ -9,6 +9,7 @@ import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { MdOutlineDeleteForever } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
 import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants'
+import { PAGE_SIZE } from '../../../constants/constants'
 import Table from 'rsuite/Table';
 import 'rsuite/Table/styles/index.css';
 import Pagination from 'rsuite/Pagination';
@@ -32,7 +33,6 @@ const { Column, HeaderCell, Cell } = Table;
 
 const ProductionRegistrationList = (props) => {
     const [query, setQuery] = useState({
-        pageIndex: 1,
         startDate: new Date(new Date().getFullYear(), 0, 1),
         endDate: new Date(new Date().getFullYear(), 11, 31),
         sector: null,
@@ -64,11 +64,7 @@ const ProductionRegistrationList = (props) => {
       };
 
     const handlePageClick = (selectedPage) => {
-        setQuery(prevQuery => ({
-            ...prevQuery,
-            pageIndex: selectedPage.selected + 1,
-        }));
-        props.getList({ ...query, pageIndex: selectedPage.selected + 1 });
+        props.getList({ ...query}, selectedPage );
     };
 
 
@@ -85,17 +81,17 @@ const ProductionRegistrationList = (props) => {
         navigate(`${PRODUCTION_REGISTRATION_DETAIL}`);
     };
     useEffect(() => {
-        props.getList(query);
+        props.getList(query, props.pageIndex);
     }, [query]);
 
     useEffect(() => {
         if (props.isDeleted || props.isUpdated || props.isCreated) {
-            props.getList(query); 
+            props.getList(query, props.pageIndex); 
         }
     }, [props.isDeleted, props.isUpdated, props.isCreated]);
 
     useEffect(() => {
-        props.getList(query);
+        props.getList(query, props.pageIndex);
         props.getSiteMaps();
       }, []);
 
@@ -132,7 +128,7 @@ const ProductionRegistrationList = (props) => {
     
 
 
-    console.log('Media Project list rerender...')
+    
     return (
         <div className="plan-page">
             <div className="plan-summary">
@@ -193,13 +189,19 @@ const ProductionRegistrationList = (props) => {
                   <Column flexGrow={1} minWidth={50} fixed>
                     <HeaderCell>Id</HeaderCell>
                     <Cell>
-                      {(rowData, rowIndex) => rowIndex + 1}
+                      {(rowData, rowIndex) => (props.pageIndex-1) * PAGE_SIZE + rowIndex + 1}
                     </Cell>
                   </Column>
 
                   <Column flexGrow={3} minWidth={150} fixed>
                     <HeaderCell>Tên</HeaderCell>
-                    <Cell style={{ fontWeight: "bold"}} dataKey="title" />
+                    <Cell >
+                      {rowData  => {
+                        const style = !rowData.title ? { fontStyle: "italic" } : { fontWeight: "bold" };
+                        const content = rowData.title || "Đề tài chưa đặt tên";
+                        return <div style={style}>{content}</div>;
+                      }}
+                    </Cell>
                   </Column>
 
                   <Column flexGrow={2.5} minWidth={150}>
@@ -239,8 +241,8 @@ const ProductionRegistrationList = (props) => {
                   </Column>
                 </Table>
 
-                {props.pageCount > 0 && (
-                    <Pagination total={props.pageCount} limit={5} activePage={query.pageIndex} onChangePage={handlePageClick} />
+                {props.list && (
+                    <Pagination total={props.totalCount} limit={PAGE_SIZE} activePage={props.pageIndex} onChangePage={handlePageClick} />
                 )}
             </div>
         </div>
@@ -258,7 +260,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (query) => dispatch(planActions.getList(PRODUCTION_REGISTRATION_API, query)),
+        getList: (query, pageIndex) => dispatch(planActions.getList(PRODUCTION_REGISTRATION_API, query, pageIndex, PAGE_SIZE)),
         get: (id) => dispatch(planActions.get(PRODUCTION_REGISTRATION_API, id)),
         remove: (id) => dispatch(planActions.remove(PRODUCTION_REGISTRATION_API, id)),
         clearSelected: () => dispatch(planActions.clearSelected),

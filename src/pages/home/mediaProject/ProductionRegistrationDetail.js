@@ -5,15 +5,20 @@ import './PlanDetailsPage.scss';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants';
-import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants';
+import { PRODUCTION_REGISTRATION } from '../../../constants/routeConstants';
 import planActions from '../../../actions/planActions';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
-
+import { createSelector } from 'reselect';
 
 import SelectPicker from 'rsuite/SelectPicker';
 import 'rsuite/SelectPicker/styles/index.css';
 
 import { CustomApproveButton, CustomSubmitButton, CustomDatePicker, CustomToggle, CustomInputNoOutline } from '../../../_sharecomponents/customrsuite/CustomRsuite';
+
+const selectPlan = createSelector(
+    (state) => state.plan,
+    (planState) => planState.selected
+);
 
 const ProductionRegistrationDetail = (props) => {
     const nullForm = {
@@ -40,7 +45,6 @@ const ProductionRegistrationDetail = (props) => {
     }, []);
 
     useEffect(() => {
-        if (props.isCreated) navigate.push(`${PRODUCTION_REGISTRATION_DETAIL}/${props.newData.id}`);
         if (props.selected) {
             setFormData((prevFormData) => ({
             ...prevFormData,
@@ -48,6 +52,10 @@ const ProductionRegistrationDetail = (props) => {
         }));
         }
     }, [props.selected]);
+
+    useEffect(() => {
+        if (props.isCreated) navigate(PRODUCTION_REGISTRATION);
+    }, [props.isCreated])
 
     useEffect(() => {
         props.showLoading(props.isLoading)
@@ -66,7 +74,7 @@ const ProductionRegistrationDetail = (props) => {
             isPersonal: !formData.isShared
         };
     
-        if (id) props.update(id, saveData)
+        if (id) props.update(id,saveData)
         else props.create(saveData)
     };
     
@@ -135,6 +143,7 @@ const ProductionRegistrationDetail = (props) => {
 
 const mapStateToProps = (state) => ({
     ...state.plan,
+    selected: selectPlan(state),
     isLoading: state.view.isLoading
 });
 

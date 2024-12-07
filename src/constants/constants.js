@@ -1,3 +1,5 @@
+export const PAGE_SIZE = 10
+
 export const ObjectTypeConst = [
     { value: "PRODUCTION_REGISTRATION", label: "Tin bài phóng sự"},
     { value: "SCRIPT_PROGRAM", label: "Kịch bản tác phẩm"}
@@ -20,6 +22,7 @@ export const StatusConst = [
 ];
 
 export default {
+    PAGE_SIZE,
     SectorConst,
     StatusConst,
     ObjectTypeConst

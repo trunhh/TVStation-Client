@@ -160,7 +160,10 @@ export const CustomToggle = ({...props }) => {
 export const CustomInputNoOutline = ({...props }) => {
   return (
     <InputGroup size='lg' style={{border: 'none'}}>
-      <Input {...props}/>  
+      <Input 
+        {...props}
+        placeholder = "Đề tài chưa đặt tên"
+      />  
     </InputGroup>
     
   )

@@ -3,7 +3,7 @@ import planConstant from "../constants/planConstant";
 const initState = {
     selected: null,
     list: [],
-    pageCount: 0,
+    pageIndex: 1,
     totalCount: 0,
     inProgressCount: 0,
     waitingApprovalCount: 0,

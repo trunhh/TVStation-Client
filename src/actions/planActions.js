@@ -30,7 +30,7 @@ const get = (route,id) => async (dispatch) => {
     }
 };
 
-const getList = (route,query) => async (dispatch) => {
+const getList = (route,query,pageIndex,pageSize) => async (dispatch) => {
     dispatch({
         type: planConstant.GET_LIST_REQUEST,
     });
@@ -45,7 +45,9 @@ const getList = (route,query) => async (dispatch) => {
                     : null,
                 endDate: query.endDate
                     ? new Date(query.endDate).toISOString()
-                    : null
+                    : null,
+                pageIndex: (pageIndex > 0) ? pageIndex : 1,
+                pageSize: (pageSize > 0)? pageSize : 10
             }).filter(([_, value]) => value !== null) // Remove entries with null values
         );
         
