@@ -3,14 +3,15 @@ import axios from "axios";
 import userConstants from "../constants/userConstants";
 
 const token = localStorage.getItem('token')
+const route = 'api/User'
 
-const getUserInfo = (username) => async(dispath) => {
+const get = (username) => async(dispath) => {
     dispath({
         type: userConstants.GET_REQUEST
     })
 
     try {
-        const response = await axios.get('/api/User/' + username, {
+        const response = await axios.get(route + "/" + username, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -38,7 +39,7 @@ const getUserInfo = (username) => async(dispath) => {
         })
     }
 }
-const updateUserInfo = (user, avatarUploadFile) => async(dispatch) => {
+const update = (user, avatarUploadFile) => async(dispatch) => {
     dispatch({
         type: userConstants.UPDATE_REQUEST
     })
@@ -159,8 +160,8 @@ const changePassword = (username, newPassword) => async(dispath) => {
 }
 
 const userActions = {
-    getUserInfo,
-    updateUserInfo,
+    get,
+    update,
     changePassword
 }
 

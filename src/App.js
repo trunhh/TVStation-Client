@@ -1,96 +1,81 @@
-import logo from './logo.svg';
-import './App.css';
-import DemoClassComponent from './_sharecomponents/DemoClassComponent';
-import CustomInput from './_sharecomponents/custominput/CustomInput';
-import FormGroup from './_sharecomponents/formgroup/FromGroup';
-import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
-
-//import Home from './pages/home/Home';
-
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import routeConstants from './constants/routeConstants';
 
 import Signin from './pages/signin/Signin';
 import Signup from './pages/signup/Signup';
 import ForgotPassword from './pages/forgotpassword/ForgotPassword';
-
-import WithLoading from './_sharecomponents/loading/WithLoading';
 import HomePage from './pages/home/HomePage';
 
+import WithLoading from './_sharecomponents/loading/WithLoading';
 import UserInfo from './pages/home/userinfo/UserInfo';
 import ListGroups from './pages/home/listgroups/ListGroups';
 import Settings from './pages/home/settings/Settings';
-import { useNavigate } from "react-router-dom";
 import PasswordChanging from './pages/home/password changing/PasswordChanging';
 import MediaProjectList from './pages/home/mediaProject/MediaProjectList';
 import MediaProjectDetail from './pages/home/mediaProject/MediaProjectDetail';
 import ProductionRegistrationList from './pages/home/mediaProject/ProductionRegistrationList';
 import ProductionRegistrationDetail from './pages/home/mediaProject/ProductionRegistrationDetail';
 
+// Wrapping components with loading HOC
 const SignupWithLoading = WithLoading(Signup);
 const SigninWithLoading = WithLoading(Signin);
-
-const UserWithLoading = WithLoading(UserInfo)
-const ListGroupsWithLoading = WithLoading(ListGroups)
-const PasswordChangingWithLoading = WithLoading(PasswordChanging)
-const SettingsWithLoading = WithLoading(Settings)
-
-const MediaProjectWithLoading = WithLoading(MediaProjectList)
-const MediaProjectDetailWithLoading = WithLoading(MediaProjectDetail)
-const ProductionRegistrationWithLoading = WithLoading(ProductionRegistrationList)
-const ProductionRegistrationDetailWithLoading = WithLoading(ProductionRegistrationDetail)
+const UserWithLoading = WithLoading(UserInfo);
+const ListGroupsWithLoading = WithLoading(ListGroups);
+const PasswordChangingWithLoading = WithLoading(PasswordChanging);
+const SettingsWithLoading = WithLoading(Settings);
+const MediaProjectWithLoading = WithLoading(MediaProjectList);
+const MediaProjectDetailWithLoading = WithLoading(MediaProjectDetail);
+const ProductionRegistrationWithLoading = WithLoading(ProductionRegistrationList);
+const ProductionRegistrationDetailWithLoading = WithLoading(ProductionRegistrationDetail);
 
 function App() {
-    
-    const handleClickButton = (count) => {
-        console.log('data received from child component: ')
-        console.log(count)
-    }
-    localStorage.setItem('login', true)
+    const navigate = useNavigate();
 
-    const isLoggedIn = localStorage.getItem('login')
+    // Function to check if the token is expired
+    const isTokenExpired = (token) => {
+        try {
+            const base64Payload = token.split('.')[1]; // Extract the payload part of the token
+            const payload = JSON.parse(atob(base64Payload)); // Decode and parse the payload
+            const currentTimestamp = Math.floor(Date.now() / 1000); // Get the current time in seconds
+            return currentTimestamp > payload.exp; // Compare the current time with the expiration time
+        } catch (error) {
+            console.error("Invalid token:", error);
+            return true; // Treat invalid tokens as expired
+        }
+    };
 
-    if (isLoggedIn === 'false') {
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token || isTokenExpired(token)) {
+            localStorage.removeItem('token'); // Clear the token if it's invalid or expired
+            navigate('/sign-in'); // Redirect to the sign-in page
+        }
+    }, [navigate]);
+
+    const isLoggedIn = localStorage.getItem('token');
+
+    if (!isLoggedIn) {
         return (
-            <div className='App'>
-                {/* <Router>
-                    <Switch>
-                        <Route path="/sign-in" component={SigninWithLoading}/>
-                        <Route path="/sign-up" component={SignupWithLoading} />
-                        <Route path="/forgot-password" component={ForgotPassword} />
-                        <Redirect from="/" to="/sign-in" />
-                    </Switch>
-                </Router> */}
-
-                
-                {/* react router ver 6 */}
+            <div className="App">
                 <Routes>
-                    <Route path="/sign-in" element={<SigninWithLoading />}/>
+                    <Route path="/sign-in" element={<SigninWithLoading />} />
                     <Route path="/sign-up" element={<SignupWithLoading />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/" element={<Navigate to="/sign-in"/>} />
+                    <Route path="*" element={<Navigate to="/sign-in" />} />
                 </Routes>
             </div>
-        )
+        );
     }
 
     return (
-        /* react router ver 5 */
-        // <Router>
-        //     <Switch>
-        //         <Route path="/sign-in" component={Login}/>
-        //         {/* <Route path="/sign-up" component={Register}/> */}
-        //         <Route path="/sign-up" render={props => <Register {...props}/>}/>
-        //         <Route path="/" component={Home}/>
-        //     </Switch>
-        // </Router>
+        <div className="App">
+            <Routes>
+                <Route path="/sign-in" element={<SigninWithLoading />} />
+                <Route path="/sign-up" element={<SignupWithLoading />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        /* react router ver 6 */
-        <Routes>
-            <Route path="/sign-in" element={ <SigninWithLoading /> }/>
-            <Route path="/sign-up" element={ <SignupWithLoading /> } />
-            <Route path="/forgot-password" element={ <ForgotPassword /> } />
-
-            <Route path="/" element={ <HomePage /> }>
+                <Route path="/" element={<HomePage />}>
                     <Route path={routeConstants.USER_INFO} element={<UserWithLoading />} />
                     <Route path="/list-groups" element={<ListGroupsWithLoading />} />
                     <Route path={routeConstants.PASSWORD_CHANGING} element={<PasswordChangingWithLoading />} />
@@ -98,12 +83,11 @@ function App() {
                     <Route path={routeConstants.MEDIA_PROJECT} element={<MediaProjectWithLoading />} />
                     <Route path={routeConstants.MEDIA_PROJECT_DETAIL + "/:id"} element={<MediaProjectDetailWithLoading />} />
                     <Route path={routeConstants.PRODUCTION_REGISTRATION} element={<ProductionRegistrationWithLoading />} />
-                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL} element={<ProductionRegistrationDetailWithLoading/>} />
-                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL + "/:id"} element={<ProductionRegistrationDetailWithLoading/>} />
-            </Route>
-
-            {/* <Route path="/" element={<Home />} /> */}
-        </Routes>
+                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL} element={<ProductionRegistrationDetailWithLoading />} />
+                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL + "/:id"} element={<ProductionRegistrationDetailWithLoading />} />
+                </Route>
+            </Routes>
+        </div>
     );
 }
 

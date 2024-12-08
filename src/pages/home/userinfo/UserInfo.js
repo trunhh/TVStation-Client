@@ -32,7 +32,7 @@ const UserInfo = (props) => {
     const [selectedFile, setSelectedFile] = useState(null)
 
     useEffect(() => {
-        props.getUserInfo(localStorage.getItem('username'))
+        props.get(localStorage.getItem('username'))
     }, [])
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const UserInfo = (props) => {
 
     const handleSubmitForm = (e) => {
         e.preventDefault()
-        props.updateUserInfo(user, avatarUploadFile)
+        props.update(user, avatarUploadFile)
     }
 
     const onFileChange = (e) => {
@@ -308,11 +308,11 @@ const mapStateToProps = (state) => {
 
 const mapDispathToProps = (dispatch, props) => {
     return {
-        getUserInfo: (userName) => {
-            dispatch(userActions.getUserInfo(userName))
+        get: (userName) => {
+            dispatch(userActions.get(userName))
         },
-        updateUserInfo: (user, avatarUploadFile) => {
-            dispatch(userActions.updateUserInfo(user, avatarUploadFile))
+        update: (user, avatarUploadFile) => {
+            dispatch(userActions.update(user, avatarUploadFile))
         }
     }
 }

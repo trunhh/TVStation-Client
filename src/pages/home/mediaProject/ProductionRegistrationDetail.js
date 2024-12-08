@@ -16,7 +16,7 @@ import 'rsuite/SelectPicker/styles/index.css';
 import { CustomApproveButton, CustomSubmitButton, CustomDatePicker, CustomToggle, CustomInputNoOutline } from '../../../_sharecomponents/customrsuite/CustomRsuite';
 
 const selectPlan = createSelector(
-    (state) => state.plan,
+    (state) => state.productionRegistration,
     (planState) => planState.selected
 );
 
@@ -24,10 +24,10 @@ const ProductionRegistrationDetail = (props) => {
     const nullForm = {
         title: '',
         status: "IN_PROGRESS",
-        sector: '',
+        sector: "TV",
         airdate: new Date(),
         content: '',
-        isShared: false
+        isPersonal: true
     };
 
     const { id } = useParams(); // Extract id from URL
@@ -69,13 +69,9 @@ const ProductionRegistrationDetail = (props) => {
     };
 
     const handleSubmit = () => {
-        const saveData = { 
-            ...formData,
-            isPersonal: !formData.isShared
-        };
-    
-        if (id) props.update(id,saveData)
-        else props.create(saveData)
+
+        if (id) props.update(id,formData)
+        else props.create(formData)
     };
     
 
@@ -111,8 +107,8 @@ const ProductionRegistrationDetail = (props) => {
                     </div>
                     <div>
                         <CustomToggle
-                            checked={formData.isPersonal}
-                            onChange={(value) => handleFormDataChange("isPersonal", value)}
+                            checked={!formData.isPersonal}
+                            onChange={(value) => handleFormDataChange("isPersonal", !value)}
                         >
                             Chia sẻ
                         </CustomToggle>
@@ -142,7 +138,7 @@ const ProductionRegistrationDetail = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    ...state.plan,
+    ...state.productionRegistration,
     selected: selectPlan(state),
     isLoading: state.view.isLoading
 });

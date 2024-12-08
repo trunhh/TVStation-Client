@@ -152,17 +152,14 @@ const remove = (route,id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: planConstant.DELETE_FAILED,
-            payload: {
-                statusCode: error.response?.status || 500,
-                message: 'Failed to delete object',
-            },
+            payload: error.response,
         });
     }
 };
 
-const clearSelected = () => (dispatch) => {
+const clearData = () => (dispatch) => {
     dispatch({
-        type: planConstant.CLEAR_SELECTED,
+        type: planConstant.CLEAR_DATA,
     });
 };
 
@@ -172,5 +169,5 @@ export default {
     create,
     update,
     remove,
-    clearSelected
+    clearData
 }

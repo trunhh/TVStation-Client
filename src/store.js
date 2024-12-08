@@ -12,7 +12,8 @@ const rootReducer = combineReducers({
     user: userReducer,
     auth: authReducer,
     group: groupReducer,
-    plan: planReducer,
+    productionRegistration: planReducer,
+    mediaProject: planReducer,
     siteMap: siteMapReducer
 })
 

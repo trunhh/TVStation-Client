@@ -2,54 +2,66 @@ import './PlanListPage.scss'
 
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
-import ReactPaginate from 'react-paginate'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
-import { SectorConst, StatusConst } from '../../../constants/constants'
+import userActions from '../../../actions/userActions'
 import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
-import ToggleSwitch from '../../../_sharecomponents/customswitch/ToggleSwitch'
-import YearDropdown from '../../../_sharecomponents/filterform/YearDropdown';
-import DateRangePicker from '../../../_sharecomponents/filterform/DateRangePicker';
-import DropdownFilter from '../../../_sharecomponents/filterform/DropdownFilter';
-import SearchInput from '../../../_sharecomponents/filterform/SearchInput';
+import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { MdOutlineDeleteForever } from 'react-icons/md'
-//Modal form
-import MediaProjectDetail from './MediaProjectDetail'
+import { useNavigate } from 'react-router-dom';
+import { MEDIA_PROJECT_DETAIL } from '../../../constants/routeConstants'
+import { PAGE_SIZE } from '../../../constants/constants'
+import Table from 'rsuite/Table';
+import 'rsuite/Table/styles/index.css';
+import Pagination from 'rsuite/Pagination';
+import 'rsuite/Pagination/styles/index.css';
+import Modal from 'rsuite/Modal';
+import 'rsuite/Modal/styles/index.css';
+import Uploader from 'rsuite/Uploader';
+import 'rsuite/Uploader/styles/index.css';
+import { 
+    CustomAddButton,
+    CustomDateRangePicker,
+    CustomSectorPicker,
+    CustomStatusPicker, 
+    CustomSitemapPicker,
+    CustomUserPicker,
+    CustomObjectTypePicker,
+    CustomInputSearch ,
+    CustomToggle,
+    CustomDeleteButton,
+    TextLink
+} from '../../../_sharecomponents/customrsuite/CustomRsuite'
 
+const { Column, HeaderCell, Cell } = Table;
 
 const MediaProjectList = (props) => {
     const [query, setQuery] = useState({
-        pageIndex: 1,
-        year: new Date().getFullYear(),
         startDate: new Date(new Date().getFullYear(), 0, 1),
         endDate: new Date(new Date().getFullYear(), 11, 31),
-        sector: '', 
-        status: '', 
-        keyword: '',
+        sector: null,
+        siteMapId: null,
+        userName: null,
+        objectType: null,
+        status: null,
+        keyword: null,
+        isPersonal: false
     });
 
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [backdrop, setBackdrop] = useState('true');
     
+    const navigate = useNavigate();
 
-
-    const handleQueryChange = (e) => {
-        const { name, value } = e.target;
+    const handleQueryChange = (name, value) => {
         setQuery(prevQuery => ({
             ...prevQuery,
             [name]: value
         }));
-        props.getList(query)
     };
+
+    const handleCloseModal = () => setOpen(false)
     
-    const handleYearChange = (selectedYear) => {
-        setQuery(prevQuery => ({
-            ...prevQuery,
-            year: selectedYear,
-            startDate: new Date(selectedYear, 0, 1),
-            endDate: new Date(selectedYear, 11, 31)
-        }));
-        props.getList(query)
-    };
     
     const handleDateRangeChange = (dates) => {
         const [start, end] = dates;
@@ -58,46 +70,39 @@ const MediaProjectList = (props) => {
           startDate: start,
           endDate: end,
         }));
-        props.getList(query)
       };
 
     const handlePageClick = (selectedPage) => {
-        setQuery(prevQuery => ({
-            ...prevQuery,
-            pageIndex: selectedPage.selected + 1,
-        }));
-        props.getList({ ...query, pageIndex: selectedPage.selected + 1 });
+        props.getList({ ...query}, selectedPage );
     };
 
-    const handleRowClick = (id) => {
-        props.get(id);
-        setModalOpen(true);
-    };
-
-    const handleAddNewClick = () => {
-        props.clearSelected();
-        setModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalOpen(false);
-        props.clearSelected();
-    };
 
     const handleDeleteClick = (item) => {
         props.remove(item.id);
-        props.clearSelected();
+        props.clearData();
     }
+
+    const handleRowClick = (id) => {
+        navigate(`${MEDIA_PROJECT_DETAIL}/${id}`);
+    };
+
+    const handleAddButtonClick = () => {
+        setOpen(true)
+    };
+    useEffect(() => {
+        props.getList(query, props.pageIndex);
+    }, [query]);
 
     useEffect(() => {
         if (props.isDeleted || props.isUpdated || props.isCreated) {
-            props.getList(query); 
+            props.getList(query, props.pageIndex); 
         }
-    }, [props.isDeleted, props.isUpdated, props.isCreated, query]);
+    }, [props.isDeleted, props.isUpdated, props.isCreated]);
 
     useEffect(() => {
-        props.getList(query);
+        props.getList(query, props.pageIndex);
         props.getSiteMaps();
+        
       }, []);
 
     useEffect(() => {
@@ -131,109 +136,9 @@ const MediaProjectList = (props) => {
         }
     ];
     
-    const renderFilterForm = () => {
-        return (
-            <div className="filter-form">
-                <YearDropdown 
-                    value={query.year} 
-                    onChange={(e) => handleYearChange(Number(e.target.value))} 
-                />
-                <DateRangePicker 
-                    startDate={query.startDate}
-                    endDate={query.endDate}
-                    onChange={handleDateRangeChange}
-                    year={query.year}
-                />
-                <DropdownFilter
-                    value={query.sector}
-                    options={SectorConst}
-                    valueKey = "value"
-                    displayKey = "value_i18n"
-                    onChange={handleQueryChange}
-                    placeholder="Loại hình báo chí"
-                />
-                <DropdownFilter
-                    value={query.siteMapId}
-                    options={props.siteMaps}
-                    valueKey = "id"
-                    displayKey = "name"
-                    onChange={handleQueryChange}
-                    placeholder="Phòng ban"
-                />
-                <DropdownFilter
-                    value={query.status}
-                    options={StatusConst}
-                    valueKey = "value"
-                    displayKey = "value_i18n"
-                    onChange={handleQueryChange}
-                    placeholder="Trạng thái"
-                />
-                <SearchInput 
-                    value={query.keyword} 
-                    onChange={handleQueryChange} 
-                    placeholder="Tìm kiếm..."
-                />
-                <ToggleSwitch
-                    value={query.isPersonal} 
-                    handleChange={handleQueryChange}
-                    label = "Cá nhân"
-                />
-            </div>
-        );
-    };
 
-    const renderTable = () => {
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Tên</th>
-                        <th>Trạng thái</th>
-                        <th>Ngày tạo</th>
-                        <th>Người tạo</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {props.list && props.list.map((item, index) => {
-                        return (
-                            <tr key={item.id} onClick={() => handleRowClick(item.id)}>
-                                <td>{index + 1}</td>
-                                <td>{item.title}</td>
-                                <td>
-                                    <span className={`status-box ${item.status.toLowerCase()}`}>
-                                        {StatusConst.find(status => status.value === item.status)?.value_i18n || "Unknown Status"}
-                                    </span>
-                                </td>
-                                <td>{new Intl.DateTimeFormat('en-GB').format(new Date(item.createdDate))}</td>
-                                <td>{item.creatorName}</td>
-                                <td>
-                                    <MdOutlineDeleteForever fontSize="1.2rem"
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            handleDeleteClick(item)
-                                        }}
-                                    />
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-        );
-    };
 
-    const renderModal = () => {
-        return(
-        <MediaProjectDetail
-            onClose={handleCloseModal}
-            selected={props.selected}
-        />)
-    }
-
-    console.log('Media Project list rerender...')
+    
     return (
         <div className="plan-page">
             <div className="plan-summary">
@@ -248,34 +153,118 @@ const MediaProjectList = (props) => {
                 ))}
             </div>
             <div className="plan-list">
-                {renderFilterForm()}
+                <div className="filter-form">
+                    <CustomDateRangePicker
+                        placeholder="Phát sóng"
+                        value={[query.startDate, query.endDate]}
+                        onChange={handleDateRangeChange}
+                    />
+                    <CustomSectorPicker
+                        value={query.sector}
+                        onChange={(value) => handleQueryChange("sector", value)}
+                    />
+                    <CustomSitemapPicker
+                        data={props.siteMaps}
+                        value={query.siteMapId}
+                        onChange={(value) => handleQueryChange("siteMapId", value)}
+                    />
+                    <CustomUserPicker
+                        value={query.userName}
+                        onChange={(value) => handleQueryChange("userName", value)}
+                    />
+                    <CustomObjectTypePicker
+                        value={query.objectType}
+                        onChange={(value) => handleQueryChange("objectType", value)}
+                    />
+                    <CustomStatusPicker
+                        value={query.status}
+                        onChange={(value) => handleQueryChange("status", value)}
+                    />
+                    <CustomInputSearch
+                        value={query.keyword}
+                        onChange={(value, e) => handleQueryChange("keyword", value)}
+                    />
+                </div>
 
                 <div className="blue-button-container">
-                    <button
-                        className="blue-button"
-                        onClick={handleAddNewClick}
+                    <CustomToggle 
+                        checked={query.isPersonal}
+                        onChange={(value,e) => handleQueryChange("isPersonal", value)}
                     >
-                        Thêm +
-                    </button>
+                        Cá nhân
+                    </CustomToggle>
+                    <CustomAddButton onClick={handleAddButtonClick}/>
                 </div>
-                
-                {renderTable()}
+                <Table 
+                    data={props.list} 
+                    autoHeight = {true}
+                   // onRowClick={(rowData) =>handleRowClick(rowData.id)}
+                >
+                  <Column flexGrow={1} minWidth={50} fixed>
+                    <HeaderCell>#</HeaderCell>
+                    <Cell>
+                      {(rowData, rowIndex) => (props.pageIndex-1) * PAGE_SIZE + rowIndex + 1}
+                    </Cell>
+                  </Column>
 
-                <div className="paging">
-                    {props.pageCount > 1 && (
-                        <ReactPaginate
-                            nextLabel="Next >"
-                            previousLabel="< Previous"
-                            pageCount={props.pageCount}
-                            onPageChange={handlePageClick}
-                            containerClassName="pagination-row"
-                            activeClassName="active"
-                            disabledClassName="disabled"
-                        />
-                    )}
-                </div>
+                  <Column flexGrow={3} minWidth={150} fixed>
+                    <HeaderCell>Tên</HeaderCell>
+                    <Cell >
+                      {rowData  => 
+                      (<TextLink 
+                        onRowClick={()=>handleRowClick(rowData.id)}
+                        text={rowData.title}
+                      />)}
+                    </Cell>
+                  </Column>
+
+                  <Column flexGrow={2.5} minWidth={150}>
+                    <HeaderCell>Trạng thái</HeaderCell>
+                    <Cell dataKey="status" style={{ marginTop: '-5px' }}>
+                        {rowData => <StatusBox status={rowData.status} />}
+                    </Cell>
+                  </Column >
+
+                  <Column flexGrow={2} minWidth={120}>
+                    <HeaderCell>Ngày tạo</HeaderCell>
+                    <Cell>
+                        {rowData => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.createdDate))}
+                    </Cell>
+                  </Column>
+
+                  <Column flexGrow={2} minWidth={120}>
+                    <HeaderCell>Người tạo</HeaderCell>
+                    <Cell dataKey="creatorName" />
+                  </Column>
+
+                  <Column align="center" flexGrow={1.5} minWidth={100}> 
+                    <HeaderCell>Thao tác</HeaderCell>
+                    <Cell> 
+                        {rowData => (<div style={{ display: 'flex', marginTop: '-10px' }}>
+                            <CustomDeleteButton onClick={() => handleDeleteClick(rowData)}/>
+                        </div>)}
+                    </Cell>
+                  </Column>
+                </Table>
+
+                {props.list && (
+                    <Pagination total={props.totalCount} limit={PAGE_SIZE} activePage={props.pageIndex} onChangePage={handlePageClick} />
+                )}
             </div>
-            {isModalOpen && renderModal()}
+
+            <Modal 
+                backdrop={backdrop} 
+                open={open} 
+                style={{zIndex: 99999}} 
+                onClose={handleCloseModal}
+            >
+
+                <Uploader action="//jsonplaceholder.typicode.com/posts/" draggable>
+                  <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span>Click or Drag files to this area to upload</span>
+                  </div>
+                </Uploader>
+            </Modal>
         </div>
         
     )
@@ -291,11 +280,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (query) => dispatch(planActions.getList(MEDIA_PROJECT_API, query)),
+        getList: (query, pageIndex) => dispatch(planActions.getList(MEDIA_PROJECT_API, query, pageIndex, PAGE_SIZE)),
         get: (id) => dispatch(planActions.get(MEDIA_PROJECT_API, id)),
         remove: (id) => dispatch(planActions.remove(MEDIA_PROJECT_API, id)),
-        clearSelected: () => dispatch(planActions.clearSelected),
-        getSiteMaps: ()=>dispatch(siteMapActions.getList())
+        clearData: () => dispatch(planActions.clearData),
+        getSiteMaps: ()=>dispatch(siteMapActions.getList()),
+        getUsers: ()=>dispatch(userActions.getList())
     }
 }
 

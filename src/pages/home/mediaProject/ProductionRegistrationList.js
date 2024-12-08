@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
+import userActions from '../../../actions/userActions'
 import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants'
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { MdOutlineDeleteForever } from 'react-icons/md'
@@ -14,9 +15,7 @@ import Table from 'rsuite/Table';
 import 'rsuite/Table/styles/index.css';
 import Pagination from 'rsuite/Pagination';
 import 'rsuite/Pagination/styles/index.css';
-import IconButton from 'rsuite/IconButton';
-import 'rsuite/IconButton/styles/index.css';
-import ShareRound from '@rsuite/icons/ShareRound';
+
 import { 
     CustomAddButton,
     CustomDateRangePicker,
@@ -26,7 +25,9 @@ import {
     CustomUserPicker,
     CustomObjectTypePicker,
     CustomInputSearch ,
-    CustomToggle
+    CustomToggle,
+    CustomDeleteButton,
+    TextLink
 } from '../../../_sharecomponents/customrsuite/CustomRsuite'
 
 const { Column, HeaderCell, Cell } = Table;
@@ -70,7 +71,7 @@ const ProductionRegistrationList = (props) => {
 
     const handleDeleteClick = (item) => {
         props.remove(item.id);
-        props.clearSelected();
+        props.clearData();
     }
 
     const handleRowClick = (id) => {
@@ -154,6 +155,7 @@ const ProductionRegistrationList = (props) => {
                         onChange={(value) => handleQueryChange("sector", value)}
                     />
                     <CustomSitemapPicker
+                        data={props.siteMaps}
                         value={query.siteMapId}
                         onChange={(value) => handleQueryChange("siteMapId", value)}
                     />
@@ -176,7 +178,10 @@ const ProductionRegistrationList = (props) => {
                 </div>
 
                 <div className="blue-button-container">
-                    <CustomToggle>
+                    <CustomToggle 
+                        checked={query.isPersonal}
+                        onChange={(value,e) => handleQueryChange("isPersonal", value)}
+                    >
                         Cá nhân
                     </CustomToggle>
                     <CustomAddButton onClick={handleAddButtonClick}/>
@@ -184,10 +189,10 @@ const ProductionRegistrationList = (props) => {
                 <Table 
                     data={props.list} 
                     autoHeight = {true}
-                    onRowClick={(rowData) =>handleRowClick(rowData.id)}
+                   // onRowClick={(rowData) =>handleRowClick(rowData.id)}
                 >
                   <Column flexGrow={1} minWidth={50} fixed>
-                    <HeaderCell>Id</HeaderCell>
+                    <HeaderCell>#</HeaderCell>
                     <Cell>
                       {(rowData, rowIndex) => (props.pageIndex-1) * PAGE_SIZE + rowIndex + 1}
                     </Cell>
@@ -196,11 +201,11 @@ const ProductionRegistrationList = (props) => {
                   <Column flexGrow={3} minWidth={150} fixed>
                     <HeaderCell>Tên</HeaderCell>
                     <Cell >
-                      {rowData  => {
-                        const style = !rowData.title ? { fontStyle: "italic" } : { fontWeight: "bold" };
-                        const content = rowData.title || "Đề tài chưa đặt tên";
-                        return <div style={style}>{content}</div>;
-                      }}
+                      {rowData  => 
+                      (<TextLink 
+                        onRowClick={()=>handleRowClick(rowData.id)}
+                        text={rowData.title}
+                      />)}
                     </Cell>
                   </Column>
 
@@ -232,11 +237,10 @@ const ProductionRegistrationList = (props) => {
 
                   <Column align="center" flexGrow={1.5} minWidth={100}> 
                     <HeaderCell>Thao tác</HeaderCell>
-                    <Cell>
-                        <div style={{ display: 'flex', marginTop: '-10px' }}>
-                            <IconButton icon={<ShareRound />} appearance="link" />
-                            <IconButton icon={<ShareRound />} appearance="link" />
-                        </div>
+                    <Cell> 
+                        {rowData => (<div style={{ display: 'flex', marginTop: '-10px' }}>
+                            <CustomDeleteButton onClick={() => handleDeleteClick(rowData)}/>
+                        </div>)}
                     </Cell>
                   </Column>
                 </Table>
@@ -252,7 +256,7 @@ const ProductionRegistrationList = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        ...state.plan ,
+        ...state.productionRegistration ,
         isLoading: state.view.isLoading,
         siteMaps: state.siteMap.list
     }
@@ -263,8 +267,9 @@ const mapDispatchToProps = (dispatch) => {
         getList: (query, pageIndex) => dispatch(planActions.getList(PRODUCTION_REGISTRATION_API, query, pageIndex, PAGE_SIZE)),
         get: (id) => dispatch(planActions.get(PRODUCTION_REGISTRATION_API, id)),
         remove: (id) => dispatch(planActions.remove(PRODUCTION_REGISTRATION_API, id)),
-        clearSelected: () => dispatch(planActions.clearSelected),
-        getSiteMaps: ()=>dispatch(siteMapActions.getList())
+        clearData: () => dispatch(planActions.clearData),
+        getSiteMaps: ()=>dispatch(siteMapActions.getList()),
+        getUsers: ()=>dispatch(userActions.getList())
     }
 }
 

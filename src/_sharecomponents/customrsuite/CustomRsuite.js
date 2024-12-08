@@ -15,6 +15,7 @@ import 'rsuite/DateRangePicker/styles/index.css';
 import SelectPicker from 'rsuite/SelectPicker';
 import 'rsuite/SelectPicker/styles/index.css';
 import PlusRound from '@rsuite/icons/PlusRound';
+import TrashIcon from '@rsuite/icons/Trash';
 import SearchIcon from '@rsuite/icons/Search';
 import { SectorConst,StatusConst,ObjectTypeConst } from '../../constants/constants';
 export const CustomApproveButton = ({ ...props }) => {
@@ -51,6 +52,17 @@ export const CustomAddButton = ({ ...props }) => {
     >
       Thêm
     </IconButton>
+  );
+};
+
+export const CustomDeleteButton = ({ ...props }) => {
+  return (
+    <IconButton
+      {...props}
+      appearance='link'
+      color='red'
+      icon={<TrashIcon/>}
+    />
   );
 };
 
@@ -160,7 +172,9 @@ export const CustomToggle = ({...props }) => {
 export const CustomInputNoOutline = ({...props }) => {
   return (
     <InputGroup size='lg' style={{border: 'none'}}>
-      <Input 
+      <Input style={{
+        fontWeight: "bold"
+      }}
         {...props}
         placeholder = "Đề tài chưa đặt tên"
       />  
@@ -184,6 +198,41 @@ export const CustomInputSearch = ({...props }) => {
   )
 }
 
+export const TextLink = ({ onRowClick, text, ...props }) => {
+  const handleMouseEnter = (e) => {
+    e.target.style.textDecoration = "underline";
+  };
+
+  const handleMouseLeave = (e) => {
+    e.target.style.textDecoration = "none";
+  };
+
+
+  const style = {
+    fontStyle: !text ? "italic" : "normal",
+    fontWeight: text ? "bold" : "normal",
+    textDecoration: "none",
+    cursor: "pointer",
+    width: "fit-content"
+  };
+
+  const content = text || "Đề tài chưa đặt tên";
+
+  return (
+    <div
+      style={style}
+      onClick={onRowClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      {...props}
+    >
+      {content}
+    </div>
+  );
+};
+
+
+
 export default {
     CustomApproveButton,
     CustomSubmitButton,
@@ -196,5 +245,6 @@ export default {
     CustomSitemapPicker,
     CustomToggle,
     CustomInputNoOutline,
-    CustomInputSearch
+    CustomInputSearch,
+    TextLink
 }
