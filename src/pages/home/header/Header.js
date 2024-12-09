@@ -1,19 +1,24 @@
 import { MdMenu } from 'react-icons/md';
 import { useState } from 'react';
 
-import { Link } from 'react-router-dom';
-
-import Dropdown from '../dropdown/Dropdown';
 
 import './Header.css';
 
 import { connect } from 'react-redux';
 
 import viewActions from '../../../actions/viewActions';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
-
+import Dropdown from 'rsuite/Dropdown';
+import 'rsuite/Dropdown/styles/index.css';
+import Avatar from 'rsuite/Avatar';
+import 'rsuite/Avatar/styles/index.css';
 const Header = (props) => {
+
+    const userFullname = localStorage.getItem("name")
+    const userEmail = localStorage.getItem("email")
+    const userAvatar = localStorage.getItem("avatarUrl")
+
     const [sideIsOpen, setSidebarIsOpen] = useState(false)
     const clickMenuIcon = () => {
         //setSidebarIsOpen(!sideIsOpen)
@@ -22,6 +27,11 @@ const Header = (props) => {
       
         props.toggleSidebar();
     }
+    const navigate = useNavigate();
+
+    const renderToggle = props => (
+        <Avatar circle {...props} src={userAvatar} alt={userFullname[0].toUpperCase()}/>
+      );
 
     const [dropdownIsOpen, setDropdownIsOpen] = useState(false)
 
@@ -47,13 +57,12 @@ const Header = (props) => {
 
 
 
-    const pathSegments = location.pathname.split('/').filter(segment => segment);
+    const pathSegments = location.pathname.split('/').map(segment => pageNames[segment]).filter(item => item && item !== "" && item?.trim() !== "");
 
     const pageDetails = {
         fullPath: pathSegments
-            .map(segment => pageNames[segment] || segment)
-            .join(' '),
-        pageName: pageNames[pathSegments[pathSegments.length - 1]]  , // Last segment of the path
+            .join(' - '),
+        pageName: pathSegments[pathSegments.length - 1]  , // Last segment of the path
     };
 
 
@@ -67,12 +76,22 @@ const Header = (props) => {
                     </NavLink>
                 </div>
                 <div className='nav-right'>
-                    <div className='header-avatar' onClick={_onClickAvatar}>
-                        <img src="../../images/avatar.png"/>
-                    </div>
-                    {   
-                        dropdownIsOpen && <Dropdown setDropdownClose={handleClickOutSideDropdown}/>
-                    }
+                    <Dropdown renderToggle={renderToggle} placement="bottomEnd">
+                        <Dropdown.Item panel style={{ padding: 16}}>
+                          <strong>{userFullname}</strong>
+                          <p>{userEmail}</p>
+                        </Dropdown.Item>
+                        <Dropdown.Separator />
+                        <Dropdown.Item>Thông tin cá nhân</Dropdown.Item>
+                        <Dropdown.Item
+                            onSelect={() => {
+                                localStorage.clear();
+                                navigate("/sign-in")
+                            }}
+                        >
+                          Đăng xuất
+                        </Dropdown.Item>
+                    </Dropdown>
                 </div>
             </div>
             <div className='row-2'>

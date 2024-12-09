@@ -17,7 +17,7 @@ import 'rsuite/SelectPicker/styles/index.css';
 import PlusRound from '@rsuite/icons/PlusRound';
 import TrashIcon from '@rsuite/icons/Trash';
 import SearchIcon from '@rsuite/icons/Search';
-import { SectorConst,StatusConst,ObjectTypeConst } from '../../constants/constants';
+import { SectorConst,StatusConst,ObjectTypeConst, GenreConst } from '../../constants/constants';
 export const CustomApproveButton = ({ ...props }) => {
   return (
     <IconButton
@@ -124,6 +124,17 @@ export const CustomObjectTypePicker = ({ ...props }) => {
           searchable={false}
           size="lg"
           placeholder="Nguồn"
+      />
+  );
+};
+
+export const CustomGenrePicker = ({ ...props }) => {
+  return (
+      <SelectPicker
+          {...props}
+          data= {GenreConst}
+          size="lg"
+          placeholder="Thể loại"
       />
   );
 };
@@ -242,6 +253,7 @@ export default {
     CustomSectorPicker,
     CustomStatusPicker,
     CustomObjectTypePicker,
+    CustomGenrePicker,
     CustomSitemapPicker,
     CustomToggle,
     CustomInputNoOutline,

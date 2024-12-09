@@ -79,7 +79,6 @@ const MediaProjectList = (props) => {
 
     const handleDeleteClick = (item) => {
         props.remove(item.id);
-        props.clearData();
     }
 
     const handleRowClick = (id) => {
@@ -283,7 +282,6 @@ const mapDispatchToProps = (dispatch) => {
         getList: (query, pageIndex) => dispatch(planActions.getList(MEDIA_PROJECT_API, query, pageIndex, PAGE_SIZE)),
         get: (id) => dispatch(planActions.get(MEDIA_PROJECT_API, id)),
         remove: (id) => dispatch(planActions.remove(MEDIA_PROJECT_API, id)),
-        clearData: () => dispatch(planActions.clearData),
         getSiteMaps: ()=>dispatch(siteMapActions.getList()),
         getUsers: ()=>dispatch(userActions.getList())
     }

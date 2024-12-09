@@ -12,7 +12,7 @@ import userActions from "../../../actions/userActions";
 //import WithLoading from "../../../_sharecomponents/loading/WithLoading";
 
 const PasswordChanging = (props) => {
-    const username = localStorage.getItem('username');
+    const username = localStorage.getItem('userName');
     console.log('username: ' + username);
 
     const formik = useFormik({

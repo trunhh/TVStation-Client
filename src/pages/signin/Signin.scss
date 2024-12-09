@@ -1,8 +1,31 @@
-.signin-container {
-    max-width: 400px;
-    width: 400px;
-    margin: auto;
-    margin-top: 1.5rem;
+.signin-page {
+    height: 100vh;
+    background-color: #3A97D3;
+    overflow: hidden;
+
+    .logo-image {
+        max-width: 100%; /* Image width will not exceed the container width */
+        height: auto;    /* Height will adjust to maintain aspect ratio */
+    }
+    .bg-image {
+        position: fixed;
+        height: 100%; /* Image width will not exceed the container width */
+        width: auto; 
+        z-index: 1;   /* Height will adjust to maintain aspect ratio */
+        padding: 64px;
+    }
+    .signin-panel {
+        position: relative;
+        background-color: white ;
+        height: 100%;
+        max-width: 468px;
+        margin-left: auto;
+        display: flex;
+        flex-direction: column;
+        padding: 64px;
+        row-gap: 32px;
+        z-index: 2;
+    }
 }
 
 .signin-header h1 {
@@ -23,13 +46,6 @@
     margin: auto;
 }
 
-.remember-me {
-    margin-top: 1rem;
-}
-
-.btn-submit {
-    margin-top: 2rem;
-}
 
 .group-link {
     display: flex;

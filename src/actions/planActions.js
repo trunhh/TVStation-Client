@@ -157,17 +157,10 @@ const remove = (route,id) => async (dispatch) => {
     }
 };
 
-const clearData = () => (dispatch) => {
-    dispatch({
-        type: planConstant.CLEAR_DATA,
-    });
-};
-
 export default {
     get,
     getList,
     create,
     update,
-    remove,
-    clearData
+    remove
 }

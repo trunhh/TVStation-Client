@@ -71,7 +71,6 @@ const ProductionRegistrationList = (props) => {
 
     const handleDeleteClick = (item) => {
         props.remove(item.id);
-        props.clearData();
     }
 
     const handleRowClick = (id) => {
@@ -256,7 +255,7 @@ const ProductionRegistrationList = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        ...state.productionRegistration ,
+        ...state.plan,
         isLoading: state.view.isLoading,
         siteMaps: state.siteMap.list
     }
@@ -267,7 +266,6 @@ const mapDispatchToProps = (dispatch) => {
         getList: (query, pageIndex) => dispatch(planActions.getList(PRODUCTION_REGISTRATION_API, query, pageIndex, PAGE_SIZE)),
         get: (id) => dispatch(planActions.get(PRODUCTION_REGISTRATION_API, id)),
         remove: (id) => dispatch(planActions.remove(PRODUCTION_REGISTRATION_API, id)),
-        clearData: () => dispatch(planActions.clearData),
         getSiteMaps: ()=>dispatch(siteMapActions.getList()),
         getUsers: ()=>dispatch(userActions.getList())
     }

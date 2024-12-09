@@ -32,7 +32,7 @@ const UserInfo = (props) => {
     const [selectedFile, setSelectedFile] = useState(null)
 
     useEffect(() => {
-        props.get(localStorage.getItem('username'))
+        props.get(localStorage.getItem('userName'))
     }, [])
 
     useEffect(() => {

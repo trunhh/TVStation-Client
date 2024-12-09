@@ -2,55 +2,23 @@ import axios from "axios";
 
 import authConstants from "../constants/authConstants";
 
-const registerUser = (user) => async(dispath) => {
-    //console.log(user)
-    dispath({
-        type: authConstants.REGISTER_USER_REQUEST
-    })
 
-    try {
-        const response = await axios.post('/api/Auth/SignUp', {
-            ...user
-        })
-        dispath({
-            type: authConstants.REGISTER_USER_SUCCEED,
-            payload: response.data
-        })
-
-        window.location.replace('/sign-in')
-
-    }catch (error) {
-        console.log(error)
-        dispath({
-            type: authConstants.REGISTER_USER_FAILED,
-            payload: {
-                statusCode: error.response.status,
-                message: error.response.data
-            }
-        })
-    }
-}
-
-const signin = (username, password) => async(dispath) => {
-    dispath({
+const signin = (form) => async(dispatch) => {
+    dispatch({
         type: authConstants.SIGNIN_REQUEST
     })
    
     try {
-        const response = await axios.post('/api/Auth/SignIn', {
-            username: username,
-            password: password
-        })
+        const response = await axios.post('/api/Auth/SignIn', form)
 
-        console.log('response action signin: ')
-        console.log(response)
-
-        //Save localStorage
         localStorage.setItem('token', response.data.token)
-        localStorage.setItem('username', response.data.userName)
+        localStorage.setItem('userName', response.data.userName)
+        localStorage.setItem('name', response.data.name)
+        localStorage.setItem('avatarUrl', response.data.avatarUrl)
+        localStorage.setItem('email', response.data.email)
         localStorage.setItem('role', response.data.role)
 
-        dispath({
+        dispatch({
             type: authConstants.SIGNIN_SUCCEED,
             payload: response.data
         })
@@ -59,18 +27,14 @@ const signin = (username, password) => async(dispath) => {
 
     }catch (error) {
         console.log(error);
-        dispath({
+        dispatch({
             type: authConstants.SIGNIN_FAILED,
-            payload: {
-                statusCode: error.response.status,
-                message: error.response.data
-            }
+            payload: error.response
         })
     }
 }
 
 const authActions = {
-    registerUser,
     signin
 }
 

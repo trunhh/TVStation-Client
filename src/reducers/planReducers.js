@@ -59,17 +59,6 @@ const planReducer = (state = initState, action) => {
                 isCreated: true,
             };
 
-
-        case planConstant.CLEAR_DATA:
-            return {
-                ...state,
-                list: [],
-                selected: null,
-                isUpdated: false,
-                isDeleted: false,
-                isCreated: false
-            };
-
         // Default case
         default:
             return state;

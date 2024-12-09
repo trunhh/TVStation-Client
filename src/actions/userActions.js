@@ -1,168 +1,125 @@
 import axios from "axios";
-
 import userConstants from "../constants/userConstants";
+const token = localStorage.getItem('token');
 
-const token = localStorage.getItem('token')
-const route = 'api/User'
+const route = "https://localhost:7031/api/User"
 
-const get = (username) => async(dispath) => {
-    dispath({
-        type: userConstants.GET_REQUEST
-    })
-
-    try {
-        const response = await axios.get(route + "/" + username, {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        })
-        dispath({
-            type: userConstants.GET_SUCCEED,
-            payload: response.data
-        })
-    }catch (error) {
-        console.log(error.response)
-        let messageError = ''
-        if (error.response.status == 401) {
-            messageError = 'Unauthorized! Please login first to receive tokens'
-        }else if (error.response.status == 500) {
-            messageError = `Get user's info fail. Internal server error!`
-        }else if (error.response.status == 403) {
-            messageError = `You don not have permission to access / on the server. Forbidden!`
-        }
-        dispath({
-            type: userConstants.GET_FAILED,
-            payload: {
-                statusCode: error.response.status,
-                message: messageError
-            }
-        })
-    }
-}
-const update = (user, avatarUploadFile) => async(dispatch) => {
+const get = (userName) => async (dispatch) => {
     dispatch({
-        type: userConstants.UPDATE_REQUEST
-    })
-
-    try {
-        if (avatarUploadFile) {
-            var formData = new FormData();
-            formData.append("image", avatarUploadFile, avatarUploadFile.name);
-            let responseUpload = await axios({
-                method: 'POST',
-                url: 'http:///api/files/image',
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                data : formData
-            })
-            const response = await axios({
-                method: 'PUT',
-                url: '/api/User/' + user.id,
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                data: {
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    username: user.username,
-                    email: user.email,
-                    password: user.password,
-                    role: localStorage.getItem('role').replace('[', '').replace(']', ''),
-                    status: 'ACTIVE',
-                    avatarUrl: responseUpload ? responseUpload.data : ''
-                }
-            })
-
-            localStorage.setItem('avatarUrl', responseUpload.data )
-
-            dispatch({
-                type: userConstants.UPDATE_SUCCEED,
-                payload: responseUpload.data 
-            })
-        }else {
-            const response = await axios({
-                method: 'PUT',
-                url: '/api/User/' + user.id,
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                data: {
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    username: user.username,
-                    email: user.email,
-                    password: user.password,
-                    role: localStorage.getItem('role').replace('[', '').replace(']', ''),
-                    status: 'ACTIVE',
-                    avatarUrl: localStorage.getItem('avatarUrl') ? localStorage.getItem('avatarUrl') : ''
-                }
-            })
-            dispatch({
-                type: userConstants.UPDATE_SUCCEED,
-                payload: response.data 
-            })
-        }
-    }catch (error) {
-        dispatch({
-            type: userConstants.UPDATE_FAILED,
-            payload: 'Update user info fail'
-        })
-        if (error.response) {
-            //Request made and server responsed
-            console.log(error.response.data)
-            console.log(error.response.status)
-        }else if (error.request) {
-            //The request was made but no response was received
-            console.log(error.request)
-        }else {
-            console.log('Error', error.message)
-        }
-    }
-}
-
-
-const changePassword = (username, newPassword) => async(dispath) => {
-    dispath({
-        type: userConstants.CHANGE_PASSWORD_REQUEST
-    })
+        type: userConstants.GET_REQUEST,
+    });
 
     try {
         const response = await axios({
-            url: '/api/Users/password-changing',
+            url: route + '/' + userName,
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json',
+            }
+        });
+
+        dispatch({
+            type: userConstants.GET_SUCCEED,
+            payload: response.data,
+        });
+
+    } catch (error) {
+        dispatch({
+            type: userConstants.GET_FAILED,
+            payload: error.response
+        });
+    }
+};
+
+const getList = () => async (dispatch) => {
+    dispatch({
+        type: userConstants.GET_LIST_REQUEST,
+    });
+
+    try {
+        const response = await axios.get(route, {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+        });
+
+        dispatch({
+            type: userConstants.GET_LIST_SUCCEED,
+            payload: response.data
+        });
+    } catch (error) {
+        dispatch({
+            type: userConstants.GET_LIST_FAILED,
+            payload: error.response
+        });
+    }
+};
+
+const create = (object) => async (dispatch) => {
+    dispatch({
+        type: userConstants.CREATE_REQUEST,
+    });
+
+    try {
+        const response = await axios({
+            url: route,
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json',
             },
-            params: {
-                username: username,
-                newPassword: newPassword
-            }
-        })
+            data: JSON.stringify(object),
+        });
 
-        console.log(response.data)
+        dispatch({
+            type: userConstants.CREATE_SUCCEED,
+            payload: response.data,
+        });
 
-        dispath({
-            type: userConstants.CHANGE_PASSWORD_SUCCEED,
-            payload: response.data
-        })
-
-    }catch (error) {
-        dispath({
-            type: userConstants.CHANGE_PASSWORD_FAILED,
-            payload: {
-                statusCode: error.response.status,
-                message: error.response.data
-            }
-        })
+    } catch (error) {
+        dispatch({
+            type: userConstants.CREATE_FAILED,
+            payload: error.response
+        });
     }
-}
+};
 
-const userActions = {
+const update = (object) => async (dispatch) => {
+    dispatch({
+        type: userConstants.UPDATE_REQUEST,
+    });
+
+    try {
+        const response = await axios({
+            url: route,
+            method: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify(object),
+        });
+
+        dispatch({
+            type: userConstants.UPDATE_SUCCEED,
+            payload: response.data,
+        });
+
+    } catch (error) {
+        dispatch({
+            type: userConstants.UPDATE_FAILED,
+            payload: error.response
+        });
+    }
+};
+
+
+
+
+export default {
     get,
-    update,
-    changePassword
+    getList,
+    create,
+    update
 }
-
-export default userActions

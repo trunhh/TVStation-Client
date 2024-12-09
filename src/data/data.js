@@ -2,11 +2,6 @@ import routeConstants from "../constants/routeConstants"
 
 export const menuLinks = [
     {
-        text: 'User Info',
-        link: routeConstants.USER_INFO,
-        icon: 'fa-solid fa-user'
-    },
-    {
         text: 'Kế hoạch',
         link: '',
         icon: 'fa-solid fa-calendar',

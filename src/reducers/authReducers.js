@@ -1,24 +1,12 @@
 import authConstants from "../constants/authConstants";
 
 const initialStateAuth = {
-    errorMessageRegister: null,
-    errorMessageSignin: null,
+    errorMessage: null,
     userToken: {},
 }
 
 const authReducer = (state = initialStateAuth, action) => {
     switch (action.type) {
-        //Register user
-        case authConstants.REGISTER_USER_SUCCEED:
-            return {
-                ...state,
-                userToken: action.payload
-            }
-        case authConstants.REGISTER_USER_FAILED:
-            return {
-                ...state, 
-                errorMessageRegister: action.payload.message
-            }
 
         //Signin
         case authConstants.SIGNIN_SUCCEED:
@@ -29,7 +17,7 @@ const authReducer = (state = initialStateAuth, action) => {
         case authConstants.SIGNIN_FAILED:
             return {
                 ...state, 
-                errorMessageSignin: action.payload.message
+                errorMessage: action.payload.data
             }
 
         default:

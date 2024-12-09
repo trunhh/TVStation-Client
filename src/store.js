@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 import viewReducer from './reducers/viewReducer';
 import userReducer from './reducers/userReducers';
 import authReducer from './reducers/authReducers';
-import groupReducer from './reducers/groupReducers';
 import planReducer from './reducers/planReducers';
 import siteMapReducer from './reducers/siteMapReducers';
 
@@ -11,9 +10,7 @@ const rootReducer = combineReducers({
     view: viewReducer,
     user: userReducer,
     auth: authReducer,
-    group: groupReducer,
-    productionRegistration: planReducer,
-    mediaProject: planReducer,
+    plan: planReducer,
     siteMap: siteMapReducer
 })
 

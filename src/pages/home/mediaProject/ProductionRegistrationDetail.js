@@ -13,10 +13,17 @@ import { createSelector } from 'reselect';
 import SelectPicker from 'rsuite/SelectPicker';
 import 'rsuite/SelectPicker/styles/index.css';
 
-import { CustomApproveButton, CustomSubmitButton, CustomDatePicker, CustomToggle, CustomInputNoOutline } from '../../../_sharecomponents/customrsuite/CustomRsuite';
+import { 
+    CustomApproveButton, 
+    CustomSubmitButton, 
+    CustomDatePicker, 
+    CustomGenrePicker,
+    CustomToggle, 
+    CustomInputNoOutline 
+} from '../../../_sharecomponents/customrsuite/CustomRsuite';
 
 const selectPlan = createSelector(
-    (state) => state.productionRegistration,
+    (state) => state.plan,
     (planState) => planState.selected
 );
 
@@ -27,16 +34,16 @@ const ProductionRegistrationDetail = (props) => {
         sector: "TV",
         airdate: new Date(),
         content: '',
-        isPersonal: true
+        isPersonal: true,
+        genre: null,
     };
 
-    const { id } = useParams(); // Extract id from URL
-    const navigate = useNavigate(); // For navigation
+    const { id } = useParams();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState(nullForm);
     
 
-    // Fetch data on load if id is present
     useEffect(() => {
         setFormData(nullForm);
         if (id) {
@@ -69,7 +76,6 @@ const ProductionRegistrationDetail = (props) => {
     };
 
     const handleSubmit = () => {
-
         if (id) props.update(id,formData)
         else props.create(formData)
     };
@@ -92,9 +98,9 @@ const ProductionRegistrationDetail = (props) => {
                     <div className="inline-group">
                         <div className="component-label-group">
                             <p className="label-text">Thể loại</p>
-                            <SelectPicker
-                                value={formData.sector}
-                                onChange={(value) => handleFormDataChange("sector", value)}
+                            <CustomGenrePicker
+                                value={formData.genre}
+                                onChange={(value) => handleFormDataChange("genre", value)}
                             />
                         </div>
                         <div className="component-label-group">
@@ -138,7 +144,7 @@ const ProductionRegistrationDetail = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    ...state.productionRegistration,
+    ...state.plan,
     selected: selectPlan(state),
     isLoading: state.view.isLoading
 });

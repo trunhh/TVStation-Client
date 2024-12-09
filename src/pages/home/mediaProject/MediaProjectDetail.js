@@ -91,7 +91,7 @@ const MediaProjectDetail = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        ...state.mediaProject ,
+        ...state.plan ,
         isLoading: state.view.isLoading
     }
 }
