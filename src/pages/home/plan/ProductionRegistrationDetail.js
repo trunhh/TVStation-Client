@@ -10,9 +10,6 @@ import planActions from '../../../actions/planActions';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
 import { createSelector } from 'reselect';
 
-import SelectPicker from 'rsuite/SelectPicker';
-import 'rsuite/SelectPicker/styles/index.css';
-
 import { 
     CustomApproveButton, 
     CustomSubmitButton, 

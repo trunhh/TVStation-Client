@@ -13,11 +13,24 @@ import Dropdown from 'rsuite/Dropdown';
 import 'rsuite/Dropdown/styles/index.css';
 import Avatar from 'rsuite/Avatar';
 import 'rsuite/Avatar/styles/index.css';
+const userFullname = localStorage.getItem("name") || " "
+const userEmail = localStorage.getItem("email") || " "
+const userAvatar = localStorage.getItem("avatarUrl") || " "
+
+const pageNames = {
+    '/': 'Home',
+    'about': 'About Us',
+    'contact': 'Contact',
+    'dashboard': 'Dashboard',
+    'MediaProject': 'Hậu kì',
+    'ProductionRegistration': 'Tin bài phóng sự',
+    'ScriptProgram': 'Kịch bản tác phẩm',
+    'Detail': 'Chi tiết',
+}
+
 const Header = (props) => {
 
-    const userFullname = localStorage.getItem("name")
-    const userEmail = localStorage.getItem("email")
-    const userAvatar = localStorage.getItem("avatarUrl")
+    
 
     const [sideIsOpen, setSidebarIsOpen] = useState(false)
     const clickMenuIcon = () => {
@@ -45,15 +58,7 @@ const Header = (props) => {
 
     const location = useLocation();
 
-    const pageNames = {
-        '/': 'Home',
-        'about': 'About Us',
-        'contact': 'Contact',
-        'dashboard': 'Dashboard',
-        'MediaProject': 'Hậu kì',
-        'ProductionRegistration': 'Tin bài phóng sự',
-        'Detail': 'Chi tiết',
-    }
+    
 
 
 

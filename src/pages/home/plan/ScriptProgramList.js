@@ -5,11 +5,10 @@ import { useEffect, useState } from 'react'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
 import userActions from '../../../actions/userActions'
-import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants'
+import { SCRIPT_PROGRAM_API } from '../../../constants/apiConstants'
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
-import { MdOutlineDeleteForever } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
-import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants'
+import { SCRIPT_PROGRAM_DETAIL } from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
 import Table from 'rsuite/Table';
 import 'rsuite/Table/styles/index.css';
@@ -23,7 +22,6 @@ import {
     CustomStatusPicker, 
     CustomSitemapPicker,
     CustomUserPicker,
-    CustomObjectTypePicker,
     CustomInputSearch ,
     CustomToggle,
     CustomDeleteButton,
@@ -32,14 +30,13 @@ import {
 
 const { Column, HeaderCell, Cell } = Table;
 
-const ProductionRegistrationList = (props) => {
+const ScriptProgramList = (props) => {
     const [query, setQuery] = useState({
         startDate: new Date(new Date().getFullYear(), 0, 1),
         endDate: new Date(new Date().getFullYear(), 11, 31),
         sector: null,
         siteMapId: null,
         userName: null,
-        objectType: null,
         status: null,
         keyword: null,
         isPersonal: false
@@ -74,11 +71,11 @@ const ProductionRegistrationList = (props) => {
     }
 
     const handleRowClick = (id) => {
-        navigate(`${PRODUCTION_REGISTRATION_DETAIL}/${id}`);
+        navigate(`${SCRIPT_PROGRAM_DETAIL}/${id}`);
     };
 
     const handleAddButtonClick = () => {
-        navigate(`${PRODUCTION_REGISTRATION_DETAIL}`);
+        navigate(`${SCRIPT_PROGRAM_DETAIL}`);
     };
     useEffect(() => {
         props.getList(query, props.pageIndex);
@@ -93,6 +90,7 @@ const ProductionRegistrationList = (props) => {
     useEffect(() => {
         props.getList(query, props.pageIndex);
         props.getSiteMaps();
+        props.getUsers();
       }, []);
 
     useEffect(() => {
@@ -159,12 +157,9 @@ const ProductionRegistrationList = (props) => {
                         onChange={(value) => handleQueryChange("siteMapId", value)}
                     />
                     <CustomUserPicker
+                        data={props.users}
                         value={query.userName}
                         onChange={(value) => handleQueryChange("userName", value)}
-                    />
-                    <CustomObjectTypePicker
-                        value={query.objectType}
-                        onChange={(value) => handleQueryChange("objectType", value)}
                     />
                     <CustomStatusPicker
                         value={query.status}
@@ -257,18 +252,19 @@ const mapStateToProps = (state) => {
     return {
         ...state.plan,
         isLoading: state.view.isLoading,
-        siteMaps: state.siteMap.list
+        siteMaps: state.siteMap.list,
+        users: state.user.list
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (query, pageIndex) => dispatch(planActions.getList(PRODUCTION_REGISTRATION_API, query, pageIndex, PAGE_SIZE)),
-        get: (id) => dispatch(planActions.get(PRODUCTION_REGISTRATION_API, id)),
-        remove: (id) => dispatch(planActions.remove(PRODUCTION_REGISTRATION_API, id)),
+        getList: (query, pageIndex) => dispatch(planActions.getList(SCRIPT_PROGRAM_API, query, pageIndex, PAGE_SIZE)),
+        get: (id) => dispatch(planActions.get(SCRIPT_PROGRAM_API, id)),
+        remove: (id) => dispatch(planActions.remove(SCRIPT_PROGRAM_API, id)),
         getSiteMaps: ()=>dispatch(siteMapActions.getList()),
         getUsers: ()=>dispatch(userActions.getList())
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductionRegistrationList)
+export default connect(mapStateToProps, mapDispatchToProps)(ScriptProgramList)
