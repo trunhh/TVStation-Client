@@ -4,10 +4,8 @@ import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
-import userActions from '../../../actions/userActions'
 import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
-import { MdOutlineDeleteForever } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
 import { MEDIA_PROJECT_DETAIL } from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
@@ -25,13 +23,12 @@ import {
     CustomSectorPicker,
     CustomStatusPicker, 
     CustomSitemapPicker,
-    CustomUserPicker,
-    CustomObjectTypePicker,
     CustomInputSearch ,
     CustomToggle,
     CustomDeleteButton,
     TextLink
 } from '../../../_sharecomponents/customrsuite/CustomRsuite'
+import { create } from '@mui/material/styles/createTransitions'
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -41,10 +38,8 @@ const MediaProjectList = (props) => {
         endDate: new Date(new Date().getFullYear(), 11, 31),
         sector: null,
         siteMapId: null,
-        userName: null,
-        objectType: null,
         status: null,
-        keyword: null,
+        keyword: "",
         isPersonal: false
     });
 
@@ -88,6 +83,20 @@ const MediaProjectList = (props) => {
     const handleAddButtonClick = () => {
         setOpen(true)
     };
+
+    const handleUploadSuccess = (response, file) => {
+        props.create({
+            mediaUrl: response.filePath,
+            title: file.name
+        })
+        setOpen(false)
+    }
+
+    const handleUploadFail = (error) => {
+        alert("Error uploading file. Please try again.");
+    }
+
+
     useEffect(() => {
         props.getList(query, props.pageIndex);
     }, [query]);
@@ -166,14 +175,6 @@ const MediaProjectList = (props) => {
                         data={props.siteMaps}
                         value={query.siteMapId}
                         onChange={(value) => handleQueryChange("siteMapId", value)}
-                    />
-                    <CustomUserPicker
-                        value={query.userName}
-                        onChange={(value) => handleQueryChange("userName", value)}
-                    />
-                    <CustomObjectTypePicker
-                        value={query.objectType}
-                        onChange={(value) => handleQueryChange("objectType", value)}
                     />
                     <CustomStatusPicker
                         value={query.status}
@@ -258,9 +259,16 @@ const MediaProjectList = (props) => {
                 onClose={handleCloseModal}
             >
 
-                <Uploader action="//jsonplaceholder.typicode.com/posts/" draggable>
+                <Uploader
+                  action="https://localhost:7031/api/Media/upload" // API endpoint
+                  draggable
+                  autoUpload={true} // Automatically uploads after selection
+                  multiple={false} // Restricts to single file
+                  onSuccess={handleUploadSuccess}
+                  onError={handleUploadFail}
+                >
                   <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span>Click or Drag files to this area to upload</span>
+                    <span>Click or Drag a file to this area to upload</span>
                   </div>
                 </Uploader>
             </Modal>
@@ -279,11 +287,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        create: (data) => dispatch(planActions.create(MEDIA_PROJECT_API,data)),
         getList: (query, pageIndex) => dispatch(planActions.getList(MEDIA_PROJECT_API, query, pageIndex, PAGE_SIZE)),
         get: (id) => dispatch(planActions.get(MEDIA_PROJECT_API, id)),
         remove: (id) => dispatch(planActions.remove(MEDIA_PROJECT_API, id)),
         getSiteMaps: ()=>dispatch(siteMapActions.getList()),
-        getUsers: ()=>dispatch(userActions.getList())
     }
 }
 
