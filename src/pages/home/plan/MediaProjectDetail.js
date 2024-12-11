@@ -9,7 +9,7 @@ import { MEDIA_PROJECT } from '../../../constants/routeConstants';
 import planActions from '../../../actions/planActions';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
 import { createSelector } from 'reselect';
-
+import ReactPlayer from 'react-player';
 import { 
     CustomApproveButton, 
     CustomSubmitButton, 
@@ -82,9 +82,12 @@ const MediaProjectDetail = (props) => {
                             onChange={(value) => handleFormDataChange("title", value)}
                         />
                     </div>
-                    <video width="100%" height="auto" controls>
-                      <source src={"https://localhost:7031/" + formData.mediaUrl} type="video/quicktime" />
-                    </video>
+                    <ReactPlayer 
+                      url={`https://localhost:7031/${formData.mediaUrl}`} 
+                      controls={true} 
+                      width="100%" 
+                      height="auto"
+                    />
 
                     <div>
                         <CustomToggle
