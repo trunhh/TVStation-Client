@@ -49,9 +49,9 @@ $focus-border-color: #39f;
     .main-form {
         width: 70%;
         margin: 24px 32px;
-        background-color: white;
         .content {
-            
+            margin-bottom: 8px;
+            background-color: white;
             padding: 16px;
             border: 1px solid $light-gray;
             border-radius: $border-radius;
@@ -107,9 +107,9 @@ $focus-border-color: #39f;
                 width: 100%;
                 max-width: 100%;
                 font-size: 20px;
-                height: 50vh;
+                height: 300px;
                 min-height: 200px;
-                margin-bottom: 32px;
+                margin-bottom: 64px;
                 white-space: normal; 
                 word-wrap: break-word;
                 overflow-wrap: break-word;

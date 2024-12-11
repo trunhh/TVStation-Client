@@ -82,13 +82,18 @@ const MediaProjectDetail = (props) => {
                             onChange={(value) => handleFormDataChange("title", value)}
                         />
                     </div>
-                    <ReactPlayer 
-                      url={`https://localhost:7031/${formData.mediaUrl}`} 
-                      controls={true} 
-                      width="100%" 
-                      height="auto"
-                    />
+                    <div style={{ position: 'relative', paddingTop: '56.25%' /* 9/16 = 56.25% */, width: '100%' }}>
+                      <ReactPlayer
+                        url={`https://localhost:7031/${formData.mediaUrl}`}
+                        controls={true}
+                        width="100%"
+                        height="100%"
+                        style={{ position: 'absolute', top: 0, left: 0 }}
+                      />
+                    </div>
+                </div>
 
+                <div className="content">
                     <div>
                         <CustomToggle
                             checked={!formData.isPersonal}

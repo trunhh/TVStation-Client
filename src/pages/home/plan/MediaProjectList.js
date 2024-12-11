@@ -263,6 +263,7 @@ const MediaProjectList = (props) => {
                   draggable
                   autoUpload={true} // Automatically uploads after selection
                   multiple={false} // Restricts to single file
+                  accept="audio/*,video/*"
                   onSuccess={handleUploadSuccess}
                   onError={handleUploadFail}
                 >
