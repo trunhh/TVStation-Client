@@ -13,8 +13,6 @@ import ReactPlayer from 'react-player';
 import { 
     CustomApproveButton, 
     CustomSubmitButton, 
-    CustomDatePicker, 
-    CustomGenrePicker,
     CustomToggle, 
     CustomInputNoOutline 
 } from '../../../_sharecomponents/customrsuite/CustomRsuite';
@@ -23,6 +21,8 @@ const selectPlan = createSelector(
     (state) => state.plan,
     (planState) => planState.selected
 );
+
+const role = localStorage.getItem('role');
 
 const MediaProjectDetail = (props) => {
     const nullForm = {
@@ -66,6 +66,14 @@ const MediaProjectDetail = (props) => {
     const handleSubmit = () => {
         props.update(id,formData)
     };
+
+    const handleApprove = (action) => {
+        const newFormData = {
+            ...formData,
+            status: action
+        }
+        props.update(id,newFormData)
+    }
     
 
     console.log(formData)
@@ -115,7 +123,12 @@ const MediaProjectDetail = (props) => {
             <div className="side-bar">
                 <div className="component-label-group">
                     <p className="label-text">Luân chuyển</p>
-                    <CustomApproveButton type="button" onClick={handleSubmit} />
+                    <CustomApproveButton 
+                        role={role} 
+                        status={formData.status} 
+                        type="button" 
+                        onClick={handleApprove} 
+                    />
                 </div>
                 <div className="component-label-group">
                     <p className="label-text">Chức năng</p>
@@ -135,7 +148,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     get: (id) => dispatch(planActions.get(MEDIA_PROJECT_API, id)),
     create: (data) => dispatch(planActions.create(MEDIA_PROJECT_API, data)),
-    update: (id,data) => dispatch(planActions.update(MEDIA_PROJECT_API, id, data)),
+    update: (id,data) => dispatch(planActions.update(MEDIA_PROJECT_API, id, data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MediaProjectDetail);

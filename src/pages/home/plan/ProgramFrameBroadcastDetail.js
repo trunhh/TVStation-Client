@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import 'handsontable/dist/handsontable.full.min.css';
+import React, { useEffect, useState, useRef } from 'react';
 import './PlanDetailsPage.scss';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -8,16 +7,18 @@ import { PROGRAM_FRAME_BROADCAST } from '../../../constants/routeConstants';
 import planActions from '../../../actions/planActions';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
 import { createSelector } from 'reselect';
-import SpreadsheetEditor from '../../../_sharecomponents/speadsheet/SpreadsheetEditor';
+import '@mescius/spread-sheets/styles/gc.spread.sheets.excel2013white.css';
 
-import { 
-    CustomApproveButton, 
-    CustomSubmitButton, 
-    CustomDatePicker, 
+import {
+    CustomApproveButton,
+    CustomSubmitButton,
+    CustomDatePicker,
     CustomGenrePicker,
-    CustomToggle, 
-    CustomInputNoOutline 
+    CustomToggle,
+    CustomInputNoOutline,
 } from '../../../_sharecomponents/customrsuite/CustomRsuite';
+
+const GC = require('@mescius/spread-sheets');
 
 const selectPlan = createSelector(
     (state) => state.plan,
@@ -27,43 +28,58 @@ const selectPlan = createSelector(
 const ProgramFrameBroadcastDetail = (props) => {
     const nullForm = {
         title: '',
-        status: "IN_PROGRESS",
-        sector: "TV",
+        status: 'IN_PROGRESS',
+        sector: 'TV',
         airdate: new Date(),
-        content: '',
+        content: '', // JSON string to initialize the spreadsheet
         isPersonal: true,
         genre: null,
     };
 
     const { id } = useParams();
     const navigate = useNavigate();
-
     const [formData, setFormData] = useState(nullForm);
-    
+    const spreadsheetRef = useRef(null);
+    const workbookRef = useRef(null); // Persistent reference for the workbook
 
     useEffect(() => {
         setFormData(nullForm);
         if (id) {
-            props.get(id);
+            props.get(id); // Fetch the data for the given id
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         if (props.selected) {
             setFormData((prevFormData) => ({
-            ...prevFormData,
-            ...props.selected
-        }));
+                ...prevFormData,
+                ...props.selected, // Update the form data once fetched
+            }));
         }
-    }, [props.selected]);
+    }, [props.selected]); // Only update when selected data changes
 
     useEffect(() => {
         if (props.isCreated) navigate(PROGRAM_FRAME_BROADCAST);
-    }, [props.isCreated])
+    }, [props.isCreated]);
 
     useEffect(() => {
-        props.showLoading(props.isLoading)
-    }, [props.isLoading])
+        props.showLoading(props.isLoading);
+    }, [props.isLoading]);
+
+    useEffect(() => {
+        // Only initialize the spreadsheet when the formData.content is updated
+        if (spreadsheetRef.current && formData.content && !workbookRef.current) {
+            workbookRef.current = new GC.Spread.Sheets.Workbook(spreadsheetRef.current);
+
+            // If content exists, load it into the spreadsheet
+            try {
+                const data = JSON.parse(formData.content);
+                workbookRef.current.fromJSON(data);
+            } catch (error) {
+                console.error('Failed to load JSON content:', error);
+            }
+        }
+    }, [formData.content]); // Re-run only when formData.content changes
 
     const handleFormDataChange = (name, value) => {
         setFormData((prevFormData) => ({
@@ -73,12 +89,14 @@ const ProgramFrameBroadcastDetail = (props) => {
     };
 
     const handleSubmit = () => {
-        if (id) props.update(id,formData)
-        else props.create(formData)
-    };
-    
+        if (workbookRef.current) {
+            const spreadsheetData = JSON.stringify(workbookRef.current.toJSON());
+            const updatedFormData = { ...formData, content: spreadsheetData };
 
-    console.log(formData)
+            if (id) props.update(id, updatedFormData);
+            else props.create(updatedFormData);
+        }
+    };
 
     return (
         <div className="plan-detail-page">
@@ -89,7 +107,7 @@ const ProgramFrameBroadcastDetail = (props) => {
                         <CustomInputNoOutline
                             value={formData.title}
                             placeholder="Đề tài chưa đặt tên"
-                            onChange={(value) => handleFormDataChange("title", value)}
+                            onChange={(value) => handleFormDataChange('title', value)}
                         />
                     </div>
                     <div className="inline-group">
@@ -97,30 +115,32 @@ const ProgramFrameBroadcastDetail = (props) => {
                             <p className="label-text">Thể loại</p>
                             <CustomGenrePicker
                                 value={formData.genre}
-                                onChange={(value) => handleFormDataChange("genre", value)}
+                                onChange={(value) => handleFormDataChange('genre', value)}
                             />
                         </div>
                         <div className="component-label-group">
                             <p className="label-text">Dự kiến phát sóng</p>
                             <CustomDatePicker
                                 value={formData.airdate}
-                                onChange={(value) => handleFormDataChange("airdate", value)}
+                                onChange={(value) => handleFormDataChange('airdate', value)}
                             />
                         </div>
                     </div>
                     <div>
                         <CustomToggle
                             checked={!formData.isPersonal}
-                            onChange={(value) => handleFormDataChange("isPersonal", !value)}
+                            onChange={(value) => handleFormDataChange('isPersonal', !value)}
                         >
                             Chia sẻ
                         </CustomToggle>
                     </div>
                     <p className="label-text">Nội dung</p>
-                    <SpreadsheetEditor
-                        value={formData.content} // JSON string
-                        onChange={(newContent) => handleFormDataChange('content', newContent)}
-                    />
+                    {/* Spreadsheet Container */}
+                    <div
+                        id="spreadsheet"
+                        ref={spreadsheetRef}
+                        style={{ width: '100%', height: '500px', border: '1px solid #ccc' }}
+                    ></div>
                 </div>
             </div>
             <div className="side-bar">
@@ -140,13 +160,13 @@ const ProgramFrameBroadcastDetail = (props) => {
 const mapStateToProps = (state) => ({
     ...state.plan,
     selected: selectPlan(state),
-    isLoading: state.view.isLoading
+    isLoading: state.view.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     get: (id) => dispatch(planActions.get(PROGRAM_FRAME_BROADCAST_API, id)),
     create: (data) => dispatch(planActions.create(PROGRAM_FRAME_BROADCAST_API, data)),
-    update: (id,data) => dispatch(planActions.update(PROGRAM_FRAME_BROADCAST_API, id, data)),
+    update: (id, data) => dispatch(planActions.update(PROGRAM_FRAME_BROADCAST_API, id, data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameBroadcastDetail);

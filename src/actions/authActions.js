@@ -11,6 +11,7 @@ const signin = (form) => async(dispatch) => {
     try {
         const response = await axios.post('/api/Auth/SignIn', form)
 
+        console.log(response)
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('userName', response.data.userName)
         localStorage.setItem('name', response.data.name)
@@ -39,3 +40,4 @@ const authActions = {
 }
 
 export default authActions;
+    

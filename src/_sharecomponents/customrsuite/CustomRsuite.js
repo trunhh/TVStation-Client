@@ -17,16 +17,70 @@ import 'rsuite/SelectPicker/styles/index.css';
 import PlusRound from '@rsuite/icons/PlusRound';
 import TrashIcon from '@rsuite/icons/Trash';
 import SearchIcon from '@rsuite/icons/Search';
-import { SectorConst,StatusConst,ObjectTypeConst, GenreConst } from '../../constants/constants';
-export const CustomApproveButton = ({ ...props }) => {
+import ArrowDownIcon from '@rsuite/icons/ArrowDown';
+import { SectorConst,StatusConst,ObjectTypeConst, GenreConst, ActionConst, RoleActionConst} from '../../constants/constants';
+import Popover from 'rsuite/Popover';
+import Whisper from 'rsuite/Whisper';
+import 'rsuite/Popover/styles/index.css';
+import ButtonGroup from 'rsuite/ButtonGroup';
+import 'rsuite/ButtonGroup/styles/index.css';
+import Dropdown from 'rsuite/Dropdown';
+import 'rsuite/Dropdown/styles/index.css';
+import React, { useState } from 'react';
+
+export const CustomApproveButton = ({ role= "", status="", onClick, ...props }) => {
+  let validActions = [];
+  const roleActions = RoleActionConst[role];
+  if (roleActions) {
+    validActions = roleActions[status] || [];
+  }
+
+  
+  const options = validActions
+    .filter(key => ActionConst[key]) // Ensure only valid keys are used
+    .map(key => ({ key, value: ActionConst[key] })); // Map to an array of objects
+
+  const [action, setAction] = useState(options[0]?.key || ""); // Default to the first option's key or empty if no valid options
+
+  //if (validActions.length == 0) return null;
+
   return (
-    <IconButton
-      {...props}
-      appearance='primary'
-      icon={<SendRound/>}
-    >
-      Duyệt theo ủy quyền
-    </IconButton>
+    <ButtonGroup style={{display: "flex"}}>
+      <IconButton  
+        {...props} 
+        appearance="primary" 
+        icon={<SendRound />} 
+        style={{flexGrow: 1}}
+        onClick={() => onClick(action)}
+      >
+        {ActionConst[action] || "Unknown Action"}
+      </IconButton>
+
+      <Whisper
+        placement="bottomEnd"
+        trigger="click"
+        speaker={({ onClose, left, top, className }, ref) => {
+          const handleSelect = eventKey => {
+            onClose();
+            setAction(eventKey);
+          };
+
+          return (
+            <Popover ref={ref} className={className} style={{ left, top }} full>
+              <Dropdown.Menu onSelect={handleSelect}>
+                {options.map(({ key, value }, index) => (
+                  <Dropdown.Item key={index} eventKey={key}>
+                    {value}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Popover>
+          );
+        }}
+      >
+        <IconButton appearance="primary" icon={<ArrowDownIcon />} />
+      </Whisper>
+    </ButtonGroup>
   );
 };
 
