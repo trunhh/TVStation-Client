@@ -1,5 +1,4 @@
-export const USER_INFO = "/user-info"
-export const PASSWORD_CHANGING = "/password-changing"
+export const USER_INFO = "/User"
 export const MEDIA_PROJECT = "/MediaProject"
 export const MEDIA_PROJECT_DETAIL= "/MediaProject/Detail"
 export const PROGRAM_FRAME_YEAR = "/ProgramFrameYear"
@@ -16,7 +15,6 @@ export const SCRIPT_PROGRAM_DETAIL = "/ScriptProgram/Detail"
 
 export default {
     USER_INFO,
-    PASSWORD_CHANGING,
     MEDIA_PROJECT,
     MEDIA_PROJECT_DETAIL,
     PROGRAM_FRAME_YEAR,

@@ -4,10 +4,10 @@ import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
-import { MEDIA_PROJECT_API } from '../../../constants/apiConstants'
+import { MEDIA_PROJECT_API, MEDIA_UPLOAD_API} from '../../../constants/apiConstants'
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { useNavigate } from 'react-router-dom';
-import { MEDIA_PROJECT_DETAIL } from '../../../constants/routeConstants'
+import { MEDIA_PROJECT_DETAIL} from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
 import Table from 'rsuite/Table';
 import 'rsuite/Table/styles/index.css';
@@ -259,10 +259,10 @@ const MediaProjectList = (props) => {
             >
 
                 <Uploader
-                  action="https://localhost:7031/api/Media/upload" // API endpoint
+                  action= {MEDIA_UPLOAD_API}
                   draggable
-                  autoUpload={true} // Automatically uploads after selection
-                  multiple={false} // Restricts to single file
+                  autoUpload={true}
+                  multiple={false}
                   accept="audio/*,video/*"
                   onSuccess={handleUploadSuccess}
                   onError={handleUploadFail}

@@ -4,8 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import './PlanDetailsPage.scss';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MEDIA_PROJECT_API } from '../../../constants/apiConstants';
-import { MEDIA_PROJECT } from '../../../constants/routeConstants';
+import { ROOT_PATH, MEDIA_PROJECT_API, MEDIA_UPLOAD_API } from '../../../constants/apiConstants';
 import planActions from '../../../actions/planActions';
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox';
 import { createSelector } from 'reselect';
@@ -92,7 +91,7 @@ const MediaProjectDetail = (props) => {
                     </div>
                     <div style={{ position: 'relative', paddingTop: '56.25%' /* 9/16 = 56.25% */, width: '100%' }}>
                       <ReactPlayer
-                        url={`https://localhost:7031/${formData.mediaUrl}`}
+                        url={ROOT_PATH + formData.mediaUrl}
                         controls={true}
                         width="100%"
                         height="100%"

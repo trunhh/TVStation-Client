@@ -1,9 +1,10 @@
 import axios from "axios"
 import fetcher from "../../fetcher"
+import { SIGNIN_API } from "../../../constants/apiConstants"
 
 export const signin = async (username, password) => {
     try {
-        const response = await axios.post('https://localhost:7031/api/Auth/SignIn', {
+        const response = await axios.post(SIGNIN_API, {
             username: username,
             password: password
         })
