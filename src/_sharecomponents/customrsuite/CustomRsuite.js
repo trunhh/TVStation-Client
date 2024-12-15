@@ -18,6 +18,7 @@ import PlusRound from '@rsuite/icons/PlusRound';
 import TrashIcon from '@rsuite/icons/Trash';
 import SearchIcon from '@rsuite/icons/Search';
 import ArrowDownIcon from '@rsuite/icons/ArrowDown';
+import WarningRoundIcon from '@rsuite/icons/WarningRound';
 import { SectorConst,StatusConst,ObjectTypeConst, GenreConst, ActionConst, RoleActionConst} from '../../constants/constants';
 import Popover from 'rsuite/Popover';
 import Whisper from 'rsuite/Whisper';
@@ -26,8 +27,14 @@ import ButtonGroup from 'rsuite/ButtonGroup';
 import 'rsuite/ButtonGroup/styles/index.css';
 import Dropdown from 'rsuite/Dropdown';
 import 'rsuite/Dropdown/styles/index.css';
-import React, { useState } from 'react';
-
+import React, { useState, forwardRef } from 'react';
+import Form from 'rsuite/Form';
+import 'rsuite/Form/styles/index.css';
+import 'rsuite/FormControl/styles/index.css';
+import 'rsuite/FormControlLabel/styles/index.css';
+import 'rsuite/FormErrorMessage/styles/index.css';
+import 'rsuite/FormHelpText/styles/index.css';
+import 'rsuite/FormGroup/styles/index.css';
 export const CustomApproveButton = ({ role= "", status="", onClick, ...props }) => {
   let validActions = [];
   const roleActions = RoleActionConst[role];
@@ -93,6 +100,19 @@ export const CustomSubmitButton = ({ ...props }) => {
       icon={<CheckRound/>}
     >
       Lưu
+    </IconButton>
+  );
+};
+
+export const CustomCancelButton = ({ ...props }) => {
+  return (
+    <IconButton
+      {...props}
+      appearance='primary'
+      color='red'
+      icon={<WarningRoundIcon/>}
+    >
+      Hủy
     </IconButton>
   );
 };
@@ -262,7 +282,15 @@ export const CustomInputSearch = ({...props }) => {
     
   )
 }
-
+export const CustomFormControl = forwardRef((props, ref) => {
+  const { name, label, accepter, ...rest } = props;
+  return (
+    <Form.Group controlId={name} ref={ref} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+      <Form.ControlLabel>{label} </Form.ControlLabel>
+      <Form.Control name={name} accepter={accepter} placeholder={label} style={{width: "100%", flex: 1}} {...rest} />
+    </Form.Group>
+  );
+});
 export const TextLink = ({ onRowClick, text, ...props }) => {
   const handleMouseEnter = (e) => {
     e.target.style.textDecoration = "underline";
@@ -312,5 +340,6 @@ export default {
     CustomToggle,
     CustomInputNoOutline,
     CustomInputSearch,
+    CustomFormControl,
     TextLink
 }

@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { useEffect } from "react";
-import userActions from "../../../actions/userActions";
+import usersActions from "../../../actions/usersActions";
 
 //import WithLoading from "../../../_sharecomponents/loading/WithLoading";
 
@@ -110,7 +110,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
     return {
         changePassword: (username, password) => {
-            dispatch(userActions.changePassword(username, password))
+            dispatch(usersActions.changePassword(username, password))
         }
     }
 }

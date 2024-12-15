@@ -1,3 +1,4 @@
+export const SIGN_IN = "/SignIn"
 export const USER_INFO = "/User"
 export const MEDIA_PROJECT = "/MediaProject"
 export const MEDIA_PROJECT_DETAIL= "/MediaProject/Detail"
@@ -14,6 +15,7 @@ export const SCRIPT_PROGRAM_DETAIL = "/ScriptProgram/Detail"
 
 
 export default {
+    SIGN_IN,
     USER_INFO,
     MEDIA_PROJECT,
     MEDIA_PROJECT_DETAIL,

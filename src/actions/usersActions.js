@@ -1,11 +1,11 @@
 import axios from "axios";
-import userConstants from "../constants/userConstants";
+import usersConstants from "../constants/usersConstants";
 import { USERS_API } from "../constants/apiConstants";
 const token = localStorage.getItem('token');
 
 const get = (userName) => async (dispatch) => {
     dispatch({
-        type: userConstants.GET_REQUEST,
+        type: usersConstants.GET_REQUEST,
     });
 
     try {
@@ -19,13 +19,13 @@ const get = (userName) => async (dispatch) => {
         });
 
         dispatch({
-            type: userConstants.GET_SUCCEED,
+            type: usersConstants.GET_SUCCEED,
             payload: response.data,
         });
 
     } catch (error) {
         dispatch({
-            type: userConstants.GET_FAILED,
+            type: usersConstants.GET_FAILED,
             payload: error.response
         });
     }
@@ -33,7 +33,7 @@ const get = (userName) => async (dispatch) => {
 
 const getList = () => async (dispatch) => {
     dispatch({
-        type: userConstants.GET_LIST_REQUEST,
+        type: usersConstants.GET_LIST_REQUEST,
     });
 
     try {
@@ -44,12 +44,12 @@ const getList = () => async (dispatch) => {
         });
 
         dispatch({
-            type: userConstants.GET_LIST_SUCCEED,
+            type: usersConstants.GET_LIST_SUCCEED,
             payload: response.data
         });
     } catch (error) {
         dispatch({
-            type: userConstants.GET_LIST_FAILED,
+            type: usersConstants.GET_LIST_FAILED,
             payload: error.response
         });
     }
@@ -57,7 +57,7 @@ const getList = () => async (dispatch) => {
 
 const create = (object) => async (dispatch) => {
     dispatch({
-        type: userConstants.CREATE_REQUEST,
+        type: usersConstants.CREATE_REQUEST,
     });
 
     try {
@@ -72,13 +72,13 @@ const create = (object) => async (dispatch) => {
         });
 
         dispatch({
-            type: userConstants.CREATE_SUCCEED,
+            type: usersConstants.CREATE_SUCCEED,
             payload: response.data,
         });
 
     } catch (error) {
         dispatch({
-            type: userConstants.CREATE_FAILED,
+            type: usersConstants.CREATE_FAILED,
             payload: error.response
         });
     }
@@ -86,7 +86,7 @@ const create = (object) => async (dispatch) => {
 
 const update = (object) => async (dispatch) => {
     dispatch({
-        type: userConstants.UPDATE_REQUEST,
+        type: usersConstants.UPDATE_REQUEST,
     });
 
     try {
@@ -101,13 +101,13 @@ const update = (object) => async (dispatch) => {
         });
 
         dispatch({
-            type: userConstants.UPDATE_SUCCEED,
+            type: usersConstants.UPDATE_SUCCEED,
             payload: response.data,
         });
 
     } catch (error) {
         dispatch({
-            type: userConstants.UPDATE_FAILED,
+            type: usersConstants.UPDATE_FAILED,
             payload: error.response
         });
     }

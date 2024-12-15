@@ -13,7 +13,6 @@ import {
     CustomApproveButton,
     CustomSubmitButton,
     CustomDatePicker,
-    CustomGenrePicker,
     CustomToggle,
     CustomInputNoOutline,
 } from '../../../_sharecomponents/customrsuite/CustomRsuite';
@@ -25,6 +24,8 @@ const selectPlan = createSelector(
     (planState) => planState.selected
 );
 
+const role = localStorage.getItem('role');
+
 const ProgramFrameBroadcastDetail = (props) => {
     const nullForm = {
         title: '',
@@ -33,7 +34,6 @@ const ProgramFrameBroadcastDetail = (props) => {
         airdate: new Date(),
         content: '', // JSON string to initialize the spreadsheet
         isPersonal: true,
-        genre: null,
     };
 
     const { id } = useParams();
@@ -67,11 +67,8 @@ const ProgramFrameBroadcastDetail = (props) => {
     }, [props.isLoading]);
 
     useEffect(() => {
-        // Only initialize the spreadsheet when the formData.content is updated
         if (spreadsheetRef.current && formData.content && !workbookRef.current) {
             workbookRef.current = new GC.Spread.Sheets.Workbook(spreadsheetRef.current);
-
-            // If content exists, load it into the spreadsheet
             try {
                 const data = JSON.parse(formData.content);
                 workbookRef.current.fromJSON(data);
@@ -79,7 +76,7 @@ const ProgramFrameBroadcastDetail = (props) => {
                 console.error('Failed to load JSON content:', error);
             }
         }
-    }, [formData.content]); // Re-run only when formData.content changes
+    }, [formData.content]);
 
     const handleFormDataChange = (name, value) => {
         setFormData((prevFormData) => ({
@@ -98,6 +95,14 @@ const ProgramFrameBroadcastDetail = (props) => {
         }
     };
 
+    const handleApprove = (action) => {
+        const newFormData = {
+            ...formData,
+            status: action
+        }
+        props.update(id,newFormData)
+    }
+
     return (
         <div className="plan-detail-page">
             <div className="main-form">
@@ -111,13 +116,6 @@ const ProgramFrameBroadcastDetail = (props) => {
                         />
                     </div>
                     <div className="inline-group">
-                        <div className="component-label-group">
-                            <p className="label-text">Thể loại</p>
-                            <CustomGenrePicker
-                                value={formData.genre}
-                                onChange={(value) => handleFormDataChange('genre', value)}
-                            />
-                        </div>
                         <div className="component-label-group">
                             <p className="label-text">Dự kiến phát sóng</p>
                             <CustomDatePicker
@@ -135,7 +133,6 @@ const ProgramFrameBroadcastDetail = (props) => {
                         </CustomToggle>
                     </div>
                     <p className="label-text">Nội dung</p>
-                    {/* Spreadsheet Container */}
                     <div
                         id="spreadsheet"
                         ref={spreadsheetRef}
@@ -146,7 +143,12 @@ const ProgramFrameBroadcastDetail = (props) => {
             <div className="side-bar">
                 <div className="component-label-group">
                     <p className="label-text">Luân chuyển</p>
-                    <CustomApproveButton type="button" onClick={handleSubmit} />
+                    <CustomApproveButton 
+                        role={role} 
+                        status={formData.status} 
+                        type="button" 
+                        onClick={handleApprove} 
+                    />
                 </div>
                 <div className="component-label-group">
                     <p className="label-text">Chức năng</p>

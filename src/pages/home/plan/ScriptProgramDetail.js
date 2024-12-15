@@ -24,6 +24,8 @@ const selectPlan = createSelector(
     (planState) => planState.selected
 );
 
+const role = localStorage.getItem('role');
+
 const ScriptProgramDetail = (props) => {
     const nullForm = {
         title: '',
@@ -76,6 +78,14 @@ const ScriptProgramDetail = (props) => {
         if (id) props.update(id,formData)
         else props.create(formData)
     };
+
+    const handleApprove = (action) => {
+        const newFormData = {
+            ...formData,
+            status: action
+        }
+        props.update(id,newFormData)
+    }
     
 
     console.log(formData)
@@ -129,7 +139,12 @@ const ScriptProgramDetail = (props) => {
             <div className="side-bar">
                 <div className="component-label-group">
                     <p className="label-text">Luân chuyển</p>
-                    <CustomApproveButton type="button" onClick={handleSubmit} />
+                    <CustomApproveButton 
+                        role={role} 
+                        status={formData.status} 
+                        type="button" 
+                        onClick={handleApprove} 
+                    />
                 </div>
                 <div className="component-label-group">
                     <p className="label-text">Chức năng</p>

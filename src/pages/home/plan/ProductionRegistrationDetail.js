@@ -24,6 +24,8 @@ const selectPlan = createSelector(
     (planState) => planState.selected
 );
 
+const role = localStorage.getItem('role');
+
 const ProductionRegistrationDetail = (props) => {
     const nullForm = {
         title: '',
@@ -77,6 +79,13 @@ const ProductionRegistrationDetail = (props) => {
         else props.create(formData)
     };
     
+    const handleApprove = (action) => {
+        const newFormData = {
+            ...formData,
+            status: action
+        }
+        props.update(id,newFormData)
+    }
 
     console.log(formData)
 
@@ -129,7 +138,12 @@ const ProductionRegistrationDetail = (props) => {
             <div className="side-bar">
                 <div className="component-label-group">
                     <p className="label-text">Luân chuyển</p>
-                    <CustomApproveButton type="button" onClick={handleSubmit} />
+                    <CustomApproveButton 
+                        role={role} 
+                        status={formData.status} 
+                        type="button" 
+                        onClick={handleApprove} 
+                    />
                 </div>
                 <div className="component-label-group">
                     <p className="label-text">Chức năng</p>

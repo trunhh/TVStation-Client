@@ -46,7 +46,7 @@ function App() {
         const token = localStorage.getItem('token');
         if (!token || isTokenExpired(token)) {
             localStorage.removeItem('token');
-            navigate('/sign-in');
+            navigate(routeConstants.SIGN_IN);
         }
     }, [navigate]);
 
@@ -56,8 +56,8 @@ function App() {
         return (
             <div className="App">
                 <Routes>
-                    <Route path="/sign-in" element={<SigninWithLoading />} />
-                    <Route path="*" element={<Navigate to="/sign-in" />} />
+                    <Route path={routeConstants.SIGN_IN} element={<SigninWithLoading />} />
+                    <Route path="*" element={<Navigate to={routeConstants.SIGN_IN} />} />
                 </Routes>
             </div>
         );
@@ -66,7 +66,7 @@ function App() {
     return (
         <div className="App">
             <Routes>
-                <Route path="/sign-in" element={<Navigate to="/" />} />
+                <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} />
 
                 <Route path="/" element={<HomePage />}>
                     <Route path={routeConstants.USER_INFO} element={<UserWithLoading />} />

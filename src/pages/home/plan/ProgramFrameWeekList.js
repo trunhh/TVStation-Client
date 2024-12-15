@@ -3,12 +3,10 @@ import './PlanListPage.scss'
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
 import planActions from '../../../actions/planActions'
-import siteMapActions from '../../../actions/siteMapActions'
-import usersActions from '../../../actions/usersActions'
-import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants'
+import { PROGRAM_FRAME_BROADCAST_API } from '../../../constants/apiConstants'
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { useNavigate } from 'react-router-dom';
-import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants'
+import { PROGRAM_FRAME_BROADCAST_DETAIL } from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
 import Table from 'rsuite/Table';
 import 'rsuite/Table/styles/index.css';
@@ -20,9 +18,6 @@ import {
     CustomDateRangePicker,
     CustomSectorPicker,
     CustomStatusPicker, 
-    CustomSitemapPicker,
-    CustomUserPicker,
-    CustomObjectTypePicker,
     CustomInputSearch ,
     CustomToggle,
     CustomDeleteButton,
@@ -31,14 +26,10 @@ import {
 
 const { Column, HeaderCell, Cell } = Table;
 
-const ProductionRegistrationList = (props) => {
+const ProgramFrameBroadcastList = (props) => {
     const [query, setQuery] = useState({
-        startDate: new Date(new Date().getFullYear(), 0, 1),
-        endDate: new Date(new Date().getFullYear(), 11, 31),
+        airdate: null,
         sector: null,
-        siteMapId: null,
-        userName: null,
-        objectType: null,
         status: null,
         keyword: null,
         isPersonal: false
@@ -73,11 +64,11 @@ const ProductionRegistrationList = (props) => {
     }
 
     const handleRowClick = (id) => {
-        navigate(`${PRODUCTION_REGISTRATION_DETAIL}/${id}`);
+        navigate(`${PROGRAM_FRAME_BROADCAST_DETAIL}/${id}`);
     };
 
     const handleAddButtonClick = () => {
-        navigate(`${PRODUCTION_REGISTRATION_DETAIL}`);
+        navigate(`${PROGRAM_FRAME_BROADCAST_DETAIL}`);
     };
     useEffect(() => {
         props.getList(query, props.pageIndex);
@@ -91,8 +82,6 @@ const ProductionRegistrationList = (props) => {
 
     useEffect(() => {
         props.getList(query, props.pageIndex);
-        props.getSiteMaps();
-        props.getUsers();
       }, []);
 
     useEffect(() => {
@@ -153,20 +142,6 @@ const ProductionRegistrationList = (props) => {
                         value={query.sector}
                         onChange={(value) => handleQueryChange("sector", value)}
                     />
-                    <CustomSitemapPicker
-                        data={props.siteMaps}
-                        value={query.siteMapId}
-                        onChange={(value) => handleQueryChange("siteMapId", value)}
-                    />
-                    <CustomUserPicker
-                        data={props.users}
-                        value={query.userName}
-                        onChange={(value) => handleQueryChange("userName", value)}
-                    />
-                    <CustomObjectTypePicker
-                        value={query.objectType}
-                        onChange={(value) => handleQueryChange("objectType", value)}
-                    />
                     <CustomStatusPicker
                         value={query.status}
                         onChange={(value) => handleQueryChange("status", value)}
@@ -217,7 +192,7 @@ const ProductionRegistrationList = (props) => {
                   </Column >
 
                   <Column flexGrow={2} minWidth={120}>
-                    <HeaderCell>Dự kiến phát sóng</HeaderCell>
+                    <HeaderCell>Ngày phát sóng</HeaderCell>
                     <Cell>
                         {rowData => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.airdate))}
                     </Cell>
@@ -258,19 +233,15 @@ const mapStateToProps = (state) => {
     return {
         ...state.plan,
         isLoading: state.view.isLoading,
-        siteMaps: state.siteMap.list,
-        users: state.users.list
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (query, pageIndex) => dispatch(planActions.getList(PRODUCTION_REGISTRATION_API, query, pageIndex, PAGE_SIZE)),
-        get: (id) => dispatch(planActions.get(PRODUCTION_REGISTRATION_API, id)),
-        remove: (id) => dispatch(planActions.remove(PRODUCTION_REGISTRATION_API, id)),
-        getSiteMaps: ()=>dispatch(siteMapActions.getList()),
-        getUsers: ()=>dispatch(usersActions.getList())
+        getList: (query, pageIndex) => dispatch(planActions.getList(PROGRAM_FRAME_BROADCAST_API, query, pageIndex, PAGE_SIZE)),
+        get: (id) => dispatch(planActions.get(PROGRAM_FRAME_BROADCAST_API, id)),
+        remove: (id) => dispatch(planActions.remove(PROGRAM_FRAME_BROADCAST_API, id)),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductionRegistrationList)
+export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameBroadcastList)

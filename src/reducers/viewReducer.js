@@ -21,7 +21,7 @@ const viewReducer = (state = initialState, action) => {
         return {
             ...state,
             isLoading: false,
-            errorMessage: payload.statusText,
+            errorMessage: payload.data,
         };
     }
     else if (type.endsWith('_SUCCEED')) {

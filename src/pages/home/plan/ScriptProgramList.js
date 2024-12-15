@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
 import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
-import userActions from '../../../actions/userActions'
+import usersActions from '../../../actions/usersActions'
 import { SCRIPT_PROGRAM_API } from '../../../constants/apiConstants'
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { useNavigate } from 'react-router-dom';
@@ -253,7 +253,7 @@ const mapStateToProps = (state) => {
         ...state.plan,
         isLoading: state.view.isLoading,
         siteMaps: state.siteMap.list,
-        users: state.user.list
+        users: state.users.list
     }
 }
 
@@ -263,7 +263,7 @@ const mapDispatchToProps = (dispatch) => {
         get: (id) => dispatch(planActions.get(SCRIPT_PROGRAM_API, id)),
         remove: (id) => dispatch(planActions.remove(SCRIPT_PROGRAM_API, id)),
         getSiteMaps: ()=>dispatch(siteMapActions.getList()),
-        getUsers: ()=>dispatch(userActions.getList())
+        getUsers: ()=>dispatch(usersActions.getList())
     }
 }
 

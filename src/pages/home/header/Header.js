@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import viewActions from '../../../actions/viewActions';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-
+import { USER_INFO, SIGN_IN } from '../../../constants/routeConstants';
 import Dropdown from 'rsuite/Dropdown';
 import 'rsuite/Dropdown/styles/index.css';
 import Avatar from 'rsuite/Avatar';
@@ -58,10 +58,6 @@ const Header = (props) => {
 
     const location = useLocation();
 
-    
-
-
-
     const pathSegments = location.pathname.split('/').map(segment => pageNames[segment]).filter(item => item && item !== "" && item?.trim() !== "");
 
     const pageDetails = {
@@ -87,11 +83,15 @@ const Header = (props) => {
                           <p>{userEmail}</p>
                         </Dropdown.Item>
                         <Dropdown.Separator />
-                        <Dropdown.Item>Thông tin cá nhân</Dropdown.Item>
+                        <Dropdown.Item
+                            onSelect={() => navigate(USER_INFO)}
+                        >
+                            Thông tin cá nhân
+                        </Dropdown.Item>
                         <Dropdown.Item
                             onSelect={() => {
                                 localStorage.clear();
-                                navigate("/sign-in")
+                                navigate(SIGN_IN)
                             }}
                         >
                           Đăng xuất
