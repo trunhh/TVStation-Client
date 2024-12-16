@@ -3,10 +3,10 @@ import './PlanListPage.scss'
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
 import planActions from '../../../actions/planActions'
-import { PROGRAM_FRAME_WEEK_API } from '../../../constants/apiConstants'
+import { PROGRAM_FRAME_YEAR_API } from '../../../constants/apiConstants'
 import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { useNavigate } from 'react-router-dom';
-import { PROGRAM_FRAME_WEEK_DETAIL } from '../../../constants/routeConstants'
+import { PROGRAM_FRAME_YEAR_DETAIL } from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
 import Table from 'rsuite/Table';
 import 'rsuite/Table/styles/index.css';
@@ -15,8 +15,7 @@ import 'rsuite/Pagination/styles/index.css';
 
 import { 
     CustomAddButton,
-    CustomDateRangePicker,
-    CustomWeekPicker,
+    CustomYearPicker,
     CustomSectorPicker,
     CustomStatusPicker, 
     CustomInputSearch ,
@@ -27,9 +26,9 @@ import {
 
 const { Column, HeaderCell, Cell } = Table;
 
-const ProgramFrameWeekList = (props) => {
+const ProgramFrameYearList = (props) => {
     const [query, setQuery] = useState({
-        airdate: null,
+        airdate: new Date(),
         sector: null,
         status: null,
         keyword: null,
@@ -65,11 +64,11 @@ const ProgramFrameWeekList = (props) => {
     }
 
     const handleRowClick = (id) => {
-        navigate(`${PROGRAM_FRAME_WEEK_DETAIL}/${id}`);
+        navigate(`${PROGRAM_FRAME_YEAR_DETAIL}/${id}`);
     };
 
     const handleAddButtonClick = () => {
-        navigate(`${PROGRAM_FRAME_WEEK_DETAIL}`);
+        navigate(`${PROGRAM_FRAME_YEAR_DETAIL}`);
     };
     useEffect(() => {
         props.getList(query, props.pageIndex);
@@ -134,7 +133,7 @@ const ProgramFrameWeekList = (props) => {
             </div>
             <div className="plan-list">
                 <div className="filter-form">
-                    <CustomWeekPicker
+                    <CustomYearPicker
                         value={query.airdate}
                         onChange={(value) => handleQueryChange("airdate", value)}
                     />
@@ -238,10 +237,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (query, pageIndex) => dispatch(planActions.getList(PROGRAM_FRAME_WEEK_API, query, pageIndex, PAGE_SIZE)),
-        get: (id) => dispatch(planActions.get(PROGRAM_FRAME_WEEK_API, id)),
-        remove: (id) => dispatch(planActions.remove(PROGRAM_FRAME_WEEK_API, id)),
+        getList: (query, pageIndex) => dispatch(planActions.getList(PROGRAM_FRAME_YEAR_API, query, pageIndex, PAGE_SIZE)),
+        get: (id) => dispatch(planActions.get(PROGRAM_FRAME_YEAR_API, id)),
+        remove: (id) => dispatch(planActions.remove(PROGRAM_FRAME_YEAR_API, id)),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameWeekList)
+export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameYearList)

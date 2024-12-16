@@ -49,7 +49,7 @@ export const CustomApproveButton = ({ role= "", status="", onClick, ...props }) 
 
   const [action, setAction] = useState(options[0]?.key || ""); // Default to the first option's key or empty if no valid options
 
-  //if (validActions.length == 0) return null;
+  if (validActions.length == 0) return null;
 
   return (
     <ButtonGroup style={{display: "flex"}}>
@@ -147,11 +147,43 @@ export const CustomDatePicker = ({ ...props }) => {
 
   return (
       <DatePicker
-          {...props}
-          size="lg"
-          format="HH:mm dd/MM/yyyy"
-          disabledDate={(date) => date < today}
-          cleanable={false}
+        {...props}
+        size="lg"
+        format="HH:mm dd/MM/yyyy"
+        disabledDate={(date) => date < today}
+        cleanable={false}
+      />
+  );
+};
+
+export const CustomWeekPicker = ({ ...props }) => {
+
+  const disableNonSundays = (date) => {
+    const day = date.getDay();
+    return day !== 0;
+  };
+
+  return (
+      <DatePicker
+        showWeekNumbers
+        {...props}
+        size="lg"
+        format="dd/MM/yyyy"
+        shouldDisableDate={disableNonSundays}
+        cleanable={false}
+        placeholder="Tuần"
+      />
+  );
+};
+
+export const CustomYearPicker = ({ ...props }) => {
+  return (
+      <DatePicker
+        {...props}
+        size="lg"
+        format="yyyy-MM"
+        cleanable={false}
+        placeholder="Năm"
       />
   );
 };
@@ -331,6 +363,7 @@ export default {
     CustomSubmitButton,
     CustomAddButton,
     CustomDatePicker,
+    CustomWeekPicker,
     CustomDateRangePicker,
     CustomSectorPicker,
     CustomStatusPicker,

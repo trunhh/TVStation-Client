@@ -15,6 +15,10 @@ import ScriptProgramList from './pages/home/plan/ScriptProgramList';
 import ScriptProgramDetail from './pages/home/plan/ScriptProgramDetail';
 import ProgramFrameBroadcastList from './pages/home/plan/ProgramFrameBroadcastList';
 import ProgramFrameBroadcastDetail from './pages/home/plan/ProgramFrameBroadcastDetail';
+import ProgramFrameWeekList from './pages/home/plan/ProgramFrameWeekList';
+import ProgramFrameWeekDetail from './pages/home/plan/ProgramFrameWeekDetail';
+import ProgramFrameYearList from './pages/home/plan/ProgramFrameYearList';
+import ProgramFrameYearDetail from './pages/home/plan/ProgramFrameYearDetail';
 
 const SigninWithLoading = WithLoading(Signin);
 const UserWithLoading = WithLoading(UserInfo);
@@ -26,7 +30,10 @@ const ScriptProgramWithLoading = WithLoading(ScriptProgramList);
 const ScriptProgramDetailWithLoading = WithLoading(ScriptProgramDetail);
 const ProgramFrameBroadcastWithLoading = WithLoading(ProgramFrameBroadcastList);
 const ProgramFrameBroadcastDetailWithLoading = WithLoading(ProgramFrameBroadcastDetail);
-
+const ProgramFrameWeekWithLoading = WithLoading(ProgramFrameWeekList);
+const ProgramFrameWeekDetailWithLoading = WithLoading(ProgramFrameWeekDetail);
+const ProgramFrameYearWithLoading = WithLoading(ProgramFrameYearList);
+const ProgramFrameYearDetailWithLoading = WithLoading(ProgramFrameYearDetail);
 function App() {
     const navigate = useNavigate();
 
@@ -81,6 +88,12 @@ function App() {
                     <Route path={routeConstants.PROGRAM_FRAME_BROADCAST} element={<ProgramFrameBroadcastWithLoading />} />
                     <Route path={routeConstants.PROGRAM_FRAME_BROADCAST_DETAIL} element={<ProgramFrameBroadcastDetailWithLoading/>} />
                     <Route path={routeConstants.PROGRAM_FRAME_BROADCAST_DETAIL + "/:id"} element={<ProgramFrameBroadcastDetailWithLoading />} />
+                    <Route path={routeConstants.PROGRAM_FRAME_WEEK} element={<ProgramFrameWeekWithLoading />} />
+                    <Route path={routeConstants.PROGRAM_FRAME_WEEK_DETAIL} element={<ProgramFrameWeekDetailWithLoading/>} />
+                    <Route path={routeConstants.PROGRAM_FRAME_WEEK_DETAIL + "/:id"} element={<ProgramFrameWeekDetailWithLoading />} />
+                    <Route path={routeConstants.PROGRAM_FRAME_YEAR} element={<ProgramFrameYearWithLoading />} />
+                    <Route path={routeConstants.PROGRAM_FRAME_YEAR_DETAIL} element={<ProgramFrameYearDetailWithLoading/>} />
+                    <Route path={routeConstants.PROGRAM_FRAME_YEAR_DETAIL + "/:id"} element={<ProgramFrameYearDetailWithLoading />} />
                 </Route>
             </Routes>
         </div>
