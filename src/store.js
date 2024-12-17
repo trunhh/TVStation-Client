@@ -6,6 +6,7 @@ import usersReducer from './reducers/usersReducers';
 import authReducer from './reducers/authReducers';
 import planReducer from './reducers/planReducers';
 import siteMapReducer from './reducers/siteMapReducers';
+import todoReducer from './reducers/todoReducers';
 
 const rootReducer = combineReducers({
     view: viewReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     users: usersReducer,
     auth: authReducer,
     plan: planReducer,
-    siteMap: siteMapReducer
+    siteMap: siteMapReducer,
+    todo: todoReducer
 })
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

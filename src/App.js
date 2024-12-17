@@ -19,6 +19,7 @@ import ProgramFrameWeekList from './pages/home/plan/ProgramFrameWeekList';
 import ProgramFrameWeekDetail from './pages/home/plan/ProgramFrameWeekDetail';
 import ProgramFrameYearList from './pages/home/plan/ProgramFrameYearList';
 import ProgramFrameYearDetail from './pages/home/plan/ProgramFrameYearDetail';
+import Dashboard from './pages/home/dashboard/Dashboard';
 
 const SigninWithLoading = WithLoading(Signin);
 const UserWithLoading = WithLoading(UserInfo);
@@ -34,6 +35,8 @@ const ProgramFrameWeekWithLoading = WithLoading(ProgramFrameWeekList);
 const ProgramFrameWeekDetailWithLoading = WithLoading(ProgramFrameWeekDetail);
 const ProgramFrameYearWithLoading = WithLoading(ProgramFrameYearList);
 const ProgramFrameYearDetailWithLoading = WithLoading(ProgramFrameYearDetail);
+const DashboardWithLoading = WithLoading(Dashboard);
+
 function App() {
     const navigate = useNavigate();
 
@@ -76,6 +79,7 @@ function App() {
                 <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} />
 
                 <Route path="/" element={<HomePage />}>
+                    <Route path="/" element={<DashboardWithLoading />}/>
                     <Route path={routeConstants.USER_INFO} element={<UserWithLoading />} />
                     <Route path={routeConstants.MEDIA_PROJECT} element={<MediaProjectWithLoading />} />
                     <Route path={routeConstants.MEDIA_PROJECT_DETAIL + "/:id"} element={<MediaProjectDetailWithLoading />} />

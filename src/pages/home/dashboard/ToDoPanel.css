@@ -1,0 +1,9 @@
+.to-do-panel {
+    height: 100%;
+    max-width: 468px;
+    margin-bottom: 8px;
+    background-color: white;
+    padding: 16px;
+    border: 1px solid lightgray;
+    border-radius: .425rem;
+}

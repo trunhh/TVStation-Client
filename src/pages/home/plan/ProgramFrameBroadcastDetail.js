@@ -67,13 +67,23 @@ const ProgramFrameBroadcastDetail = (props) => {
     }, [props.isLoading]);
 
     useEffect(() => {
-        if (spreadsheetRef.current && formData.content && !workbookRef.current) {
-            workbookRef.current = new GC.Spread.Sheets.Workbook(spreadsheetRef.current);
-            try {
-                const data = JSON.parse(formData.content);
-                workbookRef.current.fromJSON(data);
-            } catch (error) {
-                console.error('Failed to load JSON content:', error);
+        // Ensure the spreadsheet container exists
+        if (spreadsheetRef.current) {
+            // Initialize workbook only if it hasn't been created yet
+            if (!workbookRef.current) {
+                workbookRef.current = new GC.Spread.Sheets.Workbook(spreadsheetRef.current);
+            }
+    
+            // Load content into the workbook
+            if (formData.content) {
+                try {
+                    const data = JSON.parse(formData.content);
+                    // Clear existing data to avoid conflicts
+                    workbookRef.current.clearSheets();
+                    workbookRef.current.fromJSON(data);
+                } catch (error) {
+                    console.error('Failed to load spreadsheet content:', error);
+                }
             }
         }
     }, [formData.content]);
