@@ -14,9 +14,11 @@ import Table from 'rsuite/Table';
 import 'rsuite/Table/styles/index.css';
 import Pagination from 'rsuite/Pagination';
 import 'rsuite/Pagination/styles/index.css';
+import { csvExporter } from '../../../services/csvExporter'
 
 import { 
     CustomAddButton,
+    CustomExportButton,
     CustomDateRangePicker,
     CustomSectorPicker,
     CustomStatusPicker, 
@@ -41,6 +43,7 @@ const ScriptProgramList = (props) => {
         keyword: null,
         isPersonal: false
     });
+    
     
     const navigate = useNavigate();
 
@@ -179,6 +182,7 @@ const ScriptProgramList = (props) => {
                         Cá nhân
                     </CustomToggle>
                     <CustomAddButton onClick={handleAddButtonClick}/>
+                    <CustomExportButton onClick={() => csvExporter(props.list, "Kịch bản tác phẩm")}/>
                 </div>
                 <Table 
                     data={props.list} 

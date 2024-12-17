@@ -28,7 +28,7 @@ const { Column, HeaderCell, Cell } = Table;
 
 const ProgramFrameYearList = (props) => {
     const [query, setQuery] = useState({
-        airdate: new Date(),
+        year: new Date().getFullYear(),
         sector: null,
         status: null,
         keyword: null,
@@ -134,8 +134,8 @@ const ProgramFrameYearList = (props) => {
             <div className="plan-list">
                 <div className="filter-form">
                     <CustomYearPicker
-                        value={query.airdate}
-                        onChange={(value) => handleQueryChange("airdate", value)}
+                        value={query.year}
+                        onChange={(value) => handleQueryChange("year", value)}
                     />
                     <CustomSectorPicker
                         value={query.sector}
@@ -189,13 +189,6 @@ const ProgramFrameYearList = (props) => {
                         {rowData => <StatusBox status={rowData.status} />}
                     </Cell>
                   </Column >
-
-                  <Column flexGrow={2} minWidth={120}>
-                    <HeaderCell>Ngày phát sóng</HeaderCell>
-                    <Cell>
-                        {rowData => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.airdate))}
-                    </Cell>
-                  </Column>
 
                   <Column flexGrow={2} minWidth={120}>
                     <HeaderCell>Ngày tạo</HeaderCell>

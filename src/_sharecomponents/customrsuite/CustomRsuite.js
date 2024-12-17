@@ -19,6 +19,7 @@ import TrashIcon from '@rsuite/icons/Trash';
 import SearchIcon from '@rsuite/icons/Search';
 import ArrowDownIcon from '@rsuite/icons/ArrowDown';
 import WarningRoundIcon from '@rsuite/icons/WarningRound';
+import EditRoundIcon from '@rsuite/icons/EditRound';
 import { SectorConst,StatusConst,ObjectTypeConst, GenreConst, ActionConst, RoleActionConst} from '../../constants/constants';
 import Popover from 'rsuite/Popover';
 import Whisper from 'rsuite/Whisper';
@@ -129,6 +130,19 @@ export const CustomAddButton = ({ ...props }) => {
   );
 };
 
+export const CustomExportButton = ({ ...props }) => {
+  return (
+    <IconButton
+      {...props}
+      appearance='primary'
+      icon={<EditRoundIcon/>}
+    >
+      Xuất file
+    </IconButton>
+  );
+};
+
+
 export const CustomDeleteButton = ({ ...props }) => {
   return (
     <IconButton
@@ -176,17 +190,29 @@ export const CustomWeekPicker = ({ ...props }) => {
   );
 };
 
-export const CustomYearPicker = ({ ...props }) => {
+
+export const CustomYearPicker = ({ value, onChange, ...props }) => {
+  // Get current year
+  const currentYear = new Date().getFullYear();
+
+  const years = Array.from({ length: 5 }, (_, index) => {
+      const year = currentYear - 1 + index;
+      return { label: `Năm ${year}`, value: year };
+  });
+
   return (
-      <DatePicker
-        {...props}
-        size="lg"
-        format="yyyy-MM"
-        cleanable={false}
-        placeholder="Năm"
+      <SelectPicker
+          {...props}
+          size="lg"
+          data={years} 
+          value={value}
+          onChange={onChange}
+          placeholder="Năm"
       />
   );
 };
+
+
 
 export const CustomDateRangePicker = ({ ...props }) => {
   return (
@@ -362,6 +388,7 @@ export default {
     CustomApproveButton,
     CustomSubmitButton,
     CustomAddButton,
+    CustomExportButton,
     CustomDatePicker,
     CustomWeekPicker,
     CustomDateRangePicker,

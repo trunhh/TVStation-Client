@@ -31,7 +31,7 @@ const ProgramFrameYearDetail = (props) => {
         title: '',
         status: 'IN_PROGRESS',
         sector: 'TV',
-        airdate: new Date(),
+        year: new Date().getFullYear(),
         content: '', // JSON string to initialize the spreadsheet
         isPersonal: true,
     };
@@ -129,8 +129,8 @@ const ProgramFrameYearDetail = (props) => {
                         <div className="component-label-group">
                             <p className="label-text">Dự kiến phát sóng</p>
                             <CustomYearPicker
-                                value={formData.airdate}
-                                onChange={(value) => handleFormDataChange('airdate', value)}
+                                value={formData.year}
+                                onChange={(value) => handleFormDataChange('year', value)}
                             />
                         </div>
                     </div>

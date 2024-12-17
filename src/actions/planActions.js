@@ -46,6 +46,9 @@ const getList = (route,query,pageIndex,pageSize) => async (dispatch) => {
                 endDate: query.endDate
                     ? new Date(query.endDate).toISOString()
                     : null,
+                airdate: query.airdate
+                    ? new Date(query.airdate).toISOString()
+                    : null,
                 pageIndex: (pageIndex > 0) ? pageIndex : 1,
                 pageSize: (pageSize > 0)? pageSize : 10
             }).filter(([_, value]) => value !== null) // Remove entries with null values
