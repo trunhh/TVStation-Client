@@ -25,6 +25,9 @@ const pageNames = {
     'MediaProject': 'Hậu kì',
     'ProductionRegistration': 'Tin bài phóng sự',
     'ScriptProgram': 'Kịch bản tác phẩm',
+    'ProgramFrameYear': 'Khung năm',
+    'ProgramFrameWeek': 'Khung tuần',
+    'ProgramFrameBroadcast': 'Lịch phát sóng',
     'Detail': 'Chi tiết',
 }
 

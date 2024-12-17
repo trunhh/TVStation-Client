@@ -8,7 +8,13 @@ import ButtonToolbar from 'rsuite/ButtonToolbar';
 import 'rsuite/ButtonToolbar/styles/index.css';
 import { CustomFormControl, CustomSubmitButton, CustomCancelButton } from '../../../_sharecomponents/customrsuite/CustomRsuite';
 import "./UserInfoPanel.css"
+import Uploader from 'rsuite/Uploader';
+import 'rsuite/Uploader/styles/index.css';
+import { MEDIA_UPLOAD_API } from '../../../constants/apiConstants';
+import AdminIcon from '@rsuite/icons/Admin';
 
+import Avatar from 'rsuite/Avatar';
+import 'rsuite/Avatar/styles/index.css';
 const UserInfoPanel = (props) => {
     const { StringType, NumberType} = Schema.Types;
     const formRef = useRef();
@@ -53,6 +59,17 @@ const UserInfoPanel = (props) => {
         phoneNumber: NumberType("Số điện thoại chỉ bao gồm số")
       });
 
+    const handleUploadSuccess = (response, file) => {
+        setFormValue((prevFormValue) => ({
+            ...prevFormValue,
+            avatarUrl: response.filePath
+            }));
+    }
+
+    const handleUploadFail = (error) => {
+        alert("Error uploading file. Please try again.");
+    }
+
     return (
         <Form
             ref={formRef}
@@ -62,6 +79,18 @@ const UserInfoPanel = (props) => {
             model={model}
             className="info-panel"
         >
+            <p>Avatar</p>
+            <Uploader
+              action= {MEDIA_UPLOAD_API}
+              draggable
+              autoUpload={true}
+              multiple={false}
+              accept="image/*"
+              onSuccess={handleUploadSuccess}
+              onError={handleUploadFail}
+            >
+                <Avatar size="xxl" src={formValue.avatarUrl} alt="avt"/>
+            </Uploader>
             <CustomFormControl name="name" label="Họ và tên" />
             <CustomFormControl name="email" label="Email" />
             <CustomFormControl name="phoneNumber" label="Số điện thoại" />

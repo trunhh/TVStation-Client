@@ -22,22 +22,27 @@ const ToDoListPanel = (props) => {
 
     return (
         <div className="to-do-panel">
-            <Text size="lg">Công việc cần xử lý</Text>
+            <HStack spacing={15} alignItems="center" justifyContent='space-around'>
+                <strong>Công việc cần xử lý</strong>
+            </HStack>
+            
             <List>
               {props.list.map(message => (
-                <List.Item key={message.id}>
-                  <HStack spacing={15} alignItems="center">
-                    <Avatar src="" alt={message.creatorName[0]} circle />
-                    <div>
-                        <TextLink
-                            onRowClick={()=>handleRowClick(message.id)}
-                            text={message.title}
-                        />
-                        <Text muted size="sm">
-                          {message.creatorName}
-                        </Text>
-                      </div>
-                      <Text>{new Intl.DateTimeFormat('en-GB').format(new Date(message.createdDate))}</Text>
+                <List.Item key={message.id} className="list-item">
+                  <HStack spacing={15} alignItems="center" justifyContent='space-between'>
+                    <HStack spacing={15} alignItems="flex-start" className="truncate-single-line">
+                        <Avatar src="" alt={message.creatorName[0]} circle />
+                        <div>
+                            <TextLink
+                                onRowClick={()=>handleRowClick(message.id)}
+                                text={message.title}
+                            />
+                            <Text muted size="sm">
+                                {message.creatorName}
+                            </Text>
+                        </div>
+                      </HStack>
+                      <Text muted size="sm">{new Intl.DateTimeFormat('en-GB').format(new Date(message.airdate))}</Text>
                   </HStack>
                 </List.Item>
               ))}

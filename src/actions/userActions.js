@@ -47,6 +47,9 @@ const update = (formData) => async (dispatch) => {
             data: JSON.stringify(formData),
         });
 
+        localStorage.setItem('name', response.data.name)
+        localStorage.setItem('avatarUrl', response.data.avatarUrl)
+        localStorage.setItem('email', response.data.email)
         dispatch({
             type: userConstants.UPDATE_SUCCEED,
             payload: response.data,

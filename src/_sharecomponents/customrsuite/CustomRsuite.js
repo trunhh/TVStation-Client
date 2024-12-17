@@ -184,7 +184,7 @@ export const CustomWeekPicker = ({ ...props }) => {
         size="lg"
         format="dd/MM/yyyy"
         shouldDisableDate={disableNonSundays}
-        cleanable={false}
+        cleanable={true}
         placeholder="Tuần"
       />
   );
