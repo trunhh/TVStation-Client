@@ -1,6 +1,5 @@
 import React, { useEffect} from 'react';
 import { Routes, Route, Outlet}  from 'react-router-dom';
-import Sidebar from './sidebar/Sidebar';
 import Header from './header/Header';
 
 import './HomePage.css';
@@ -11,10 +10,7 @@ import viewActions from '../../actions/viewActions';
 
 
 const HomePage = (props) => {
-    //const [sideBarIsOpen, setSidebarIsOpen] = useState(true)
-    const handleClickMenuIcon = (sidebarIsOpen) => {
-        //setSidebarIsOpen(sidebarIsOpen)
-    }
+
 
     useEffect(() => {
         if (props.errorMessage) {
@@ -26,9 +22,8 @@ const HomePage = (props) => {
 
     return(
         <div className='home-container'>
-            <Sidebar />
-            <div className={props.sidebarIsOpen ? 'home-main' : 'home-main sidebar-close'}>
-                <Header clickMenuIcon={handleClickMenuIcon}/>
+            <div className='home-main sidebar-close'>
+                <Header/>
                 <div className='main-content'>
                     <Outlet />
                 </div>

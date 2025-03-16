@@ -1,21 +1,19 @@
 import { MdMenu } from 'react-icons/md';
-import { useState } from 'react';
-
-
-import './Header.css';
-
-import { connect } from 'react-redux';
-
-import viewActions from '../../../actions/viewActions';
+import { useState, useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
+import { menuLinks } from '../../../data/data';
 import { USER_INFO, SIGN_IN } from '../../../constants/routeConstants';
 import Dropdown from 'rsuite/Dropdown';
-import 'rsuite/Dropdown/styles/index.css';
 import Avatar from 'rsuite/Avatar';
+import 'rsuite/Dropdown/styles/index.css';
 import 'rsuite/Avatar/styles/index.css';
-const userFullname = localStorage.getItem("name") || " "
-const userEmail = localStorage.getItem("email") || " "
-const userAvatar = localStorage.getItem("avatarUrl") || " "
+import { connect } from 'react-redux';
+import viewActions from '../../../actions/viewActions';  // Corrected import
+
+const userFullname = localStorage.getItem("name") || " ";
+const userEmail = localStorage.getItem("email") || " ";
+const userAvatar = localStorage.getItem("avatarUrl") || " ";
 
 const pageNames = {
     '/': 'Home',
@@ -27,98 +25,102 @@ const pageNames = {
     'ScriptProgram': 'Kịch bản tác phẩm',
     'ProgramFrameYear': 'Khung năm',
     'ProgramFrameWeek': 'Khung tuần',
-    'ProgramFrameBroadcast': 'Lịch phát sóng',
+    'ProgramFrameBroadcast': 'Lịch phát s',
     'Detail': 'Chi tiết',
-}
+};
 
 const Header = (props) => {
-
-    
-
-    const [sideIsOpen, setSidebarIsOpen] = useState(false)
-    const clickMenuIcon = () => {
-        //setSidebarIsOpen(!sideIsOpen)
-
-        //props.clickMenuIcon(!isOpen)
-      
-        props.toggleSidebar();
-    }
+    const [expanded, setExpanded] = useState(false);
     const navigate = useNavigate();
-
-    const renderToggle = props => (
-        <Avatar circle {...props} src={userAvatar} alt={userFullname[0].toUpperCase()}/>
-      );
-
-    const [dropdownIsOpen, setDropdownIsOpen] = useState(false)
-
-    const _onClickAvatar = () => {
-        setDropdownIsOpen(!dropdownIsOpen)
-    }
-
-    const handleClickOutSideDropdown = () => {
-        setDropdownIsOpen(false)
-    }
-
     const location = useLocation();
+
+    useEffect(() => {
+        setExpanded(false);
+      }, [location.pathname]);
 
     const pathSegments = location.pathname.split('/').map(segment => pageNames[segment]).filter(item => item && item !== "" && item?.trim() !== "");
 
     const pageDetails = {
-        fullPath: pathSegments
-            .join(' - '),
-        pageName: pathSegments[pathSegments.length - 1]  , // Last segment of the path
+        fullPath: pathSegments.join(' - '),
+        pageName: pathSegments[pathSegments.length - 1],
     };
 
+    const renderToggle = props => (
+        <Avatar circle {...props} src={userAvatar} alt={userFullname[0].toUpperCase()} />
+    );
 
     return (
-        <nav className='header'>
-            <div className='row-1'>
-                <div className='nav-left'>
-                    <MdMenu className='menu-icon' onClick={clickMenuIcon} />
-                    <NavLink to="/" className="logo-link">
-                        <img src="../../images/logo-ktv.png" alt="Logo" className="logo-image" />
-                    </NavLink>
-                </div>
-                <div className='nav-right'>
-                    <Dropdown renderToggle={renderToggle} placement="bottomEnd">
-                        <Dropdown.Item panel style={{ padding: 16}}>
-                          <strong>{userFullname}</strong>
-                          <p>{userEmail}</p>
-                        </Dropdown.Item>
-                        <Dropdown.Separator />
-                        <Dropdown.Item
-                            onSelect={() => navigate(USER_INFO)}
-                        >
-                            Thông tin cá nhân
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                            onSelect={() => {
-                                localStorage.clear();
-                                navigate(SIGN_IN)
-                            }}
-                        >
-                          Đăng xuất
-                        </Dropdown.Item>
-                    </Dropdown>
-                </div>
-            </div>
-            <div className='row-2'>
+    <Navbar sticky="top" expand="lg" variant="dark" className="d-flex flex-column bg-primary shadow-lg" expanded={expanded}>
+      <Container>
+        <Navbar.Toggle
+          aria-controls="navbar-nav"
+          onClick={() => setExpanded(expanded ? false : "expanded")}
+        >
+            <MdMenu />
+          {/* {expanded ? <FaTimes /> : <FaBars />} */}
+        </Navbar.Toggle>
+        <img src="../../images/logo-haiphong.svg" alt="Logo" className="img-fluid " style={{maxWidth: "128px"}} />
+        <Navbar.Collapse id="navbar-nav">
+        <Nav className="nav-underline fw-bold text-uppercase ">
+            {menuLinks.map(({ text, link, subMenu }) => (
+                subMenu ? (
+                    // If there are submenus, use NavDropdown
+                    <NavDropdown title={text} id="navbarScrollingDropdown"  key={text}>
+                        {subMenu.map(({ text, link }) => (
+                            <NavDropdown.Item as={NavLink} to={link} key={link}>
+                                {text}
+                            </NavDropdown.Item>
+                        ))}
+                    </NavDropdown>
+                ) : (
+                    // If no submenus, just a regular Nav.Link
+                    <Nav.Link 
+                        as={NavLink} 
+                        to={link} 
+                        end 
+                        key={link}
+                        className="px-3"
+                    >
+                        {text}
+                    </Nav.Link>
+                )
+            ))}
+        </Nav>
+        </Navbar.Collapse>
+        <Dropdown renderToggle={renderToggle} placement="bottomEnd">
+          <Dropdown.Item panel style={{ padding: 16 }}>
+              <strong>{userFullname}</strong>
+              <p>{userEmail}</p>
+          </Dropdown.Item>
+          <Dropdown.Separator />
+          <Dropdown.Item onSelect={() => navigate(USER_INFO)}>
+              Thông tin cá nhân
+          </Dropdown.Item>
+          <Dropdown.Item
+              onSelect={() => {
+                  localStorage.clear();
+                  navigate(SIGN_IN);
+              }}
+          >
+              Đăng xuất
+          </Dropdown.Item>
+        </Dropdown>
+      </Container>
+        {/* <div className="row-2">
                 <h1 className="page-title">{pageDetails.pageName}</h1>
                 <h1 className="page-path">|</h1>
                 <h1 className="page-path">{pageDetails.fullPath}</h1>
-            </div>
-        </nav>
-    )
-}
+        </div> */}
+    </Navbar>
+    );
+};
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         toggleSidebar: () => {
-            dispatch(viewActions.toggleSidebar())
+            dispatch(viewActions.toggleSidebar());
         }
-    }
-}
-
-//export default Header;
+    };
+};
 
 export default connect(null, mapDispatchToProps)(Header);
