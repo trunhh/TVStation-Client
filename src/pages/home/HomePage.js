@@ -10,6 +10,7 @@ import viewActions from '../../actions/viewActions';
 
 
 const HomePage = (props) => {
+    
 
 
     useEffect(() => {
@@ -21,14 +22,12 @@ const HomePage = (props) => {
     }, [props.errorMessage])
 
     return(
-        <div className='home-container'>
-            <div className='home-main sidebar-close'>
-                <Header/>
-                <div className='main-content'>
-                    <Outlet />
-                </div>
+        <>
+            <Header/>
+            <div className='main-content'>
+                <Outlet />
             </div>
-        </div>
+        </>
     )
 }
 

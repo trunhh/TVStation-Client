@@ -112,9 +112,9 @@ const MediaProjectList = (props) => {
         
       }, []);
 
-    useEffect(() => {
-        props.showLoading(props.isLoading)
-    }, [props.isLoading])
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading)
+    // }, [props.isLoading])
 
     const summaryData = [
         {

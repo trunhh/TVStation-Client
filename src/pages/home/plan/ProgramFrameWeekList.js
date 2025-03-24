@@ -85,9 +85,9 @@ const ProgramFrameWeekList = (props) => {
         props.getList(query, props.pageIndex);
       }, []);
 
-    useEffect(() => {
-        props.showLoading(props.isLoading)
-    }, [props.isLoading])
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading)
+    // }, [props.isLoading])
 
     const summaryData = [
         {

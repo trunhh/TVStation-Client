@@ -97,9 +97,9 @@ const ProductionRegistrationList = (props) => {
         props.getUsers();
       }, []);
 
-    useEffect(() => {
-        props.showLoading(props.isLoading)
-    }, [props.isLoading])
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading)
+    // }, [props.isLoading])
 
     const summaryData = [
         {

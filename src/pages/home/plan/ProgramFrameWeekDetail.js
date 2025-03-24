@@ -69,9 +69,9 @@ const ProgramFrameWeekDetail = (props) => {
         if (props.isCreated) navigate(PROGRAM_FRAME_WEEK);
     }, [props.isCreated]);
 
-    useEffect(() => {
-        props.showLoading(props.isLoading);
-    }, [props.isLoading]);
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading);
+    // }, [props.isLoading]);
 
     useEffect(() => {
             // Ensure the spreadsheet container exists

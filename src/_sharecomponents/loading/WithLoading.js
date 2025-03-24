@@ -11,7 +11,7 @@ const WithLoading = (WrappedComponent) => {
         }
 
         return (
-            <div className="loading-container">
+            <div>
                 {   
                     isLoading &&
                     <div className="loading-content">

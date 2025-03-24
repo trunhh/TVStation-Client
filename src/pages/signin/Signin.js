@@ -23,9 +23,9 @@ const Signin = (props) => {
     });
   };
 
-  useEffect(() => {
-    props.showLoading(props.isLoading);
-  }, [props.isLoading]);
+  // useEffect(() => {
+  //   props.showLoading(props.isLoading);
+  // }, [props.isLoading]);
 
   return (
     <div 

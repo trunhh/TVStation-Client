@@ -62,9 +62,9 @@ const ProgramFrameBroadcastDetail = (props) => {
         if (props.isCreated) navigate(PROGRAM_FRAME_BROADCAST);
     }, [props.isCreated]);
 
-    useEffect(() => {
-        props.showLoading(props.isLoading);
-    }, [props.isLoading]);
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading);
+    // }, [props.isLoading]);
 
     useEffect(() => {
         // Ensure the spreadsheet container exists

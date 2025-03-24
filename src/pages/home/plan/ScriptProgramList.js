@@ -96,9 +96,9 @@ const ScriptProgramList = (props) => {
         props.getUsers();
       }, []);
 
-    useEffect(() => {
-        props.showLoading(props.isLoading)
-    }, [props.isLoading])
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading)
+    // }, [props.isLoading])
 
     const summaryData = [
         {

@@ -8,8 +8,7 @@ import Dropdown from 'rsuite/Dropdown';
 import Avatar from 'rsuite/Avatar';
 import 'rsuite/Dropdown/styles/index.css';
 import 'rsuite/Avatar/styles/index.css';
-import { connect } from 'react-redux';
-import viewActions from '../../../actions/viewActions';  // Corrected import
+
 
 const userFullname = localStorage.getItem("name") || " ";
 const userEmail = localStorage.getItem("email") || " ";
@@ -50,7 +49,7 @@ const Header = (props) => {
     );
 
     return (
-    <Navbar sticky="top" expand="lg" variant="dark" className="d-flex flex-column bg-primary shadow-lg" expanded={expanded}>
+    <Navbar sticky="top" expand="lg" variant="dark" className="d-flex flex-column bg-primary bg-gradient shadow-lg" expanded={expanded}>
       <Container>
         <Navbar.Toggle
           aria-controls="navbar-nav"
@@ -61,7 +60,7 @@ const Header = (props) => {
         </Navbar.Toggle>
         <img src="../../images/logo-haiphong.svg" alt="Logo" className="img-fluid " style={{maxWidth: "128px"}} />
         <Navbar.Collapse id="navbar-nav">
-        <Nav className="nav-underline fw-bold text-uppercase ">
+        <Nav className="fw-bold text-uppercase ">
             {menuLinks.map(({ text, link, subMenu }) => (
                 subMenu ? (
                     // If there are submenus, use NavDropdown
@@ -88,7 +87,7 @@ const Header = (props) => {
         </Nav>
         </Navbar.Collapse>
         <Dropdown renderToggle={renderToggle} placement="bottomEnd">
-          <Dropdown.Item panel style={{ padding: 16 }}>
+          <Dropdown.Item panel style={{ padding: "1rem" }}>
               <strong>{userFullname}</strong>
               <p>{userEmail}</p>
           </Dropdown.Item>
@@ -115,12 +114,4 @@ const Header = (props) => {
     );
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        toggleSidebar: () => {
-            dispatch(viewActions.toggleSidebar());
-        }
-    };
-};
-
-export default connect(null, mapDispatchToProps)(Header);
+export default Header;

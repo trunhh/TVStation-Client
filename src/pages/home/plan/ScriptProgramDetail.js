@@ -63,9 +63,9 @@ const ScriptProgramDetail = (props) => {
         if (props.isCreated) navigate(SCRIPT_PROGRAM);
     }, [props.isCreated])
 
-    useEffect(() => {
-        props.showLoading(props.isLoading)
-    }, [props.isLoading])
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading)
+    // }, [props.isLoading])
 
     const handleFormDataChange = (name, value) => {
         setFormData((prevFormData) => ({

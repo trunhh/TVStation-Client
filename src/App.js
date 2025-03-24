@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import {Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import routeConstants from './constants/routeConstants';
+import "./App.css"
 
 import Signin from './pages/signin/Signin';
 import HomePage from './pages/home/HomePage';
 
-import WithLoading from './_sharecomponents/loading/WithLoading';
 import UserInfo from './pages/home/userinfo/UserInfo';
 import MediaProjectList from './pages/home/plan/MediaProjectList';
 import MediaProjectDetail from './pages/home/plan/MediaProjectDetail';
@@ -21,28 +21,14 @@ import ProgramFrameYearList from './pages/home/plan/ProgramFrameYearList';
 import ProgramFrameYearDetail from './pages/home/plan/ProgramFrameYearDetail';
 import Dashboard from './pages/home/dashboard/Dashboard';
 
-const SigninWithLoading = WithLoading(Signin);
-const UserWithLoading = WithLoading(UserInfo);
-const MediaProjectWithLoading = WithLoading(MediaProjectList);
-const MediaProjectDetailWithLoading = WithLoading(MediaProjectDetail);
-const ProductionRegistrationWithLoading = WithLoading(ProductionRegistrationList);
-const ProductionRegistrationDetailWithLoading = WithLoading(ProductionRegistrationDetail);
-const ScriptProgramWithLoading = WithLoading(ScriptProgramList);
-const ScriptProgramDetailWithLoading = WithLoading(ScriptProgramDetail);
-const ProgramFrameBroadcastWithLoading = WithLoading(ProgramFrameBroadcastList);
-const ProgramFrameBroadcastDetailWithLoading = WithLoading(ProgramFrameBroadcastDetail);
-const ProgramFrameWeekWithLoading = WithLoading(ProgramFrameWeekList);
-const ProgramFrameWeekDetailWithLoading = WithLoading(ProgramFrameWeekDetail);
-const ProgramFrameYearWithLoading = WithLoading(ProgramFrameYearList);
-const ProgramFrameYearDetailWithLoading = WithLoading(ProgramFrameYearDetail);
-const DashboardWithLoading = WithLoading(Dashboard);
 
 function App() {
     const navigate = useNavigate();
 
+    // Token expiration check function
     const isTokenExpired = (token) => {
         try {
-            const base64Payload = token.split('.')[1]; 
+            const base64Payload = token.split('.')[1];
             const payload = JSON.parse(atob(base64Payload));
             const currentTimestamp = Math.floor(Date.now() / 1000);
             return currentTimestamp > payload.exp;
@@ -56,51 +42,46 @@ function App() {
         const token = localStorage.getItem('token');
         if (!token || isTokenExpired(token)) {
             localStorage.removeItem('token');
-            navigate(routeConstants.SIGN_IN);
+            navigate(routeConstants.SIGN_IN);  // Redirect to sign-in if no token or expired
         }
     }, [navigate]);
 
     const isLoggedIn = localStorage.getItem('token');
 
-    if (!isLoggedIn) {
-        return (
-            <div className="App">
-                <Routes>
-                    <Route path={routeConstants.SIGN_IN} element={<SigninWithLoading />} />
-                    <Route path="*" element={<Navigate to={routeConstants.SIGN_IN} />} />
-                </Routes>
-            </div>
-        );
-    }
-
     return (
-        <div className="App">
-            <Routes>
-                <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} />
-
-                <Route path="/" element={<HomePage />}>
-                    <Route path="/" element={<DashboardWithLoading />}/>
-                    <Route path={routeConstants.USER_INFO} element={<UserWithLoading />} />
-                    <Route path={routeConstants.MEDIA_PROJECT} element={<MediaProjectWithLoading />} />
-                    <Route path={routeConstants.MEDIA_PROJECT_DETAIL + "/:id"} element={<MediaProjectDetailWithLoading />} />
-                    <Route path={routeConstants.PRODUCTION_REGISTRATION} element={<ProductionRegistrationWithLoading />} />
-                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL} element={<ProductionRegistrationDetailWithLoading />} />
-                    <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL + "/:id"} element={<ProductionRegistrationDetailWithLoading />} />
-                    <Route path={routeConstants.SCRIPT_PROGRAM} element={<ScriptProgramWithLoading />} />
-                    <Route path={routeConstants.SCRIPT_PROGRAM_DETAIL} element={<ScriptProgramDetailWithLoading />} />
-                    <Route path={routeConstants.SCRIPT_PROGRAM_DETAIL + "/:id"} element={<ScriptProgramDetailWithLoading />} />
-                    <Route path={routeConstants.PROGRAM_FRAME_BROADCAST} element={<ProgramFrameBroadcastWithLoading />} />
-                    <Route path={routeConstants.PROGRAM_FRAME_BROADCAST_DETAIL} element={<ProgramFrameBroadcastDetailWithLoading/>} />
-                    <Route path={routeConstants.PROGRAM_FRAME_BROADCAST_DETAIL + "/:id"} element={<ProgramFrameBroadcastDetailWithLoading />} />
-                    <Route path={routeConstants.PROGRAM_FRAME_WEEK} element={<ProgramFrameWeekWithLoading />} />
-                    <Route path={routeConstants.PROGRAM_FRAME_WEEK_DETAIL} element={<ProgramFrameWeekDetailWithLoading/>} />
-                    <Route path={routeConstants.PROGRAM_FRAME_WEEK_DETAIL + "/:id"} element={<ProgramFrameWeekDetailWithLoading />} />
-                    <Route path={routeConstants.PROGRAM_FRAME_YEAR} element={<ProgramFrameYearWithLoading />} />
-                    <Route path={routeConstants.PROGRAM_FRAME_YEAR_DETAIL} element={<ProgramFrameYearDetailWithLoading/>} />
-                    <Route path={routeConstants.PROGRAM_FRAME_YEAR_DETAIL + "/:id"} element={<ProgramFrameYearDetailWithLoading />} />
-                </Route>
-            </Routes>
-        </div>
+        <Routes>
+            {!isLoggedIn ? (
+                <>
+                    <Route path={routeConstants.SIGN_IN} element={<Signin />} />
+                    <Route path="*" element={<Navigate to={routeConstants.SIGN_IN} />} />
+                </>
+            ) : (
+                <>
+                    <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} />
+                    <Route path="/" element={<HomePage />}>
+                        <Route path="/" element={<Dashboard />} />
+                        <Route path={routeConstants.USER_INFO} element={<UserInfo />} />
+                        <Route path={routeConstants.MEDIA_PROJECT} element={<MediaProjectList />} />
+                        <Route path={`${routeConstants.MEDIA_PROJECT_DETAIL}/:id`} element={<MediaProjectDetail />} />
+                        <Route path={routeConstants.PRODUCTION_REGISTRATION} element={<ProductionRegistrationList />} />
+                        <Route path={routeConstants.PRODUCTION_REGISTRATION_DETAIL} element={<ProductionRegistrationDetail />} />
+                        <Route path={`${routeConstants.PRODUCTION_REGISTRATION_DETAIL}/:id`} element={<ProductionRegistrationDetail />} />
+                        <Route path={routeConstants.SCRIPT_PROGRAM} element={<ScriptProgramList />} />
+                        <Route path={routeConstants.SCRIPT_PROGRAM_DETAIL} element={<ScriptProgramDetail />} />
+                        <Route path={`${routeConstants.SCRIPT_PROGRAM_DETAIL}/:id`} element={<ScriptProgramDetail />} />
+                        <Route path={routeConstants.PROGRAM_FRAME_BROADCAST} element={<ProgramFrameBroadcastList />} />
+                        <Route path={routeConstants.PROGRAM_FRAME_BROADCAST_DETAIL} element={<ProgramFrameBroadcastDetail />} />
+                        <Route path={`${routeConstants.PROGRAM_FRAME_BROADCAST_DETAIL}/:id`} element={<ProgramFrameBroadcastDetail />} />
+                        <Route path={routeConstants.PROGRAM_FRAME_WEEK} element={<ProgramFrameWeekList />} />
+                        <Route path={routeConstants.PROGRAM_FRAME_WEEK_DETAIL} element={<ProgramFrameWeekDetail />} />
+                        <Route path={`${routeConstants.PROGRAM_FRAME_WEEK_DETAIL}/:id`} element={<ProgramFrameWeekDetail />} />
+                        <Route path={routeConstants.PROGRAM_FRAME_YEAR} element={<ProgramFrameYearList />} />
+                        <Route path={routeConstants.PROGRAM_FRAME_YEAR_DETAIL} element={<ProgramFrameYearDetail />} />
+                        <Route path={`${routeConstants.PROGRAM_FRAME_YEAR_DETAIL}/:id`} element={<ProgramFrameYearDetail />} />
+                    </Route>
+                </>
+            )}
+        </Routes>
     );
 }
 

@@ -51,9 +51,9 @@ const MediaProjectDetail = (props) => {
         }
     }, [props.selected]);
 
-    useEffect(() => {
-        props.showLoading(props.isLoading)
-    }, [props.isLoading])
+    // useEffect(() => {
+    //     props.showLoading(props.isLoading)
+    // }, [props.isLoading])
 
     const handleFormDataChange = (name, value) => {
         setFormData((prevFormData) => ({
