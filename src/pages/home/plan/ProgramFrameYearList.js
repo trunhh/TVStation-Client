@@ -81,13 +81,12 @@ const ProgramFrameYearList = (props) => {
     
 
     return (
-        <div className="w-5 overflow-hidden d-flex flex-column mx-auto py-5 row-gap-3">
+        <div className="w-5 overflow-hidden d-flex flex-column mx-auto px-3 py-5 row-gap-3 bg-white shadow-lg rounded">
             <Summary {...props}/>
             
 
             {/* Filter Form */}
-            <div className="mb-4">
-                <div className="row">
+            <div className="mb-4 d-flex flex-wrap">
                     <div className="col-md-3">
                         <CustomYearPicker
                             value={query.year}
@@ -112,7 +111,6 @@ const ProgramFrameYearList = (props) => {
                             onChange={(value, e) => handleQueryChange("keyword", value)}
                         />
                     </div>
-                </div>
             </div>
 
             {/* Action Buttons */}

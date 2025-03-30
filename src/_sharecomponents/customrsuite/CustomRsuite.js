@@ -1,7 +1,6 @@
 import IconButton from 'rsuite/IconButton';
 import 'rsuite/IconButton/styles/index.css';
 import SendRound from '@rsuite/icons/SendRound';
-import CheckRound from '@rsuite/icons/CheckRound';
 import DatePicker from 'rsuite/DatePicker';
 import 'rsuite/DatePicker/styles/index.css';
 import Toggle from 'rsuite/Toggle';
@@ -14,12 +13,8 @@ import DateRangePicker from 'rsuite/DateRangePicker';
 import 'rsuite/DateRangePicker/styles/index.css';
 import SelectPicker from 'rsuite/SelectPicker';
 import 'rsuite/SelectPicker/styles/index.css';
-import PlusRound from '@rsuite/icons/PlusRound';
-import TrashIcon from '@rsuite/icons/Trash';
 import SearchIcon from '@rsuite/icons/Search';
 import ArrowDownIcon from '@rsuite/icons/ArrowDown';
-import WarningRoundIcon from '@rsuite/icons/WarningRound';
-import EditRoundIcon from '@rsuite/icons/EditRound';
 import { SectorConst,StatusConst,ObjectTypeConst, GenreConst, ActionConst, RoleActionConst} from '../../constants/constants';
 import Popover from 'rsuite/Popover';
 import Whisper from 'rsuite/Whisper';
@@ -36,6 +31,10 @@ import 'rsuite/FormControlLabel/styles/index.css';
 import 'rsuite/FormErrorMessage/styles/index.css';
 import 'rsuite/FormHelpText/styles/index.css';
 import 'rsuite/FormGroup/styles/index.css';
+
+
+import { Button, FloatingLabel, Form } from 'react-bootstrap';
+
 export const CustomApproveButton = ({ role= "", status="", onClick, ...props }) => {
   let validActions = [];
   const roleActions = RoleActionConst[role];
@@ -94,63 +93,41 @@ export const CustomApproveButton = ({ role= "", status="", onClick, ...props }) 
 
 export const CustomSubmitButton = ({ ...props }) => {
   return (
-    <IconButton
-      {...props}
-      appearance='primary'
-      color='green'
-      icon={<CheckRound/>}
-    >
-      Lưu
-    </IconButton>
+    <CustomIconButton variant="success" icon="bi-check-circle-fill" text="Lưu" {...props}/>
   );
 };
 
+export const CustomIconButton = ({icon="", text="", ...props}) => {
+  return (
+    <Button {...props}>
+      <i className={`bi ${icon} fst-normal`}> {text}</i>
+    </Button>
+  );
+}
+
+
 export const CustomCancelButton = ({ ...props }) => {
   return (
-    <IconButton
-      {...props}
-      appearance='primary'
-      color='red'
-      icon={<WarningRoundIcon/>}
-    >
-      Hủy
-    </IconButton>
+    <CustomIconButton variant="danger" icon="bi-x-circle-fill" text="Hủy" {...props}/>
   );
 };
 
 export const CustomAddButton = ({ ...props }) => {
   return (
-    <IconButton
-      {...props}
-      appearance='primary'
-      icon={<PlusRound/>}
-    >
-      Thêm
-    </IconButton>
+    <CustomIconButton variant="primary" size="sm" icon="bi-plus-circle-fill" text="Thêm" {...props}/>
   );
 };
 
 export const CustomExportButton = ({ ...props }) => {
   return (
-    <IconButton
-      {...props}
-      appearance='primary'
-      icon={<EditRoundIcon/>}
-    >
-      Xuất file
-    </IconButton>
+    <CustomIconButton variant="primary" icon="bi-x-circle-fill" text="Xuất file" {...props}/>
   );
 };
 
 
 export const CustomDeleteButton = ({ ...props }) => {
   return (
-    <IconButton
-      {...props}
-      appearance='link'
-      color='red'
-      icon={<TrashIcon/>}
-    />
+    <button className="bi bi-trash-fill link-danger border-0 w-1" {...props}/>
   );
 };
 
@@ -286,6 +263,25 @@ export const CustomSitemapPicker = ({ data, ...props }) => {
   );
 };
 
+export const CustomFormSelect = ({data, getKey, getValue, label, controlId, error, ...props}) => {
+  // label, controlId
+  <FloatingLabel label={label} controlId={controlId}>
+      <Form.Select
+          placeholder=" "
+          isInvalid={!!error}
+          {...props}
+      >
+        <option value="">Chọn người dùng</option>
+        {data?.map((item) => (
+          <option key={getKey(item)} value={getKey(item)}>
+            {getValue(item)}
+          </option>
+        ))}
+      </Form.Select>
+      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+  </FloatingLabel>
+}
+
 export const CustomUserPicker = ({ data, ...props }) => {
   const transformedData = data?.map(item => ({
     label: item.name,
@@ -349,57 +345,24 @@ export const CustomFormControl = forwardRef((props, ref) => {
     </Form.Group>
   );
 });
-export const TextLink = ({ onRowClick, text, ...props }) => {
-  const handleMouseEnter = (e) => {
-    e.target.style.textDecoration = "underline";
-  };
 
-  const handleMouseLeave = (e) => {
-    e.target.style.textDecoration = "none";
-  };
-
-
+export const TextLink = ({ text, ...props }) => {
   const style = {
     fontStyle: !text ? "italic" : "normal",
     fontWeight: text ? "bold" : "normal",
-    textDecoration: "none",
-    cursor: "pointer",
-    width: "fit-content"
   };
 
   const content = text || "Đề tài chưa đặt tên";
 
   return (
-    <div
+    <a
       style={style}
-      onClick={onRowClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       {...props}
+      className='link-dark link-underline link-underline-opacity-0 link-underline-opacity-75-hover'
     >
       {content}
-    </div>
+    </a>
   );
 };
 
 
-
-export default {
-    CustomApproveButton,
-    CustomSubmitButton,
-    CustomAddButton,
-    CustomExportButton,
-    CustomDatePicker,
-    CustomWeekPicker,
-    CustomDateRangePicker,
-    CustomSectorPicker,
-    CustomStatusPicker,
-    CustomObjectTypePicker,
-    CustomGenrePicker,
-    CustomSitemapPicker,
-    CustomToggle,
-    CustomInputNoOutline,
-    CustomInputSearch,
-    CustomFormControl,
-    TextLink
-}

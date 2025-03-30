@@ -11,12 +11,12 @@ export const SectorConst = [
 ];
 
 export const StatusConst = [
-    { value: "IN_PROGRESS", label: "Đang thực hiện" },
-    { value: "WAITING_FOR_APPROVAL", label: "Chờ xác nhận" },
-    { value: "APPROVED", label: "Đã xác nhận" },
-    { value: "RETURNED", label: "Trả lại" },
-    { value: "RETRIEVED", label: "Thu hồi" },
-    { value: "CANCELLED", label: "Đã hủy" }
+    { value: "IN_PROGRESS", label: "Đang thực hiện", style: "info" },
+    { value: "WAITING_FOR_APPROVAL", label: "Chờ duyệt", style: "warning" },
+    { value: "APPROVED", label: "Đã duyệt", style: "success" },
+    { value: "RETURNED", label: "Trả lại", style: "danger" },
+    { value: "RETRIEVED", label: "Thu hồi", style: "danger" },
+    { value: "CANCELLED", label: "Đã hủy", style: "danger" },
 ];
 
 export const GenreConst = [

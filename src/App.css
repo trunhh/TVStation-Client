@@ -21,12 +21,14 @@ nav {
     height: var(--navbar-height) !important;
 }
 
+.h-0 {height: 0;}
 .h-1 { height: calc(var(--size-unit) * .25); }
 .h-2 { height: calc(var(--size-unit) * .5); }
 .h-3 { height: var(--size-unit); }
 .h-4 { height: calc(var(--size-unit) * 1.5); }
 .h-5 { height: calc(var(--size-unit) * 3); }
 
+.w-0 {width: 0;}
 .w-1 { width: calc(var(--size-unit) * .25); }
 .w-2 { width: calc(var(--size-unit) * .5); }
 .w-3 { width: var(--size-unit); }
