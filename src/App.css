@@ -21,6 +21,8 @@ nav {
     height: var(--navbar-height) !important;
 }
 
+.h-min {height: min-content !important;}
+.h-max {height: max-content !important;}
 .h-0 {height: 0;}
 .h-1 { height: calc(var(--size-unit) * .25); }
 .h-2 { height: calc(var(--size-unit) * .5); }
@@ -28,6 +30,8 @@ nav {
 .h-4 { height: calc(var(--size-unit) * 1.5); }
 .h-5 { height: calc(var(--size-unit) * 3); }
 
+.w-min {width: min-content !important;}
+.w-max {width: max-content !important;}
 .w-0 {width: 0;}
 .w-1 { width: calc(var(--size-unit) * .25); }
 .w-2 { width: calc(var(--size-unit) * .5); }

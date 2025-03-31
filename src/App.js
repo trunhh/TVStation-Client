@@ -38,26 +38,27 @@ function App() {
         }
     };
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token || isTokenExpired(token)) {
-            localStorage.removeItem('token');
-            navigate(routeConstants.SIGN_IN);  // Redirect to sign-in if no token or expired
-        }
-    }, [navigate]);
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     if (!token || isTokenExpired(token)) {
+    //         localStorage.removeItem('token');
+    //         navigate(routeConstants.SIGN_IN);  // Redirect to sign-in if no token or expired
+    //     }
+    // }, [navigate]);
 
     const isLoggedIn = localStorage.getItem('token');
 
     return (
         <Routes>
-            {!isLoggedIn ? (
+            {/* {!isLoggedIn ? (
                 <>
                     <Route path={routeConstants.SIGN_IN} element={<Signin />} />
                     <Route path="*" element={<Navigate to={routeConstants.SIGN_IN} />} />
                 </>
-            ) : (
+            ) :  */}
+            (
                 <>
-                    <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} />
+                    {/* <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} /> */}
                     <Route path="/" element={<HomePage />}>
                         <Route path="/" element={<Dashboard />} />
                         <Route path={routeConstants.USER_INFO} element={<UserInfo />} />
@@ -80,7 +81,7 @@ function App() {
                         <Route path={`${routeConstants.PROGRAM_FRAME_YEAR_DETAIL}/:id`} element={<ProgramFrameYearDetail />} />
                     </Route>
                 </>
-            )}
+            )
         </Routes>
     );
 }

@@ -20,18 +20,9 @@ import {
 
 import Summary from '../../../components/Summary';
 import Pagination from 'rsuite/esm/Pagination/Pagination';
+import { Collapse, Form } from 'react-bootstrap';
 
-const ProgramFrameYearList = (props) => {
-    const [query, setQuery] = useState({
-        year: new Date().getFullYear(),
-        sector: null,
-        status: null,
-        keyword: null,
-        isPersonal: false
-    });
-
-    const navigate = useNavigate();
-
+const ProgramFrameYearForm = ({query, setQuery}) => {
     const handleQueryChange = (name, value) => {
         setQuery(prevQuery => ({
             ...prevQuery,
@@ -47,6 +38,51 @@ const ProgramFrameYearList = (props) => {
             endDate: end,
         }));
     };
+
+    return (
+        <Form className="d-flex flex-wrap gap-2" >
+            <CustomToggle 
+                value={query.isPersonal}
+                onChange={(value,e) => handleQueryChange("isPersonal", value)}
+            />
+            
+            <CustomYearPicker
+                controlId="year"
+                // value={query.year}
+                // onChange={(value) => handleQueryChange("year", value)}
+            />
+            <CustomSectorPicker
+                value={query.sector}
+                onChange={(value) => handleQueryChange("sector", value)}
+            />
+            <CustomStatusPicker
+                value={query.status}
+                onChange={(value) => handleQueryChange("status", value)}
+            />
+            <CustomInputSearch
+                value={query.keyword}
+                onChange={(value, e) => handleQueryChange("keyword", value)}
+            />
+        </Form>
+    )
+
+}
+
+
+
+
+const ProgramFrameYearList = (props) => {
+    const [query, setQuery] = useState({
+        year: new Date().getFullYear(),
+        sector: null,
+        status: null,
+        keyword: null,
+        isPersonal: false
+    });
+
+    const navigate = useNavigate();
+
+    
 
     const handlePageClick = (selectedPage) => {
         props.getList({ ...query }, selectedPage);
@@ -78,51 +114,37 @@ const ProgramFrameYearList = (props) => {
         props.getList(query, props.pageIndex);
     }, []);
 
+    const [open, setOpen] = useState(false);
     
 
     return (
         <div className="w-5 overflow-hidden d-flex flex-column mx-auto px-3 py-5 row-gap-3 bg-white shadow-lg rounded">
             <Summary {...props}/>
-            
 
-            {/* Filter Form */}
-            <div className="mb-4 d-flex flex-wrap">
-                    <div className="col-md-3">
-                        <CustomYearPicker
-                            value={query.year}
-                            onChange={(value) => handleQueryChange("year", value)}
-                        />
-                    </div>
-                    <div className="col-md-3">
-                        <CustomSectorPicker
-                            value={query.sector}
-                            onChange={(value) => handleQueryChange("sector", value)}
-                        />
-                    </div>
-                    <div className="col-md-3">
-                        <CustomStatusPicker
-                            value={query.status}
-                            onChange={(value) => handleQueryChange("status", value)}
-                        />
-                    </div>
-                    <div className="col-md-3">
-                        <CustomInputSearch
-                            value={query.keyword}
-                            onChange={(value, e) => handleQueryChange("keyword", value)}
-                        />
-                    </div>
-            </div>
 
             {/* Action Buttons */}
-            <div className="d-flex justify-content-end mb-3">
-                <CustomToggle 
-                    checked={query.isPersonal}
-                    onChange={(value,e) => handleQueryChange("isPersonal", value)}
-                >
-                    Cá nhân
-                </CustomToggle>
-                <CustomAddButton onClick={handleAddButtonClick} />
+            <div className="d-flex justify-content-end gap-2">
+                <a 
+                    className="bi bi-filter-circle-fill link-secondary" 
+                    onClick={() => setOpen(!open)} 
+                    aria-controls="collapse-text" 
+                />
+                <a 
+                    className="bi bi-plus-circle-fill link-secondary"
+                    onClick={handleAddButtonClick}
+                />
             </div>
+
+            {/* Filter Form */}
+            
+            <Collapse in={open}>
+                <div id="collapse-text">
+                    <ProgramFrameYearForm query={query} setQuery={setQuery} />
+                </div>
+            </Collapse>
+            
+
+            
 
             {/* Table */}
             <div className="table-responsive">

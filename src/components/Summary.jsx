@@ -2,25 +2,25 @@ const Summary = ({totalCount, inProgressCount, waitingApprovalCount, approvedCou
     const summaryData = [
         {
             name: "primary",
-            icon: "fa-note-sticky",
+            icon: "bi-envelope-at-fill",
             title: "Tổng số",
             value: totalCount,
         },
         {
             name: "info",
-            icon: "fa-pen-to-square",
+            icon: "bi-envelope-dash-fill",
             title: "Đang thực hiện",
             value: inProgressCount
         },
         {
             name: "warning",
-            icon: "fa-spinner",
+            icon: "bi-envelope-exclamation-fill",
             title: "Chờ duyệt",
             value: waitingApprovalCount,
         },
         {
             name: "success",
-            icon: "fa-circle-check",
+            icon: "bi-envelope-check-fill",
             title: "Đã duyệt",
             value: approvedCount
         }
@@ -36,8 +36,8 @@ const Summary = ({totalCount, inProgressCount, waitingApprovalCount, approvedCou
                         <small className="text-muted">{item.title}</small>
                         <div className={`d-flex gap-2 text-${item.name} fw-bold`}>
                             
-                            <i className={`fa-solid ${item.icon}`}/>
-                            <div className='lh-1'>{item.value}</div>
+                            <i className={`bi ${item.icon}`}/>
+                            {item.value}
                         </div>
                     </div>
                 </div>

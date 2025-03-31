@@ -1,45 +1,44 @@
-import IconButton from 'rsuite/IconButton';
-import 'rsuite/IconButton/styles/index.css';
-import SendRound from '@rsuite/icons/SendRound';
 import DatePicker from 'rsuite/DatePicker';
 import 'rsuite/DatePicker/styles/index.css';
-import Toggle from 'rsuite/Toggle';
-import 'rsuite/Toggle/styles/index.css';
-import Input from 'rsuite/Input';
-import InputGroup from 'rsuite/InputGroup';
-import 'rsuite/Input/styles/index.css';
-import 'rsuite/InputGroup/styles/index.css';
 import DateRangePicker from 'rsuite/DateRangePicker';
 import 'rsuite/DateRangePicker/styles/index.css';
-import SelectPicker from 'rsuite/SelectPicker';
-import 'rsuite/SelectPicker/styles/index.css';
-import SearchIcon from '@rsuite/icons/Search';
-import ArrowDownIcon from '@rsuite/icons/ArrowDown';
 import { SectorConst,StatusConst,ObjectTypeConst, GenreConst, ActionConst, RoleActionConst} from '../../constants/constants';
-import Popover from 'rsuite/Popover';
-import Whisper from 'rsuite/Whisper';
-import 'rsuite/Popover/styles/index.css';
-import ButtonGroup from 'rsuite/ButtonGroup';
-import 'rsuite/ButtonGroup/styles/index.css';
-import Dropdown from 'rsuite/Dropdown';
-import 'rsuite/Dropdown/styles/index.css';
 import React, { useState, forwardRef } from 'react';
-import Form from 'rsuite/Form';
-import 'rsuite/Form/styles/index.css';
-import 'rsuite/FormControl/styles/index.css';
-import 'rsuite/FormControlLabel/styles/index.css';
-import 'rsuite/FormErrorMessage/styles/index.css';
-import 'rsuite/FormHelpText/styles/index.css';
-import 'rsuite/FormGroup/styles/index.css';
 
 
-import { Button, FloatingLabel, Form } from 'react-bootstrap';
+import { Button, FloatingLabel, Form, InputGroup, ButtonGroup, Dropdown } from 'react-bootstrap';
+
+
+export const CustomDropdown = ({ options, text, variant, ...props}) => {
+
+  return (
+    <Dropdown className="btn-group" {...props} >
+      <Dropdown.Toggle variant={variant}>
+        {text}
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        {options.map(({ key, value }, index) => (
+          <Dropdown.Item key={key} eventKey={key}>
+            {value}
+          </Dropdown.Item>
+        ))}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+
+
+
+
+
+// #region button
 
 export const CustomApproveButton = ({ role= "", status="", onClick, ...props }) => {
   let validActions = [];
-  const roleActions = RoleActionConst[role];
+  const roleActions = RoleActionConst["MANAGER"];
   if (roleActions) {
-    validActions = roleActions[status] || [];
+    validActions = roleActions["IN_PROGRESS"] || [];
   }
 
   
@@ -49,45 +48,21 @@ export const CustomApproveButton = ({ role= "", status="", onClick, ...props }) 
 
   const [action, setAction] = useState(options[0]?.key || ""); // Default to the first option's key or empty if no valid options
 
-  if (validActions.length == 0) return null;
+  // if (validActions.length == 0) return null;
+
+  const variant = "success"
 
   return (
-    <ButtonGroup style={{display: "flex"}}>
-      <IconButton  
-        {...props} 
-        appearance="primary" 
-        icon={<SendRound />} 
-        style={{flexGrow: 1}}
-        onClick={() => onClick(action)}
-      >
-        {ActionConst[action] || "Unknown Action"}
-      </IconButton>
+    <CustomIconButton 
+      variant={variant}
+      icon="bi-exclamation-circle-fill"
+      text={ActionConst[action] || "Unknown Action"}
+      onClick={() => onClick(action)}
+      {...props}
+    >
+      <CustomDropdown variant={variant} options={options} onSelect={(key)=>setAction(key)}/>
 
-      <Whisper
-        placement="bottomEnd"
-        trigger="click"
-        speaker={({ onClose, left, top, className }, ref) => {
-          const handleSelect = eventKey => {
-            onClose();
-            setAction(eventKey);
-          };
-
-          return (
-            <Popover ref={ref} className={className} style={{ left, top }} full>
-              <Dropdown.Menu onSelect={handleSelect}>
-                {options.map(({ key, value }, index) => (
-                  <Dropdown.Item key={index} eventKey={key}>
-                    {value}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Popover>
-          );
-        }}
-      >
-        <IconButton appearance="primary" icon={<ArrowDownIcon />} />
-      </Whisper>
-    </ButtonGroup>
+    </CustomIconButton>
   );
 };
 
@@ -97,14 +72,16 @@ export const CustomSubmitButton = ({ ...props }) => {
   );
 };
 
-export const CustomIconButton = ({icon="", text="", ...props}) => {
+export const CustomIconButton = ({icon="", text="", children, variant, ...props}) => {
   return (
-    <Button {...props}>
-      <i className={`bi ${icon} fst-normal`}> {text}</i>
-    </Button>
+    <ButtonGroup {...props}>
+      <Button variant={variant} active><i className={`bi ${icon}`}/></Button>
+      <Button variant={variant} className="w-100">{text}</Button>
+      {children}
+    </ButtonGroup>
+    
   );
 }
-
 
 export const CustomCancelButton = ({ ...props }) => {
   return (
@@ -124,13 +101,16 @@ export const CustomExportButton = ({ ...props }) => {
   );
 };
 
-
 export const CustomDeleteButton = ({ ...props }) => {
   return (
     <button className="bi bi-trash-fill link-danger border-0 w-1" {...props}/>
   );
 };
 
+// #endregion
+
+
+// #region date
 export const CustomDatePicker = ({ ...props }) => {
   const today = new Date(); // Get the current date and time
   // Remove time parts to set the min date to midnight today
@@ -167,30 +147,6 @@ export const CustomWeekPicker = ({ ...props }) => {
   );
 };
 
-
-export const CustomYearPicker = ({ value, onChange, ...props }) => {
-  // Get current year
-  const currentYear = new Date().getFullYear();
-
-  const years = Array.from({ length: 5 }, (_, index) => {
-      const year = currentYear - 1 + index;
-      return { label: `Năm ${year}`, value: year };
-  });
-
-  return (
-      <SelectPicker
-          {...props}
-          size="lg"
-          data={years} 
-          value={value}
-          onChange={onChange}
-          placeholder="Năm"
-      />
-  );
-};
-
-
-
 export const CustomDateRangePicker = ({ ...props }) => {
   return (
       <DateRangePicker
@@ -200,149 +156,173 @@ export const CustomDateRangePicker = ({ ...props }) => {
       />
   );
 };
+// #endregion
+
+
+// #region picker
+export const CustomFormSelect = ({
+  data, 
+  getKey = (item) => item.value,
+  getValue = (item) => item.value,
+  getLabel = (item) => item.label,
+  label,
+  controlId,
+  error,
+  placeholder,
+  className,
+  ...props
+}) => {
+  return (
+    <FloatingLabel label={label} controlId={controlId} className={className}>
+      <Form.Select
+          isInvalid={!!error}
+          {...props}
+      >
+        <option value="">Tất cả</option>
+        {data?.map((item) => (
+          <option key={getKey(item)} value={getValue(item)}>
+            {getLabel(item)}
+          </option>
+        ))}
+      </Form.Select>
+      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+    </FloatingLabel>
+  )
+};
+
+export const CustomYearPicker = ({ ...props }) => {
+  // Get current year
+  const currentYear = new Date().getFullYear();
+
+  const years = Array.from({ length: 5 }, (_, index) => currentYear - 1 + index);
+
+
+
+  return (
+    <CustomFormSelect 
+      data={years}
+      getKey={(item)=>item}
+      getValue={(item)=>item}
+      getLabel={(item)=>item}
+      label="Năm"
+      className="w-3"
+      {...props}
+    />
+  );
+};
 
 export const CustomSectorPicker = ({ ...props }) => {
   return (
-      <SelectPicker
-          {...props}
-          data= {SectorConst}
-          searchable={false}
-          size="lg"
-          placeholder="Loại hình"
-      />
+    <CustomFormSelect 
+      data={SectorConst}
+      label="Loại hình"
+      className="w-3"
+      {...props}
+    />
   );
 };
 
 export const CustomStatusPicker = ({ ...props }) => {
   return (
-      <SelectPicker
-          {...props}
-          data= {StatusConst}
-          searchable={false}
-          size="lg"
-          placeholder="Trạng thái"
-      />
+    <CustomFormSelect 
+      data={StatusConst}
+      label="Trạng thái"
+      className="w-3"
+      {...props}
+    />
   );
 };
 
 export const CustomObjectTypePicker = ({ ...props }) => {
   return (
-      <SelectPicker
-          {...props}
-          data= {ObjectTypeConst}
-          searchable={false}
-          size="lg"
-          placeholder="Nguồn"
-      />
+    <CustomFormSelect 
+      data={ObjectTypeConst}
+      label="Nguồn"
+      className="w-3"
+      {...props}
+    />
   );
 };
 
 export const CustomGenrePicker = ({ ...props }) => {
   return (
-      <SelectPicker
-          {...props}
-          data= {GenreConst}
-          size="lg"
-          placeholder="Thể loại"
-      />
-  );
-};
-
-export const CustomSitemapPicker = ({ data, ...props }) => {
-  const transformedData = data?.map(item => ({
-    label: item.name,
-    value: item.id
-  }));
-  return (
-      <SelectPicker
-          {...props}
-          data= {transformedData}
-          size="lg"
-          placeholder="Phòng ban"
-      />
-  );
-};
-
-export const CustomFormSelect = ({data, getKey, getValue, label, controlId, error, ...props}) => {
-  // label, controlId
-  <FloatingLabel label={label} controlId={controlId}>
-      <Form.Select
-          placeholder=" "
-          isInvalid={!!error}
-          {...props}
-      >
-        <option value="">Chọn người dùng</option>
-        {data?.map((item) => (
-          <option key={getKey(item)} value={getKey(item)}>
-            {getValue(item)}
-          </option>
-        ))}
-      </Form.Select>
-      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
-  </FloatingLabel>
-}
-
-export const CustomUserPicker = ({ data, ...props }) => {
-  const transformedData = data?.map(item => ({
-    label: item.name,
-    value: item.userName
-  }));
-  return (
-      <SelectPicker
-          {...props}
-          data= {transformedData}
-          size="lg"
-          placeholder="Người dùng"
-      />
-  );
-};
-
-export const CustomToggle = ({...props }) => {
-  return (
-    <Toggle
+    <CustomFormSelect 
+      data={GenreConst}
+      label="loại"
+      className="w-3"
       {...props}
-      style={{
-        flexGrow: 0
-      }}
     />
   );
 };
 
+export const CustomSitemapPicker = ({ data, ...props }) => {
+  return (
+    <CustomFormSelect 
+      data={data}
+      getKey={(item)=>item.id}
+      getValue={(item)=>item.id}
+      getLabel={(item)=>item.name}
+      label="Phòng ban"
+      className="w-3"
+      {...props}
+    />
+  );
+};
+
+export const CustomUserPicker = ({ data, ...props }) => {
+  return (
+    <CustomFormSelect 
+      data={data}
+      getKey={(item)=>item.userName}
+      getValue={(item)=>item.userName}
+      getLabel={(item)=>item.name}
+      label="Người dùng"
+      className="w-3"
+      {...props}
+    />
+  );
+};
+
+// #endregion
+
+export const CustomToggle = ({...props }) => {
+  return (
+    <Form.Check type="switch" role="switch" label="Cá nhân" {...props}/>
+  );
+};
+
+
+
+
 export const CustomInputNoOutline = ({...props }) => {
   return (
-    <InputGroup size='lg' style={{border: 'none'}}>
-      <Input style={{
-        fontWeight: "bold"
-      }}
-        {...props}
-        placeholder = "Đề tài chưa đặt tên"
-      />  
-    </InputGroup>
+    <Form.Text
+      {...props}
+      placeholder = "Đề tài chưa đặt tên"
+    />
     
   )
 }
 
 export const CustomInputSearch = ({...props }) => {
   return (
-    <InputGroup inside size='lg'>
-      <Input
-      {...props}
-      placeholder="Tìm kiếm..."
+    <InputGroup>
+      <Form.Control
+        placeholder="Tìm kiếm..."
+        {...props}
       />
-      <InputGroup.Addon>
-        <SearchIcon />
-      </InputGroup.Addon>
+      <span class="input-group-text"><i class="bi bi-search"/></span>
     </InputGroup>
     
   )
 }
 export const CustomFormControl = forwardRef((props, ref) => {
   const { name, label, accepter, ...rest } = props;
-  return (
-    <Form.Group controlId={name} ref={ref} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-      <Form.ControlLabel>{label} </Form.ControlLabel>
-      <Form.Control name={name} accepter={accepter} placeholder={label} style={{width: "100%", flex: 1}} {...rest} />
-    </Form.Group>
+  return ( <></>
+    // <Form.Group controlId={name} ref={ref} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    //   <Form.ControlLabel>{label} </Form.ControlLabel>
+    //   <Form.Control name={name} accepter={accepter} placeholder={label} style={{width: "100%", flex: 1}} {...rest} />
+    // </Form.Group>
   );
 });
 
