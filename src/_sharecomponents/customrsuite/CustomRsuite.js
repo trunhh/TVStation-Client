@@ -1,8 +1,4 @@
-import DatePicker from 'rsuite/DatePicker';
-import 'rsuite/DatePicker/styles/index.css';
-import DateRangePicker from 'rsuite/DateRangePicker';
-import 'rsuite/DateRangePicker/styles/index.css';
-import { SectorConst,StatusConst,ObjectTypeConst, GenreConst, ActionConst, RoleActionConst} from '../../constants/constants';
+import { ActionConst, RoleActionConst} from '../../constants/constants';
 import React, { useState, forwardRef } from 'react';
 
 
@@ -110,59 +106,11 @@ export const CustomDeleteButton = ({ ...props }) => {
 // #endregion
 
 
-// #region date
-export const CustomDatePicker = ({ ...props }) => {
-  const today = new Date(); // Get the current date and time
-  // Remove time parts to set the min date to midnight today
-  today.setHours(0, 0, 0, 0);
-
-  return (
-      <DatePicker
-        {...props}
-        size="lg"
-        format="HH:mm dd/MM/yyyy"
-        disabledDate={(date) => date < today}
-        cleanable={false}
-      />
-  );
-};
-
-export const CustomWeekPicker = ({ ...props }) => {
-
-  const disableNonSundays = (date) => {
-    const day = date.getDay();
-    return day !== 0;
-  };
-
-  return (
-      <DatePicker
-        showWeekNumbers
-        {...props}
-        size="lg"
-        format="dd/MM/yyyy"
-        shouldDisableDate={disableNonSundays}
-        cleanable={true}
-        placeholder="Tuần"
-      />
-  );
-};
-
-export const CustomDateRangePicker = ({ ...props }) => {
-  return (
-      <DateRangePicker
-          {...props}
-          size="lg"
-          format="dd/MM/yyyy"
-      />
-  );
-};
-// #endregion
 
 
 // #region picker
 export const CustomFormSelect = ({
   data, 
-  getKey = (item) => item.value,
   getValue = (item) => item.value,
   getLabel = (item) => item.label,
   label,
@@ -179,8 +127,8 @@ export const CustomFormSelect = ({
           {...props}
       >
         <option value="">Tất cả</option>
-        {data?.map((item) => (
-          <option key={getKey(item)} value={getValue(item)}>
+        {data?.map((item,index) => (
+          <option key={index} value={getValue(item)}>
             {getLabel(item)}
           </option>
         ))}
@@ -190,104 +138,11 @@ export const CustomFormSelect = ({
   )
 };
 
-export const CustomYearPicker = ({ ...props }) => {
-  // Get current year
-  const currentYear = new Date().getFullYear();
-
-  const years = Array.from({ length: 5 }, (_, index) => currentYear - 1 + index);
-
-
-
-  return (
-    <CustomFormSelect 
-      data={years}
-      getKey={(item)=>item}
-      getValue={(item)=>item}
-      getLabel={(item)=>item}
-      label="Năm"
-      className="w-3"
-      {...props}
-    />
-  );
-};
-
-export const CustomSectorPicker = ({ ...props }) => {
-  return (
-    <CustomFormSelect 
-      data={SectorConst}
-      label="Loại hình"
-      className="w-3"
-      {...props}
-    />
-  );
-};
-
-export const CustomStatusPicker = ({ ...props }) => {
-  return (
-    <CustomFormSelect 
-      data={StatusConst}
-      label="Trạng thái"
-      className="w-3"
-      {...props}
-    />
-  );
-};
-
-export const CustomObjectTypePicker = ({ ...props }) => {
-  return (
-    <CustomFormSelect 
-      data={ObjectTypeConst}
-      label="Nguồn"
-      className="w-3"
-      {...props}
-    />
-  );
-};
-
-export const CustomGenrePicker = ({ ...props }) => {
-  return (
-    <CustomFormSelect 
-      data={GenreConst}
-      label="loại"
-      className="w-3"
-      {...props}
-    />
-  );
-};
-
-export const CustomSitemapPicker = ({ data, ...props }) => {
-  return (
-    <CustomFormSelect 
-      data={data}
-      getKey={(item)=>item.id}
-      getValue={(item)=>item.id}
-      getLabel={(item)=>item.name}
-      label="Phòng ban"
-      className="w-3"
-      {...props}
-    />
-  );
-};
-
-export const CustomUserPicker = ({ data, ...props }) => {
-  return (
-    <CustomFormSelect 
-      data={data}
-      getKey={(item)=>item.userName}
-      getValue={(item)=>item.userName}
-      getLabel={(item)=>item.name}
-      label="Người dùng"
-      className="w-3"
-      {...props}
-    />
-  );
-};
-
 // #endregion
 
 export const CustomToggle = ({...props }) => {
   return (
-    <Form.Check type="switch" role="switch" label="Cá nhân" {...props}/>
+    <Form.Check type="switch" role="switch" {...props}/>
   );
 };
 
@@ -304,9 +159,9 @@ export const CustomInputNoOutline = ({...props }) => {
   )
 }
 
-export const CustomInputSearch = ({...props }) => {
+export const CustomInputSearch = ({className, ...props }) => {
   return (
-    <InputGroup>
+    <InputGroup className={className}>
       <Form.Control
         placeholder="Tìm kiếm..."
         {...props}

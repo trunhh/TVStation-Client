@@ -8,67 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import { PROGRAM_FRAME_YEAR_DETAIL } from '../../../constants/routeConstants';
 import { PAGE_SIZE } from '../../../constants/constants';
 import { 
-    CustomAddButton,
-    CustomYearPicker,
-    CustomSectorPicker,
-    CustomStatusPicker, 
-    CustomInputSearch,
-    CustomToggle,
     CustomDeleteButton,
     TextLink
 } from '../../../_sharecomponents/customrsuite/CustomRsuite';
 
 import Summary from '../../../components/Summary';
-import Pagination from 'rsuite/esm/Pagination/Pagination';
-import { Collapse, Form } from 'react-bootstrap';
-
-const ProgramFrameYearForm = ({query, setQuery}) => {
-    const handleQueryChange = (name, value) => {
-        setQuery(prevQuery => ({
-            ...prevQuery,
-            [name]: value
-        }));
-    };
-
-    const handleDateRangeChange = (dates) => {
-        const [start, end] = dates;
-        setQuery((prevQuery) => ({
-            ...prevQuery,
-            startDate: start,
-            endDate: end,
-        }));
-    };
-
-    return (
-        <Form className="d-flex flex-wrap gap-2" >
-            <CustomToggle 
-                value={query.isPersonal}
-                onChange={(value,e) => handleQueryChange("isPersonal", value)}
-            />
-            
-            <CustomYearPicker
-                controlId="year"
-                // value={query.year}
-                // onChange={(value) => handleQueryChange("year", value)}
-            />
-            <CustomSectorPicker
-                value={query.sector}
-                onChange={(value) => handleQueryChange("sector", value)}
-            />
-            <CustomStatusPicker
-                value={query.status}
-                onChange={(value) => handleQueryChange("status", value)}
-            />
-            <CustomInputSearch
-                value={query.keyword}
-                onChange={(value, e) => handleQueryChange("keyword", value)}
-            />
-        </Form>
-    )
-
-}
-
-
+import FilterForm from '../../../components/FilterForm';
+import { Collapse } from 'react-bootstrap';
+import Calendar from '@toast-ui/calendar';
+import '../../../toastui-custom/toastui-calendar.css';
+import { customTheme } from '../../../toastui-custom/toastui-calendar-theme';
 
 
 const ProgramFrameYearList = (props) => {
@@ -79,6 +28,13 @@ const ProgramFrameYearList = (props) => {
         keyword: null,
         isPersonal: false
     });
+
+    useEffect(() => {
+        const calendar = new Calendar('#calendar', {
+            theme: customTheme
+        });
+      }, []);
+
 
     const navigate = useNavigate();
 
@@ -118,7 +74,7 @@ const ProgramFrameYearList = (props) => {
     
 
     return (
-        <div className="w-5 overflow-hidden d-flex flex-column mx-auto px-3 py-5 row-gap-3 bg-white shadow-lg rounded">
+        <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
             <Summary {...props}/>
 
 
@@ -139,15 +95,18 @@ const ProgramFrameYearList = (props) => {
             
             <Collapse in={open}>
                 <div id="collapse-text">
-                    <ProgramFrameYearForm query={query} setQuery={setQuery} />
+                    <FilterForm query={query} setQuery={setQuery} />
                 </div>
             </Collapse>
+
+            <div className="fixed-height" id="calendar"/>
+
             
 
             
 
             {/* Table */}
-            <div className="table-responsive">
+            {/* <div className="table-responsive">
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -179,13 +138,13 @@ const ProgramFrameYearList = (props) => {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div> */}
 
             {/* Pagination */}
-            {props.list && (
+            {/* {props.list && (
                 <Pagination total={props.totalCount} limit={PAGE_SIZE} activePage={props.pageIndex} onChangePage={handlePageClick} />
-            )}
-        </div>
+            )} */}
+        </section>
     );
 }
 

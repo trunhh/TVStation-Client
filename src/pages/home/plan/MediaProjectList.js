@@ -9,27 +9,6 @@ import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { useNavigate } from 'react-router-dom';
 import { MEDIA_PROJECT_DETAIL} from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
-import Table from 'rsuite/Table';
-import 'rsuite/Table/styles/index.css';
-import Pagination from 'rsuite/Pagination';
-import 'rsuite/Pagination/styles/index.css';
-import Modal from 'rsuite/Modal';
-import 'rsuite/Modal/styles/index.css';
-import Uploader from 'rsuite/Uploader';
-import 'rsuite/Uploader/styles/index.css';
-import { 
-    CustomAddButton,
-    CustomDateRangePicker,
-    CustomSectorPicker,
-    CustomStatusPicker, 
-    CustomSitemapPicker,
-    CustomInputSearch ,
-    CustomToggle,
-    CustomDeleteButton,
-    TextLink
-} from '../../../_sharecomponents/customrsuite/CustomRsuite'
-
-const { Column, HeaderCell, Cell } = Table;
 
 const MediaProjectList = (props) => {
     const [query, setQuery] = useState({
@@ -148,7 +127,7 @@ const MediaProjectList = (props) => {
     
     return (
         <div className="plan-page">
-            <div className="plan-summary">
+            {/* <div className="plan-summary">
                 {summaryData.map((item, index) => (
                     <div className="summary-box" key={index}>
                         <i className={`fa-solid ${item.icon} icon-${item.name}`}></i>
@@ -271,7 +250,7 @@ const MediaProjectList = (props) => {
                     <span>Click or Drag a file to this area to upload</span>
                   </div>
                 </Uploader>
-            </Modal>
+            </Modal> */}
         </div>
         
     )

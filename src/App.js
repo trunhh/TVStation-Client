@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import {Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import routeConstants from './constants/routeConstants';
-import "./App.css"
-
 import Signin from './pages/signin/Signin';
 import HomePage from './pages/home/HomePage';
 

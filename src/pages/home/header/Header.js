@@ -1,14 +1,9 @@
-import { MdMenu } from 'react-icons/md';
 import { useState, useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
 import { menuLinks } from '../../../data/data';
 import { USER_INFO, SIGN_IN } from '../../../constants/routeConstants';
-import Dropdown from 'rsuite/Dropdown';
-import Avatar from 'rsuite/Avatar';
-import 'rsuite/Dropdown/styles/index.css';
-import 'rsuite/Avatar/styles/index.css';
-
+import { THP_Logo } from '../../../components/Logo';
 
 const userFullname = localStorage.getItem("name") || " ";
 const userEmail = localStorage.getItem("email") || " ";
@@ -44,21 +39,16 @@ const Header = (props) => {
         pageName: pathSegments[pathSegments.length - 1],
     };
 
-    const renderToggle = props => (
-        <Avatar circle {...props} src={userAvatar} alt={userFullname[0].toUpperCase()} />
-    );
-
     return (
     <Navbar sticky="top" expand="lg" variant="dark" className="d-flex flex-column bg-primary bg-gradient shadow-lg" expanded={expanded}>
-      <Container>
+      <Container className="h-100 w-100">
         <Navbar.Toggle
           aria-controls="navbar-nav"
           onClick={() => setExpanded(expanded ? false : "expanded")}
         >
-            <MdMenu />
-          {/* {expanded ? <FaTimes /> : <FaBars />} */}
+            <i className="bi bi-list"></i>
         </Navbar.Toggle>
-        <img src="../../images/logo-haiphong.svg" alt="Logo" className="img-fluid " style={{maxWidth: "128px"}} />
+        <THP_Logo class="h-100" />
         <Navbar.Collapse id="navbar-nav">
         <Nav className="fw-bold text-uppercase ">
             {menuLinks.map(({ text, link, subMenu }) => (
@@ -86,7 +76,7 @@ const Header = (props) => {
             ))}
         </Nav>
         </Navbar.Collapse>
-        <Dropdown renderToggle={renderToggle} placement="bottomEnd">
+        {/* <Dropdown renderToggle={<Avatar circle {...props} src={userAvatar} alt={userFullname[0].toUpperCase()} />} placement="bottomEnd">
           <Dropdown.Item panel style={{ padding: "1rem" }}>
               <strong>{userFullname}</strong>
               <p>{userEmail}</p>
@@ -103,7 +93,7 @@ const Header = (props) => {
           >
               Đăng xuất
           </Dropdown.Item>
-        </Dropdown>
+        </Dropdown> */}
       </Container>
         {/* <div className="row-2">
                 <h1 className="page-title">{pageDetails.pageName}</h1>

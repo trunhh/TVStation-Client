@@ -12,7 +12,6 @@ import '@mescius/spread-sheets/styles/gc.spread.sheets.excel2013white.css';
 import {
     CustomApproveButton,
     CustomSubmitButton,
-    CustomWeekPicker,
     CustomToggle,
     CustomInputNoOutline,
 } from '../../../_sharecomponents/customrsuite/CustomRsuite';
@@ -135,10 +134,10 @@ const ProgramFrameWeekDetail = (props) => {
                     <div className="inline-group">
                         <div className="component-label-group">
                             <p className="label-text">Dự kiến phát sóng</p>
-                            <CustomWeekPicker
+                            {/* <CustomWeekPicker
                                 value={formData.airdate}
                                 onChange={(value) => handleFormDataChange('airdate', value)}
-                            />
+                            /> */}
                         </div>
                     </div>
                     <div>

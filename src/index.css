@@ -1,5 +1,10 @@
+:root {
+    --font-size: 2.5;
+    --nav-height: 3rem;
+}
+
 * {
-    font-size: 2.75vmin;
+    font-size: calc(var(--font-size) * 1vmin);
     box-sizing: border-box;
     padding: 0;
     margin: 0;
@@ -7,5 +12,21 @@
 
 body {
     font-family: 'Oswald', sans-serif !important;
-  }
+    background: url(https://thhp.vn/themes/frontend/bhy/Assets/imgs/bg3.png) no-repeat top center;
+    background-size: cover;
+}
+
+
+section {
+    width: calc(100 / var(--font-size) *  1rem) !important;
+}
+
+
+.fixed-height {
+    min-height: calc(100 / var(--font-size) *  1rem - var(--nav-height)) !important;
+}
+
+nav {
+    height: var(--nav-height);
+}
   

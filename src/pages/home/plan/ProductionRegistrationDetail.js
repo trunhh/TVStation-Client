@@ -13,8 +13,6 @@ import { createSelector } from 'reselect';
 import { 
     CustomApproveButton, 
     CustomSubmitButton, 
-    CustomDatePicker, 
-    CustomGenrePicker,
     CustomToggle, 
     CustomInputNoOutline 
 } from '../../../_sharecomponents/customrsuite/CustomRsuite';
@@ -102,7 +100,7 @@ const ProductionRegistrationDetail = (props) => {
                         />
                     </div>
                     <div className="inline-group">
-                        <div className="component-label-group">
+                        {/* <div className="component-label-group">
                             <p className="label-text">Thể loại</p>
                             <CustomGenrePicker
                                 value={formData.genre}
@@ -115,7 +113,7 @@ const ProductionRegistrationDetail = (props) => {
                                 value={formData.airdate}
                                 onChange={(value) => handleFormDataChange("airdate", value)}
                             />
-                        </div>
+                        </div> */}
                     </div>
                     <div>
                         <CustomToggle

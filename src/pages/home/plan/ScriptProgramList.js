@@ -10,27 +10,7 @@ import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { useNavigate } from 'react-router-dom';
 import { SCRIPT_PROGRAM_DETAIL } from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
-import Table from 'rsuite/Table';
-import 'rsuite/Table/styles/index.css';
-import Pagination from 'rsuite/Pagination';
-import 'rsuite/Pagination/styles/index.css';
 import { csvExporter } from '../../../services/csvExporter'
-
-import { 
-    CustomAddButton,
-    CustomExportButton,
-    CustomDateRangePicker,
-    CustomSectorPicker,
-    CustomStatusPicker, 
-    CustomSitemapPicker,
-    CustomUserPicker,
-    CustomInputSearch ,
-    CustomToggle,
-    CustomDeleteButton,
-    TextLink
-} from '../../../_sharecomponents/customrsuite/CustomRsuite'
-
-const { Column, HeaderCell, Cell } = Table;
 
 const ScriptProgramList = (props) => {
     const [query, setQuery] = useState({
@@ -132,7 +112,7 @@ const ScriptProgramList = (props) => {
     
     return (
         <div className="plan-page">
-            <div className="plan-summary">
+            {/* <div className="plan-summary">
                 {summaryData.map((item, index) => (
                     <div className="summary-box" key={index}>
                         <i className={`fa-solid ${item.icon} icon-${item.name}`}></i>
@@ -246,7 +226,7 @@ const ScriptProgramList = (props) => {
                 {props.list && (
                     <Pagination total={props.totalCount} limit={PAGE_SIZE} activePage={props.pageIndex} onChangePage={handlePageClick} />
                 )}
-            </div>
+            </div> */}
         </div>
         
     )

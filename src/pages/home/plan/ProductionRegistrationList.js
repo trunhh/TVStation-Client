@@ -6,14 +6,9 @@ import planActions from '../../../actions/planActions'
 import siteMapActions from '../../../actions/siteMapActions'
 import usersActions from '../../../actions/usersActions'
 import { PRODUCTION_REGISTRATION_API } from '../../../constants/apiConstants'
-import StatusBox from '../../../_sharecomponents/statusbox/StatusBox'
 import { useNavigate } from 'react-router-dom';
 import { PRODUCTION_REGISTRATION_DETAIL } from '../../../constants/routeConstants'
 import { PAGE_SIZE } from '../../../constants/constants'
-import Table from 'rsuite/Table';
-import 'rsuite/Table/styles/index.css';
-import Pagination from 'rsuite/Pagination';
-import 'rsuite/Pagination/styles/index.css';
 import { csvExporter } from '../../../services/csvExporter'
 
 import { 
@@ -31,7 +26,7 @@ import {
     TextLink
 } from '../../../_sharecomponents/customrsuite/CustomRsuite'
 
-const { Column, HeaderCell, Cell } = Table;
+
 
 const ProductionRegistrationList = (props) => {
     const [query, setQuery] = useState({
@@ -133,7 +128,7 @@ const ProductionRegistrationList = (props) => {
     
     return (
         <div className="plan-page">
-            <div className="plan-summary">
+            {/* <div className="plan-summary">
                 {summaryData.map((item, index) => (
                     <div className="summary-box" key={index}>
                         <i className={`fa-solid ${item.icon} icon-${item.name}`}></i>
@@ -251,7 +246,7 @@ const ProductionRegistrationList = (props) => {
                 {props.list && (
                     <Pagination total={props.totalCount} limit={PAGE_SIZE} activePage={props.pageIndex} onChangePage={handlePageClick} />
                 )}
-            </div>
+            </div> */}
         </div>
         
     )

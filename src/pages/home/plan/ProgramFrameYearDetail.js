@@ -12,7 +12,6 @@ import '@mescius/spread-sheets/styles/gc.spread.sheets.excel2013white.css';
 import {
     CustomApproveButton,
     CustomSubmitButton,
-    CustomYearPicker,
     CustomToggle,
     CustomInputNoOutline,
 } from '../../../_sharecomponents/customrsuite/CustomRsuite';
@@ -128,10 +127,10 @@ const ProgramFrameYearDetail = (props) => {
                     <div className="inline-group">
                         <div className="component-label-group">
                             <p className="label-text">Dự kiến phát sóng</p>
-                            <CustomYearPicker
+                            {/* <CustomYearPicker
                                 value={formData.year}
                                 onChange={(value) => handleFormDataChange('year', value)}
-                            />
+                            /> */}
                         </div>
                     </div>
                     <div>
