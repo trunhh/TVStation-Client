@@ -252,8 +252,8 @@
 
 .toastui-calendar-column .toastui-calendar-grid-selection {
   position: absolute;
-  right: 0.416667rem;
-  left: 0.0416667rem;
+  right: 0;
+  left: 0;
   padding: 0.125rem;
 }
 
@@ -271,11 +271,14 @@
 }
 
 .toastui-calendar-panel.toastui-calendar-time {
+  height: 65% !important;
   overflow-y: auto;
 }
 /* HERE */
+.toastui-calendar-task,
+.toastui-calendar-allday,
 .toastui-calendar-milestone {
-  height: 3rem !important;
+  height: 10% !important;
 }
 
 .toastui-calendar-timegrid {
@@ -1016,7 +1019,7 @@
 }
 
 .toastui-calendar-day-names.toastui-calendar-week {
-  height: 1.75rem;
+  height: 5%;
   padding-left: 0;
   text-align: left;
 }

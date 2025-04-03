@@ -23,7 +23,7 @@ section {
 
 
 .fixed-height {
-    min-height: calc(100 / var(--font-size) *  1rem - var(--nav-height)) !important;
+    height: calc(100 / var(--font-size) *  1rem - var(--nav-height)) !important;
 }
 
 nav {

@@ -29,11 +29,85 @@ const ProgramFrameYearList = (props) => {
         isPersonal: false
     });
 
+    const [calendar, setCalendar] = useState(null);
+    const [dateText, setDateText] = useState("");
+
+
     useEffect(() => {
-        const calendar = new Calendar('#calendar', {
-            theme: customTheme
-        });
+        const cal = new Calendar("#calendar", { theme: customTheme });
+        setCalendar(cal);
+        updateDateRange(cal);
+
+        cal.createEvents([
+            {
+              id: '1',
+              calendarId: 'cal1',
+              title: 'Event 1',
+              isAllDay: true,
+              start: new Date(),
+              end: new Date('2025-04-04'),
+              // The following three colors ignore the color value of cal1.
+              color: '#fff',
+              backgroundColor: '#3c056d',
+              dragBackgroundColor: '#3c056d',
+              // borderColor: '#a73eaf' // '#000' of cal1 is applied because it is commented out.
+            },
+          ]);
+
+        
       }, []);
+
+    const updateDateRange = (calendar) => {
+        const start = calendar.getDateRangeStart();
+        const end = calendar.getDateRangeEnd();
+        
+        switch (calendar.getViewName()) {
+            case "month": 
+                setDateText(formatDate(start, { month: "2-digit", year: "2-digit" })); 
+                break;
+            case "week":
+                setDateText(
+                    `${formatDate(start, { day: "2-digit", month: "2-digit", year: "2-digit" })} ~ 
+                    ${formatDate(end, { day: "2-digit", month: "2-digit", year: "2-digit" })}`
+                );
+                break;
+                
+            case "day": 
+                setDateText(formatDate(start, { day: "2-digit", month: "2-digit", year: "2-digit" }));
+                break;
+            default: setDateText(""); break;
+
+
+        }
+    };
+
+    const handlePrevClick = (calendar) => {
+        calendar.prev()
+        updateDateRange(calendar)
+    }
+
+    const handleNextClick = (calendar) => {
+        calendar.next()
+        updateDateRange(calendar)
+    }
+
+    const handleTodayClick = (calendar) => {
+        calendar.today()
+        updateDateRange(calendar)
+    }
+
+    const handleDayClick = (calendar) => {
+        calendar.changeView('day');
+        updateDateRange(calendar)
+    }
+    const handleMonthClick = (calendar) => {
+        calendar.changeView('month');
+        updateDateRange(calendar)
+    }
+    const handleWeekClick = (calendar) => {
+        calendar.changeView('week');
+        updateDateRange(calendar)
+    }
 
 
     const navigate = useNavigate();
@@ -71,6 +145,8 @@ const ProgramFrameYearList = (props) => {
     }, []);
 
     const [open, setOpen] = useState(false);
+
+    const formatDate = (date, format) => date?.toDate().toLocaleDateString('en-GB', format)
     
 
     return (
@@ -98,6 +174,31 @@ const ProgramFrameYearList = (props) => {
                     <FilterForm query={query} setQuery={setQuery} />
                 </div>
             </Collapse>
+
+            <div className="d-flex gap-2 align-items-center">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3" onClick={()=>handleMonthClick(calendar)}>
+                    Tháng
+                </button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3" onClick={()=>handleWeekClick(calendar)}>
+                    Tuần
+                </button>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3" onClick={()=>handleDayClick(calendar)}>
+                    Ngày
+                </button>
+            </div>
+
+            <div className="d-flex gap-2 align-items-center">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3" onClick={()=>handleTodayClick(calendar)}>
+                    Hôm nay
+                </button>
+                <button type="button" class="btn btn-outline-secondary rounded-circle f-flex" onClick={()=>handlePrevClick(calendar)}>
+                    <i class="bi bi-chevron-left"/>
+                </button>
+                <button type="button" class="btn btn-outline-secondary rounded-circle d-flex" onClick={()=>handleNextClick(calendar)}>
+                    <i class="bi bi-chevron-right"/>
+                </button>
+                {dateText}
+            </div>
 
             <div className="fixed-height" id="calendar"/>
 
