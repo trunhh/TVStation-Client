@@ -4,8 +4,8 @@ import { CustomToggle, CustomInputSearch } from '../_sharecomponents/customrsuit
 import { CustomFormSelect } from '../_sharecomponents/customrsuite/CustomRsuite';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import siteMapActions from '../actions/siteMapActions';
-import usersActions from '../actions/usersActions';
+import siteMapActions from '../redux/actions/siteMapActions';
+import usersActions from '../redux/actions/usersActions';
 import { Form } from 'react-bootstrap';
 
 

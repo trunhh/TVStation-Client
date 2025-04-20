@@ -1,12 +1,12 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
-import viewReducer from './reducers/viewReducer';
-import userReducer from './reducers/userReducers';
-import usersReducer from './reducers/usersReducers';
-import authReducer from './reducers/authReducers';
-import planReducer from './reducers/planReducers';
-import siteMapReducer from './reducers/siteMapReducers';
-import todoReducer from './reducers/todoReducers';
+import viewReducer from './redux/reducers/viewReducer';
+import userReducer from './redux/reducers/userReducers';
+import usersReducer from './redux/reducers/usersReducers';
+import authReducer from './redux/reducers/authReducers';
+import planReducer from './redux/reducers/planReducers';
+import siteMapReducer from './redux/reducers/siteMapReducers';
+import todoReducer from './redux/reducers/todoReducers';
 
 const rootReducer = combineReducers({
     view: viewReducer,

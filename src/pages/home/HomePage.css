@@ -1,6 +1,0 @@
-.main-content {
-
-    background: url(https://thhp.vn/themes/frontend/bhy/Assets/imgs/bg3.png) no-repeat top center;
-    background-size: cover;
-    min-height: calc(100vh - var(--navbar-height));
-}

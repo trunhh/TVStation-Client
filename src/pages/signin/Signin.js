@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import authActions from "../../actions/authActions";
+import authActions from "../../redux/actions/authActions";
 import { connect } from 'react-redux';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
