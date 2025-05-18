@@ -2,11 +2,19 @@ import routeConstants from "../constants/routeConstants"
 
 export const menuLinks = [
     {
-        text: 'Dashboard',
+        text: 'Trang chủ',
         link:'/',
     },
     {
-        text: 'Kế hoạch',
+        text: 'Lịch phát sóng',
         link: routeConstants.PROGRAM_FRAME_YEAR,
+    },
+    {
+        text: 'Báo cáo',
+        link: '/a',
+    },
+    {
+        text: 'Nhân sự',
+        link: '/b',
     }
 ]

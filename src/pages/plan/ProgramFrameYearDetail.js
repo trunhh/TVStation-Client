@@ -7,7 +7,9 @@ import planActions from '../../redux/actions/planActions';
 import StatusBox from '../../_sharecomponents/statusbox/StatusBox';
 import { createSelector } from 'reselect';
 import '@mescius/spread-sheets/styles/gc.spread.sheets.excel2013white.css';
-
+import ReactPlayer from 'react-player';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import {
     CustomApproveButton,
     CustomSubmitButton,
@@ -112,42 +114,50 @@ const ProgramFrameYearDetail = (props) => {
     }
 
     return (
-        <div className="plan-detail-page">
-            <div className="main-form">
-                <div className="content">
-                    <div className="inline-group">
-                        <StatusBox status={formData.status} />
-                        <CustomInputNoOutline
-                            value={formData.title}
-                            placeholder="Đề tài chưa đặt tên"
-                            onChange={(value) => handleFormDataChange('title', value)}
-                        />
-                    </div>
-                    <div className="inline-group">
+        <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
+                    <div className="d-flex flex-row inline-group justify-content-between align-items-center gap-5 mb-4">
+                        <div className='d-flex flex-row justify-content-center gap-2'>
+                            <StatusBox status={formData.status} />
+                            <div>
+                                <h5 className='m-0'>Thực thần sóng núi</h5>
+                                <small>Phim Trung Quốc</small>
+
+                            </div>
+                            
+                        
+
+                        </div>
+                        
                         <div className="component-label-group">
-                            <p className="label-text">Dự kiến phát sóng</p>
+                            <div className="label-text">10:00 15/05/2025</div>
                             {/* <CustomYearPicker
                                 value={formData.year}
                                 onChange={(value) => handleFormDataChange('year', value)}
                             /> */}
                         </div>
                     </div>
-                    <div>
+                    {/* <div>
                         <CustomToggle
                             checked={!formData.isPersonal}
                             onChange={(value) => handleFormDataChange('isPersonal', !value)}
                         >
                             Chia sẻ
                         </CustomToggle>
-                    </div>
-                    <p className="label-text">Nội dung</p>
-                    <div
-                        id="spreadsheet"
-                        ref={spreadsheetRef}
-                        style={{ width: '100%', height: '500px', border: '1px solid #ccc' }}
-                    ></div>
-                </div>
-            </div>
+                    </div> */}
+                    <div className="label-text">Kịch bản</div>
+                     <ReactQuill
+                        className="large-editor"
+                        theme="snow"
+                        value={formData.content}
+                        onChange={(value) => handleFormDataChange("content", value)}
+                        placeholder="Nội dung..."
+                    />
+
+                    <div className="label-text">Nguồn</div>
+                    <ReactPlayer
+                        url="https://1253562137.e.cdneverest.net/o-fLoPqv4kVBnT0PyvB3pg/1747102484/live/285a4c99665fdf84e94956c66bc7dc7eb5d/playlist.m3u8"
+                        controls={true}
+                      />
             <div className="side-bar">
                 <div className="component-label-group">
                     <p className="label-text">Luân chuyển</p>
@@ -163,7 +173,7 @@ const ProgramFrameYearDetail = (props) => {
                     <CustomSubmitButton type="button" onClick={handleSubmit} />
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

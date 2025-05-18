@@ -41,7 +41,37 @@ const ProgramFrameYearList = (props) => {
           ] });
         setCalendar(cal);
         updateDateRange(cal);
+
+        cal.on('selectDateTime', (selectDate) => cal.openFormPopup({
+            id: 'event1',
+            calendarId: 'cal1',
+            title: 'Event 1',
+            isAllDay: true,
+            start: '2025-05-20T09:00:00',
+            end: '2025-05-21T09:00:00',
+            // The following three colors ignore the color value of cal1.
+            color: 'red',
+            backgroundColor: '#3c056d',
+            dragBackgroundColor: '#3c056d',
+            // borderColor: '#a73eaf' // '#000' of cal1 is applied because it is commented out.
+          }));
       }, []);
+
+    const handleDateSelect = (selectDate) => {
+        const {
+            start,
+            end,
+            isAllday,
+            nativeEvent,
+            gridSelectionElements,
+          } = selectDate;
+
+        gridSelectionElements.forEach(e => {
+            console.log(e.innerHTML)
+            return
+        });
+        console.log(selectDate)
+    }
 
     const updateDateRange = (calendar) => {
         const start = calendar.getDateRangeStart();
@@ -85,8 +115,8 @@ const ProgramFrameYearList = (props) => {
               calendarId: 'cal1',
               title: 'Event 1',
               isAllDay: true,
-              start: '2025-04-20T09:00:00',
-              end: '2025-04-21T09:00:00',
+              start: '2025-05-20T09:00:00',
+              end: '2025-05-21T09:00:00',
               // The following three colors ignore the color value of cal1.
               color: 'red',
               backgroundColor: '#3c056d',

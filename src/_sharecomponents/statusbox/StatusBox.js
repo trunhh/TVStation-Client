@@ -5,7 +5,7 @@ const StatusBox = ({ status }) => {
     const statusObject = StatusConst.find(s => s.value === status);
     
     return (
-        <span className={`bg-${statusObject.style} rounded-pill px-2 py-1  text-white`}>
+        <span className={`bg-${statusObject.style} rounded-pill px-2 py-1  text-white d-flex align-items-center`}>
             {statusObject.label}
         </span>
     );
