@@ -138,6 +138,30 @@ export const CustomFormSelect = ({
   )
 };
 
+
+export const CustomFormInput = ({
+  label,
+  controlId,
+  error,
+  placeholder,
+  type = 'text',
+  className,
+  ...props
+}) => {
+  return (
+    <FloatingLabel label={label} controlId={controlId} className={className}>
+      <Form.Control
+        type={type}
+        placeholder={placeholder || label}
+        isInvalid={!!error}
+        {...props}
+      />
+      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+    </FloatingLabel>
+  );
+};
+
+
 // #endregion
 
 export const CustomToggle = ({...props }) => {

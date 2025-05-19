@@ -124,3 +124,55 @@ export const customTheme = {
   week: WeekTheme,
   month: MonthTheme,
 }
+
+const start = new Date();
+const end = new Date(new Date().setMinutes(start.getMinutes() + 60));
+export const attendees = [
+  {
+    id: "1",
+    name: "Chin"
+  },
+  { id: "2", name: "Khanh" },
+  { id: "3", name: "Linh" },
+  { id: "4", name: "Hai" }
+];
+
+
+export const customTemplate = {
+  popupIsAllday: function () {
+    return 'All day?';
+  },
+  popupStateFree: function () {
+    return '🏝️ Free';
+  },
+  popupStateBusy: function () {
+    return '🔥 Busy';
+  },
+  titlePlaceholder: function () {
+    return 'Enter title';
+  },
+  locationPlaceholder: function () {
+    return 'Enter location';
+  },
+  startDatePlaceholder: function () {
+    return 'Start date';
+  },
+  endDatePlaceholder: function () {
+    return 'End date';
+  },
+  popupSave: function () {
+    return 'Add Event';
+  },
+  popupUpdate: function () {
+    return 'Update Event';
+  },
+  popupEdit: function () {
+    return 'Modify';
+  },
+  popupDelete: function () {
+    return 'Remove';
+  },
+  popupDetailTitle: function (data) {
+    return 'Detail of ' + data.title;
+  },
+}

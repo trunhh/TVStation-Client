@@ -17,16 +17,16 @@ export const CREATE_REQUEST = 'PLAN_UPDATE_REQUEST'
 export const CREATE_SUCCEED = 'PLAN_CREATE_SUCCEED'
 export const CREATE_FAILED = 'PLAN_CREATE_FAILED'
 
+const apiRoute = "https://localhost:7031/api/Event"
 
-
-const get = (route,id) => async (dispatch) => {
+const get = (id) => async (dispatch) => {
     dispatch({
         type: GET_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: route + '/' + id,
+            url: apiRoute + '/' + id,
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -47,14 +47,16 @@ const get = (route,id) => async (dispatch) => {
     }
 };
 
-const getList = (route,query,pageIndex,pageSize) => async (dispatch) => {
+const getList = (query,pageIndex,pageSize) => async (dispatch) => {
     dispatch({
         type: GET_LIST_REQUEST,
     });
 
-    try {
+    let url = apiRoute
 
-        const filteredQuery = Object.fromEntries(
+    try {
+        if (query != null) {
+            const filteredQuery = Object.fromEntries(
             Object.entries({
                 ...query,
                 startDate: query.startDate
@@ -72,7 +74,11 @@ const getList = (route,query,pageIndex,pageSize) => async (dispatch) => {
         );
         
         const params = new URLSearchParams(filteredQuery);
-        let url = route + '?' + params.toString();
+        url += apiRoute + '?' + params.toString();
+
+        }
+
+        
 
         const response = await axios.get(url, {
             headers: {
@@ -92,14 +98,14 @@ const getList = (route,query,pageIndex,pageSize) => async (dispatch) => {
     }
 };
 
-const create = (route,object) => async (dispatch) => {
+const create = (object) => async (dispatch) => {
     dispatch({
         type: CREATE_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: route,
+            url: apiRoute,
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -121,14 +127,14 @@ const create = (route,object) => async (dispatch) => {
     }
 };
 
-const update = (route,id,object) => async (dispatch) => {
+const update = (id,object) => async (dispatch) => {
     dispatch({
         type: UPDATE_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: route + '/' + id,
+            url: apiRoute + '/' + id,
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -150,14 +156,14 @@ const update = (route,id,object) => async (dispatch) => {
     }
 };
 
-const remove = (route,id) => async (dispatch) => {
+const remove = (id) => async (dispatch) => {
     dispatch({
         type: DELETE_REQUEST,
     });
 
     try {
         await axios({
-            url: route + '/' + id,
+            url: apiRoute + '/' + id,
             method: 'DELETE',
             headers: {
                 Authorization: 'Bearer ' + token,

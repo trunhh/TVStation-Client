@@ -1,192 +1,191 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
-import { PROGRAM_FRAME_YEAR_API } from '../../constants/apiConstants';
-import { PROGRAM_FRAME_YEAR } from '../../constants/routeConstants';
+import { useParams } from 'react-router-dom';
+import { createSelector } from 'reselect';
 import planActions from '../../redux/actions/planActions';
 import StatusBox from '../../_sharecomponents/statusbox/StatusBox';
-import { createSelector } from 'reselect';
-import '@mescius/spread-sheets/styles/gc.spread.sheets.excel2013white.css';
 import ReactPlayer from 'react-player';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { CustomFormSelect, CustomFormInput } from '../../_sharecomponents/customrsuite/CustomRsuite';
 import {
-    CustomApproveButton,
-    CustomSubmitButton,
-    CustomToggle,
-    CustomInputNoOutline,
+  CustomApproveButton,
+  CustomSubmitButton
 } from '../../_sharecomponents/customrsuite/CustomRsuite';
+import { SectorConst } from '../../constants/constants';
+import BootstrapVideoUploader from '../../components/BootstrapVideoUploader';
 
-const GC = require('@mescius/spread-sheets');
-
+// Redux selector
 const selectPlan = createSelector(
-    (state) => state.plan,
-    (planState) => planState.selected
+  (state) => state.plan,
+  (planState) => planState.selected
 );
 
 const role = localStorage.getItem('role');
 
-const ProgramFrameYearDetail = (props) => {
-    const nullForm = {
-        title: '',
-        status: 'IN_PROGRESS',
-        sector: 'TV',
-        year: new Date().getFullYear(),
-        content: '', // JSON string to initialize the spreadsheet
-        isPersonal: true,
-    };
+const ProgramFrameYearDetail = ({ selected, get, update }) => {
+  const { id } = useParams();
 
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState(nullForm);
-    const spreadsheetRef = useRef(null);
-    const workbookRef = useRef(null); // Persistent reference for the workbook
+  const nullForm = {
+    collaboratorUsername: [],
+    channelId: "00000000-0000-0000-0000-000000000000",
+    status: "IN_PROGRESS",
+    mediaUrl: "",
+    sector: "TV",
+    summary: "",
+    content: "",
+    start: "2025-05-19T23:30:00",
+    end: "2025-05-20T02:30:00",
+    title: "",
+    rRule: "",
+    body: ""
+  };
 
-    useEffect(() => {
-        setFormData(nullForm);
-        if (id) {
-            props.get(id); // Fetch the data for the given id
-        }
-    }, [id]);
+  const [formData, setFormData] = useState(nullForm);
 
-    useEffect(() => {
-        if (props.selected) {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                ...props.selected, // Update the form data once fetched
-            }));
-        }
-    }, [props.selected]); // Only update when selected data changes
-
-    useEffect(() => {
-        if (props.isCreated) navigate(PROGRAM_FRAME_YEAR);
-    }, [props.isCreated]);
-
-    // useEffect(() => {
-    //     props.showLoading(props.isLoading);
-    // }, [props.isLoading]);
-
-    useEffect(() => {
-            // Ensure the spreadsheet container exists
-            if (spreadsheetRef.current) {
-                // Initialize workbook only if it hasn't been created yet
-                if (!workbookRef.current) {
-                    workbookRef.current = new GC.Spread.Sheets.Workbook(spreadsheetRef.current);
-                }
-        
-                // Load content into the workbook
-                if (formData.content) {
-                    try {
-                        const data = JSON.parse(formData.content);
-                        // Clear existing data to avoid conflicts
-                        workbookRef.current.clearSheets();
-                        workbookRef.current.fromJSON(data);
-                    } catch (error) {
-                        console.error('Failed to load spreadsheet content:', error);
-                    }
-                }
-            }
-        }, [formData.content]);
-
-    const handleFormDataChange = (name, value) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = () => {
-        if (workbookRef.current) {
-            const spreadsheetData = JSON.stringify(workbookRef.current.toJSON());
-            const updatedFormData = { ...formData, content: spreadsheetData };
-
-            if (id) props.update(id, updatedFormData);
-            else props.create(updatedFormData);
-        }
-    };
-
-    const handleApprove = (action) => {
-        const newFormData = {
-            ...formData,
-            status: action
-        }
-        props.update(id,newFormData)
+  useEffect(() => {
+    if (id) {
+      get(id);
     }
+  }, [id]);
 
-    return (
-        <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
-                    <div className="d-flex flex-row inline-group justify-content-between align-items-center gap-5 mb-4">
-                        <div className='d-flex flex-row justify-content-center gap-2'>
-                            <StatusBox status={formData.status} />
-                            <div>
-                                <h5 className='m-0'>Thực thần sóng núi</h5>
-                                <small>Phim Trung Quốc</small>
+  useEffect(() => {
+    if (selected) {
+      setFormData((prev) => ({
+        ...prev,
+        ...selected
+      }));
+    }
+  }, [selected]);
 
-                            </div>
-                            
-                        
+  const handleChange = (key, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value
+    }));
+  };
 
-                        </div>
-                        
-                        <div className="component-label-group">
-                            <div className="label-text">10:00 15/05/2025</div>
-                            {/* <CustomYearPicker
-                                value={formData.year}
-                                onChange={(value) => handleFormDataChange('year', value)}
-                            /> */}
-                        </div>
-                    </div>
-                    {/* <div>
-                        <CustomToggle
-                            checked={!formData.isPersonal}
-                            onChange={(value) => handleFormDataChange('isPersonal', !value)}
-                        >
-                            Chia sẻ
-                        </CustomToggle>
-                    </div> */}
-                    <div className="label-text">Kịch bản</div>
-                     <ReactQuill
-                        className="large-editor"
-                        theme="snow"
-                        value={formData.content}
-                        onChange={(value) => handleFormDataChange("content", value)}
-                        placeholder="Nội dung..."
-                    />
+  const handleSubmit = () => {
+    console.log(formData)
+    //update(id, formData);
+  };
 
-                    <div className="label-text">Nguồn</div>
-                    <ReactPlayer
-                        url="https://1253562137.e.cdneverest.net/o-fLoPqv4kVBnT0PyvB3pg/1747102484/live/285a4c99665fdf84e94956c66bc7dc7eb5d/playlist.m3u8"
-                        controls={true}
-                      />
-            <div className="side-bar">
-                <div className="component-label-group">
-                    <p className="label-text">Luân chuyển</p>
-                    <CustomApproveButton 
-                        role={role} 
-                        status={formData.status} 
-                        type="button" 
-                        onClick={handleApprove} 
-                    />
-                </div>
-                <div className="component-label-group">
-                    <p className="label-text">Chức năng</p>
-                    <CustomSubmitButton type="button" onClick={handleSubmit} />
-                </div>
+  const handleApprove = (action) => {
+    update(id, { ...formData, status: action });
+  };
+
+  const isValidMediaUrl = (url) => {
+  // A basic check: non-empty and likely a playable video format
+  return url && /\.(m3u8|mp4|webm|mov)$/i.test(url);
+    };
+
+  return (
+    <section className="container bg-white shadow-lg rounded p-4 my-5">
+      <form className="d-grid gap-4">
+        {/* Title & Status Row */}
+        <div className="row align-items-center">
+          <div className="col-auto pe-0">
+            <StatusBox status={formData.status} />
+          </div>
+          <div className="col ps-0">
+            <input
+              type="text"
+              className="form-control border-0"
+              placeholder="Tiêu đề"
+              value={formData.title}
+              onChange={(e) => handleChange('title', e.target.value)}
+            />
+          </div>
+          <div className="col-auto">
+            <div className="form-control">
+              {new Date(formData.start).toLocaleString("vi-VN", {
+                hour: "2-digit",
+                minute: "2-digit",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+              })}
             </div>
-        </section>
-    );
+          </div>
+        </div>
+
+        {/* Sector & Recurrence Rule */}
+        <div className="row">
+          <div className="col">
+            <CustomFormSelect
+                data = { SectorConst}
+                label = "Lĩnh vực"
+                placeholder = ' '
+              value={formData.sector}
+              onChange={(e) => handleChange('sector', e.target.value)}
+            />
+          </div>
+
+          <div className="col">
+            <CustomFormInput
+              label="Chu kỳ phát sóng"
+              type="text"
+              placeholder="e.g., MO, TU"
+              value={formData.rRule}
+              onChange={(e) => handleChange('rRule', e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Summary */}
+        <div>
+          <CustomFormInput
+            label="Tóm tắt"
+            as="textarea"
+            rows="5"
+            value={formData.summary}
+            onChange={(e) => handleChange('summary', e.target.value)}
+          />
+        </div>
+
+        {/* Content */}
+        <div>
+          <label className="form-label">Nội dung kịch bản</label>
+          <ReactQuill
+            className="large-editor"
+            theme="snow"
+            value={formData.content}
+            onChange={(value) => handleChange("content", value)}
+            placeholder="Nhập nội dung kịch bản..."
+          />
+        </div>
+
+        <BootstrapVideoUploader
+          mediaUrl={formData.mediaUrl}
+          onUpload={(url) => handleChange("mediaUrl", url)}
+        />
+    
+        {/* Action Buttons */}
+        <div className="row">
+          <div className="col-auto">
+            <CustomApproveButton
+              role={role}
+              status={formData.status}
+              type="button"
+              onClick={handleApprove}
+            />
+          </div>
+          <div className="col-auto">
+            <CustomSubmitButton type="button" onClick={handleSubmit} />
+          </div>
+        </div>
+      </form>
+    </section>
+  );
 };
 
 const mapStateToProps = (state) => ({
-    ...state.plan,
-    selected: selectPlan(state),
-    isLoading: state.view.isLoading,
+  selected: selectPlan(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    get: (id) => dispatch(planActions.get(PROGRAM_FRAME_YEAR_API, id)),
-    create: (data) => dispatch(planActions.create(PROGRAM_FRAME_YEAR_API, data)),
-    update: (id, data) => dispatch(planActions.update(PROGRAM_FRAME_YEAR_API, id, data)),
+  get: (id) => dispatch(planActions.get(id)),
+  update: (id, data) => dispatch(planActions.update(id, data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameYearDetail);

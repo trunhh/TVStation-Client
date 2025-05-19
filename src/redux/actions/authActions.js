@@ -12,7 +12,7 @@ const signin = (form) => async(dispatch) => {
     })
    
     try {
-        const response = await axios.post('/api/Auth/SignIn', form)
+        const response = await axios.post('https://localhost:7031/api/Auth/SignIn', form)
 
         console.log(response)
         localStorage.setItem('token', response.data.token)

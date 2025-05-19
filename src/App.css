@@ -1,0 +1,10 @@
+.large-editor {
+  height: 300px; /* Adjust as needed */
+}
+
+/* Set height of editor area inside Quill */
+.large-editor .ql-container {
+  height: 250px; /* Leave room for toolbar */
+  max-height: 250px;
+  overflow-y: auto;
+}

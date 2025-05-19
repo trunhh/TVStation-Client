@@ -10,7 +10,8 @@ import {
 
 const initState = {
     selected: null,
-    list: [],
+    eventList: [],
+    channelList: [],
     pageIndex: 1,
     totalCount: 0,
     inProgressCount: 0,
@@ -35,6 +36,7 @@ const planReducer = (state = initState, action) => {
             }
 
         case GET_LIST_SUCCEED:
+            console.log(action.payload)
             return {
                 ...state,
                 ...action.payload,

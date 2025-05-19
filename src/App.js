@@ -8,7 +8,7 @@ import UserInfo from './pages/userinfo/UserInfo';
 import ProgramFrameYearList from './pages/plan/ProgramFrameYearList';
 import ProgramFrameYearDetail from './pages/plan/ProgramFrameYearDetail';
 import Dashboard from './pages/dashboard/Dashboard';
-
+import "./App.css"
 
 function App() {
     const navigate = useNavigate();
@@ -26,24 +26,24 @@ function App() {
         }
     };
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('token');
-    //     if (!token || isTokenExpired(token)) {
-    //         localStorage.removeItem('token');
-    //         navigate(routeConstants.SIGN_IN);  // Redirect to sign-in if no token or expired
-    //     }
-    // }, [navigate]);
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token || isTokenExpired(token)) {
+            localStorage.removeItem('token');
+            navigate(routeConstants.SIGN_IN);  // Redirect to sign-in if no token or expired
+        }
+    }, [navigate]);
 
     const isLoggedIn = localStorage.getItem('token');
 
     return (
         <Routes>
-            {/* {!isLoggedIn ? (
+            {!isLoggedIn ? (
                 <>
                     <Route path={routeConstants.SIGN_IN} element={<Signin />} />
                     <Route path="*" element={<Navigate to={routeConstants.SIGN_IN} />} />
                 </>
-            ) :  */}
+            ) : 
             (
                 <>
                     {/* <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} /> */}
@@ -55,7 +55,7 @@ function App() {
                         <Route path={`${routeConstants.PROGRAM_FRAME_YEAR_DETAIL}/:id`} element={<ProgramFrameYearDetail />} />
                     </Route>
                 </>
-            )
+            )}
         </Routes>
     );
 }
