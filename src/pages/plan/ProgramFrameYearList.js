@@ -1,133 +1,139 @@
-import React, { useState, useRef, useEffect } from "react";
-import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import CustomTuiCalendar from "../../components/BigCalendar/CustomTuiCalendar";
-import CustomTuiModal from "../../components/BigCalendar/CustomTuiModal";
-import { PROGRAM_FRAME_YEAR_DETAIL } from "../../constants/routeConstants";
-import planActions from "../../redux/actions/planActions";
+import { connect } from 'react-redux';
+import { useEffect, useState } from 'react';
+import planActions from '../../redux/actions/planActions';
+import siteMapActions from '../../redux/actions/siteMapActions';
+import channelActions from '../../redux/actions/channelActions';
+import usersActions from '../../redux/actions/usersActions';
+import StatusBox from '../../_sharecomponents/statusbox/StatusBox';
+import { useNavigate } from 'react-router-dom';
+import { PROGRAM_FRAME_YEAR_DETAIL } from '../../constants/routeConstants';
+import { PAGE_SIZE } from '../../constants/constants';
+import { 
+    CustomDeleteButton,
+    TextLink
+} from '../../_sharecomponents/customrsuite/CustomRsuite';
 
-function ProgramFrameYearList(props) {
-  const [modal, setModal] = useState(false);
-  const [event, setEvent] = useState(null);
-  const childRef = useRef();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-      props.getList();
-  }, []);
+import Summary from '../../components/Summary';
+import FilterForm from '../../components/FilterForm';
+import { Collapse } from 'react-bootstrap';
+import { StatusConst } from '../../constants/constants';
+import DynamicTable from '../../components/DynamicTable';
 
 
-  const toggle = () => {
-    setModal(!modal);
-    setEvent(null);
-  };
+const ProgramFrameYearList = (props) => {
+    const [form, setForm] = useState({
+        status: null,
+        keyword: null,
+        users: null,
+        channel: null,
+        siteMap: null,
+    });
 
-  function onBeforeCreateSchedule(event) {
-    console.log('onBeforeCreateSchedule', event)
-    event.guide.clearGuideElement();
-    setModal(true);
-    setEvent(event);
-  }
+    const navigate = useNavigate();
 
-  function handleCreateSchedule(newEvent) {
-    props.create({...newEvent, channelId: newEvent.calendarId})
-  }
-
-  useEffect(() => {
-    if (props.selected != null) {
-      childRef.current.createSchedule(props.selected);
-    }
-    setModal(false);
-  }, [props.selected]);
-
-  function onBeforeUpdateSchedule(event) {
-    if (event.triggerEventName == "click") {
-      navigate(`${PROGRAM_FRAME_YEAR_DETAIL}/${event.schedule.id}`);
-      return;
+    const fieldProps = {
+        status: { data: StatusConst, label: "Trạng thái" },
+        siteMap: { data: props.siteMap, label: "Phòng ban" },
+        channel: { data: props.channel, label: "Kênh phát sóng" },
+        users: { data: props.users, label: "Người dùng" },
+        keyword: { type: "search", label: "Tìm kiếm" }
     }
 
+    const handlePageClick = (selectedPage) => {
+        props.getList({ ...form }, selectedPage);
+    };
 
-    console.log('onBeforeUpdateSchedule', event)
+    const handleDeleteClick = (item) => {
+        props.remove(item.id);
+    };
 
-    //props.update(event.schedule.id, event)
+    const handleRowClick = (rowData) => {
+        navigate(`${PROGRAM_FRAME_YEAR_DETAIL}/${rowData.id}`);
+    };
 
-  }
+    const handleAddButtonClick = () => {
+        navigate(`${PROGRAM_FRAME_YEAR_DETAIL}`);
+    };
 
-  async function handleUpdateSchedule(updateEvent) {
-    // props.update(updateEvent.id, updateEvent)
-  } 
+    useEffect(() => {
+        props.getList(form, props.pageIndex);
+    }, [form]);
 
-  function onBeforeDeleteSchedule(event) {
-    console.log('onBeforeDeleteSchedule', event)
+    useEffect(() => {
+        if (props.isDeleted || props.isUpdated || props.isCreated) {
+            props.getList(form, props.pageIndex); 
+        }
+    }, [props.isDeleted, props.isUpdated, props.isCreated]);
 
-    // call api
-    const result = true;
+    useEffect(() => {
+        props.getList(form, props.pageIndex);
+        props.getSiteMap();
+        props.getChannel();
+        props.getUsers();
+    }, []);
 
-    if (result) {
-      const { schedule } = event;
-      childRef.current.deleteSchedule(schedule);
-    }
-
-    return true;
-  }
+    const [open, setOpen] = useState(false);
 
 
-  return (
-    <div>
-      {props.channelList != null && props.channelList.length > 0 
-      && props.eventList != null && props.eventList.length > 0 
-      && (
-        <CustomTuiCalendar
-        ref={childRef}
-        {...{
-          isReadOnly: false,
-          showSlidebar: true,
-          showMenu: true,
-          useCreationPopup: false,
-          // onCreate: () => {
-          //   console.log("create that!!!");
-          //   childRef.current.getAlert();
-          // },
-          // createText: "Tao moi",
-          calendars: props.channelList,
-          schedules: props.eventList,
-          onBeforeCreateSchedule,
-          onBeforeUpdateSchedule,
-          onBeforeDeleteSchedule
-        }}
-      />
+    return (
+        <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
+            <Summary {...props}/>
 
-      )}
-      
-      <CustomTuiModal
-        {...{
-          isOpen: modal,
-          toggle,
-          onSubmit:
-            event?.triggerEventName === "mouseup"
-              ? handleCreateSchedule
-              : handleUpdateSchedule,
-          submitText: event?.triggerEventName === "mouseup" ? "Save" : "Update",
-          calendars: props.channelList,
-          schedule: event?.schedule,
-          startDate: event?.start,
-          endDate: event?.end
-        }}
-      />
-    </div>
-  );
+
+            {/* Action Buttons */}
+            <div className="d-flex justify-content-end gap-2">
+                <a 
+                    className="bi bi-filter-circle-fill link-secondary" 
+                    onClick={() => setOpen(!open)} 
+                    aria-controls="collapse-text" 
+                />
+                <a 
+                    className="bi bi-plus-circle-fill link-secondary"
+                    onClick={handleAddButtonClick}
+                />
+            </div>
+
+            {/* Filter Form */}
+            
+            <Collapse in={open}>
+                <div id="collapse-text">
+                    <FilterForm form={form} setForm={setForm} fieldProps={fieldProps}/>
+                </div>
+            </Collapse>
+
+            <DynamicTable 
+                data={props.list} 
+                onRowClick={handleRowClick} 
+                onRowDelete={handleDeleteClick} 
+                columns={[
+                    { header: "Tập tiếp theo", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.createdDate)) },
+                    { header: "Tiêu đề", body: (rowData) => (<TextLink text={rowData.title}/>), focus: true },
+                    { header: "Trạng thái", body: (rowData) => (<StatusBox status={rowData.status} />) }          
+                ]}
+            />
+        </section>
+    );
 }
 
+const mapStateToProps = (state) => {
+    return {
+        ...state.plan,
+        siteMap: state.siteMap.list,
+        channel: state.channel.list,
+        users: state.users.list,
+        isLoading: state.view.isLoading,
+    }
+}
 
-const mapStateToProps = (state) => ({
-    ...state.plan,
-    isLoading: state.view.isLoading,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-    getList: () => dispatch(planActions.getList()),
-    create: (data) => dispatch(planActions.create(data)),
-    update: (id, data) => dispatch(planActions.update(id, data)),
-});
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getList: (form, pageIndex) => dispatch(planActions.getList(form, pageIndex, PAGE_SIZE)),
+        get: (id) => dispatch(planActions.get(id)),
+        remove: (id) => dispatch(planActions.remove(id)),
+        getSiteMap: () => dispatch(siteMapActions.getList()),
+        getChannel: () => dispatch(channelActions.getList()),
+        getUsers: () => dispatch(usersActions.getList()),
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameYearList);

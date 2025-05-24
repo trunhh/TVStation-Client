@@ -5,10 +5,6 @@ export const ObjectTypeConst = [
     { value: "SCRIPT_PROGRAM", label: "Kịch bản tác phẩm"}
 ]
 
-export const SectorConst = [
-    { value: "TV", label: "Truyền hình" },
-    { value: "BROADCAST", label: "Phát thanh" }
-];
 
 export const StatusConst = [
     { value: "IN_PROGRESS", label: "Đang thực hiện", style: "info" },
@@ -19,7 +15,7 @@ export const StatusConst = [
     { value: "CANCELLED", label: "Đã hủy", style: "danger" },
 ];
 
-export const GenreConst = [
+export const SectorConst = [
     { value: "NEWS", label: "Bản tin" },
     { value: "PROGRAM", label: "Chương trình" },
     { value: "WEATHER_FORECAST", label: "Dự báo thời tiết" },
@@ -29,6 +25,39 @@ export const GenreConst = [
     { value: "REPORTS", label: "Phóng sự" },
     { value: "PROMOTION", label: "Quảng cáo" }
 ]
+
+export const DurationConst = [
+    { value: 0.25, label: "15 phút" },
+    { value: 0.5, label: "Nửa tiếng" },
+    { value: 0.75, label: "45 phút" },
+    { value: 1, label: "1 tiếng" },
+    { value: 1.5, label: "1 tiếng rưỡi" },
+    { value: 2, label: "2 tiếng" },
+]
+
+export const DayOfWeekConst1 = [
+    { value: "MO", label: "Thứ hai" },
+    { value: "TU", label: "Thứ ba" },
+    { value: "WE", label: "Thứ tư" },
+    { value: "TH", label: "Thứ năm" },
+    { value: "FR", label: "Thứ sáu" },
+    { value: "SA", label: "Thứ bảy" },
+    { value: "SU", label: "Chủ nhật" },
+]
+
+export const DayOfWeekConst = ({id}) => {
+  return (
+    <datalist id = {id}>
+      <option value="Monday">Thứ Hai</option>
+      <option value="Tuesday">Thứ Ba</option>
+      <option value="Wednesday">Thứ Tư</option>
+      <option value="Thursday">Thứ Năm</option>
+      <option value="Friday">Thứ Sáu</option>
+      <option value="Saturday">Thứ Bảy</option>
+      <option value="Sunday">Chủ Nhật</option>
+    </datalist>
+  );
+};
 
 export const ActionConst = {
     "WAITING_FOR_APPROVAL": "Trình lên cấp trên",
@@ -69,7 +98,6 @@ export default {
     SectorConst,
     StatusConst,
     ObjectTypeConst,
-    GenreConst,
     ActionConst,
     RoleActionConst
 }

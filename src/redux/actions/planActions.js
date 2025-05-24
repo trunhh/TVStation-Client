@@ -17,7 +17,7 @@ export const CREATE_REQUEST = 'PLAN_UPDATE_REQUEST'
 export const CREATE_SUCCEED = 'PLAN_CREATE_SUCCEED'
 export const CREATE_FAILED = 'PLAN_CREATE_FAILED'
 
-const apiRoute = "https://localhost:7031/api/Event"
+const apiRoute = "https://localhost:7031/api/Programme"
 
 const get = (id) => async (dispatch) => {
     dispatch({
@@ -74,7 +74,7 @@ const getList = (query,pageIndex,pageSize) => async (dispatch) => {
         );
         
         const params = new URLSearchParams(filteredQuery);
-        url += apiRoute + '?' + params.toString();
+        url += '?' + params.toString();
 
         }
 
@@ -131,6 +131,8 @@ const update = (id,object) => async (dispatch) => {
     dispatch({
         type: UPDATE_REQUEST,
     });
+
+    console.log(object);
 
     try {
         const response = await axios({

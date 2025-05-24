@@ -48,7 +48,7 @@ const Header = (props) => {
         >
             <i className="bi bi-list"></i>
         </Navbar.Toggle>
-        <THP_Logo class="h-100" />
+        <THP_Logo className="h-100" />
         <Navbar.Collapse id="navbar-nav">
         <Nav className="fw-bold text-uppercase ">
             {menuLinks.map(({ text, link, subMenu }) => (

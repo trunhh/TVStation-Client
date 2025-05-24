@@ -4,9 +4,7 @@ import React, { useState, forwardRef } from 'react';
 
 import { Button, FloatingLabel, Form, InputGroup, ButtonGroup, Dropdown } from 'react-bootstrap';
 
-
 export const CustomDropdown = ({ options, text, variant, ...props}) => {
-
   return (
     <Dropdown className="btn-group" {...props} >
       <Dropdown.Toggle variant={variant}>
@@ -111,25 +109,25 @@ export const CustomDeleteButton = ({ ...props }) => {
 // #region picker
 export const CustomFormSelect = ({
   data, 
-  getValue = (item) => item.value,
-  getLabel = (item) => item.label,
   label,
   controlId,
   error,
-  placeholder,
   className,
+  placeholder = "Tất cả",
+  required = false,
   ...props
 }) => {
   return (
     <FloatingLabel label={label} controlId={controlId} className={className}>
       <Form.Select
           isInvalid={!!error}
+          required={required}
           {...props}
       >
-        <option value="">Tất cả</option>
+        {!required && (<option value="">{placeholder}</option>)}
         {data?.map((item,index) => (
-          <option key={index} value={getValue(item)}>
-            {getLabel(item)}
+          <option key={index} value={item.value}>
+            {item.label || item.value}
           </option>
         ))}
       </Form.Select>
@@ -145,6 +143,7 @@ export const CustomFormInput = ({
   error,
   placeholder,
   type = 'text',
+  children,
   className,
   ...props
 }) => {
@@ -156,6 +155,7 @@ export const CustomFormInput = ({
         isInvalid={!!error}
         {...props}
       />
+      {children}
       <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
     </FloatingLabel>
   );
@@ -163,6 +163,8 @@ export const CustomFormInput = ({
 
 
 // #endregion
+
+
 
 export const CustomToggle = ({...props }) => {
   return (
@@ -195,15 +197,6 @@ export const CustomInputSearch = ({className, ...props }) => {
     
   )
 }
-export const CustomFormControl = forwardRef((props, ref) => {
-  const { name, label, accepter, ...rest } = props;
-  return ( <></>
-    // <Form.Group controlId={name} ref={ref} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-    //   <Form.ControlLabel>{label} </Form.ControlLabel>
-    //   <Form.Control name={name} accepter={accepter} placeholder={label} style={{width: "100%", flex: 1}} {...rest} />
-    // </Form.Group>
-  );
-});
 
 export const TextLink = ({ text, ...props }) => {
   const style = {

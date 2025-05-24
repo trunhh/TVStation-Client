@@ -7,6 +7,7 @@ import authReducer from './redux/reducers/authReducers';
 import planReducer from './redux/reducers/planReducers';
 import siteMapReducer from './redux/reducers/siteMapReducers';
 import todoReducer from './redux/reducers/todoReducers';
+import channelReducer from './redux/reducers/channelReducers';
 
 const rootReducer = combineReducers({
     view: viewReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     plan: planReducer,
     siteMap: siteMapReducer,
+    channel: channelReducer,
     todo: todoReducer
 })
 

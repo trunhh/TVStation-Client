@@ -30,3 +30,7 @@ nav {
     height: var(--nav-height);
 }
   
+
+th {
+    width: 0;
+}

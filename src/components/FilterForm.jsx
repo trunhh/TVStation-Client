@@ -1,91 +1,55 @@
- 
-import { SectorConst,StatusConst,ObjectTypeConst, GenreConst} from '../constants/constants'; 
-import { CustomToggle, CustomInputSearch } from '../_sharecomponents/customrsuite/CustomRsuite';
+import { CustomFormInput} from '../_sharecomponents/customrsuite/CustomRsuite';
 import { CustomFormSelect } from '../_sharecomponents/customrsuite/CustomRsuite';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import siteMapActions from '../redux/actions/siteMapActions';
-import usersActions from '../redux/actions/usersActions';
 import { Form } from 'react-bootstrap';
 
 
-const FilterForm = ({query, setQuery}) => {
-  const siteMaps = useSelector((state) => state.siteMap.list);
-  const users = useSelector((state) => state.users.list);
-  const dispatch = useDispatch();
+const FilterForm = ({form, setForm, fieldProps}) => {
 
-  const filterFormProps = {
-    year: {
-      data: Array.from({ length: 5 }, (_, index) => new Date().getFullYear() - 1 + index),
-      getValue: (item)=>item,
-      getLabel: (item)=>item,
-      label: "Năm"
-    },
-    sector: {
-      data: SectorConst,
-      label: "Loại hình"
-    },
-    status: {
-      data: StatusConst,
-      label: "Trạng thái"
-    },
-    objectType: {
-      data: ObjectTypeConst,
-      label: "Nguồn"
-    },
-    genre: {
-      data: GenreConst,
-      label: "loại"
-
-    },
-    sitemap: {
-      data: siteMaps ?? [],
-      getValue: (item)=>item.id,
-      getLabel: (item)=>item.name,
-      label: "Phòng ban"
-    },
-    users: {
-      data: users ?? [],
-      getValue: (item)=>item.userName,
-      getLabel: (item)=>item.name,
-      label: "Người dùng"
-    },
-  }
+  // const filterFormProps2 = {
+  //   status: { data: StatusConst, label: "Trạng thái" },
+  //   duration: { data: DurationConst, label: "Thời lượng"},
+  //   //frequency: { data: DayOfWeekConst, label: "Quy luật", required: true },
+  //   frequency: { type: "email", required: true, list: "iw", multiple: true, children: (<DayOfWeekConst id="iw"/>), label: "Lặp lại" },
+  //   siteMap: { data: siteMap, label: "Phòng ban" },
+  //   channel: { data: channel, label: "Kênh phát sóng" },
+  //   users: { data: users, label: "Người dùng" },
+  //   startDate: { type: "date", label: "Ngày bắt dầu"},
+  //   startTime: { type: "time", label: "Giờ bắt đầu" },
+  //   start: { type: "datetime", label: "Bắt dầu" },
+  //   end: { type: "datetime", label: "Kết thúc" },
+  //   episodeNumber: { type: "number", label: "Số tập", min: 1 },
+  //   keyword: { type: "search", label: "Tìm kiếm" }
+  // }
 
   const handleQueryChange = (e) => {
       const { name, value} = e.target;
-      setQuery(prevQuery => ({
+      setForm(prevQuery => ({
           ...prevQuery,
           [name]: value
       }));
   };
 
-  useEffect(() => {
-    dispatch(siteMapActions.getList());
-    dispatch(usersActions.getList());
- }, []);
 
   return ( 
     <Form className="row row-gap-3" >
-        {Object.keys(query).map((key) => {
+        {Object.keys(form).map((key, index) => {
+          if (!fieldProps[key]) return null;
+
           let props = {
             key: key,
             name: key,
             onChange: handleQueryChange,
-            value: query[key] ?? ''
+            value: form[key] ?? '',
+            ...fieldProps[key]
           }
 
+          
           return (
-            <div className="w-50">
+            <div className="w-50" key={index}>
               {(() => {
-                switch (key) {
-                  case "isPersonal":
-                    return (<CustomToggle {...props}/>)
-                  case "keyword":
-                    return (<CustomInputSearch className="h-100" {...props}/>)
-                  default:
-                    return (<CustomFormSelect {...props} {...filterFormProps[key]}/>)
-                }
+                if (props.type != null) return <CustomFormInput {...props}/>;
+                else if (props.data != null) return <CustomFormSelect {...props} />;
+                else return null
               })()}
             </div>
           )

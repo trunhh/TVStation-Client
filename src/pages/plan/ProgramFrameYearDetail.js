@@ -4,16 +4,19 @@ import { useParams } from 'react-router-dom';
 import { createSelector } from 'reselect';
 import planActions from '../../redux/actions/planActions';
 import StatusBox from '../../_sharecomponents/statusbox/StatusBox';
-import ReactPlayer from 'react-player';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { CustomFormSelect, CustomFormInput } from '../../_sharecomponents/customrsuite/CustomRsuite';
 import {
   CustomApproveButton,
   CustomSubmitButton
 } from '../../_sharecomponents/customrsuite/CustomRsuite';
-import { SectorConst } from '../../constants/constants';
 import BootstrapVideoUploader from '../../components/BootstrapVideoUploader';
+import { Tab, Nav } from 'react-bootstrap';
+import FilterForm from '../../components/FilterForm';
+import siteMapActions from '../../redux/actions/siteMapActions';
+import channelActions from '../../redux/actions/channelActions';
+import { DurationConst, DayOfWeekConst } from '../../constants/constants';
+
 
 // Redux selector
 const selectPlan = createSelector(
@@ -23,27 +26,47 @@ const selectPlan = createSelector(
 
 const role = localStorage.getItem('role');
 
-const ProgramFrameYearDetail = ({ selected, get, update }) => {
+const ProgramFrameYearDetail = (
+  { 
+    selected, 
+    get, update,
+    getChannel, getSiteMap,
+    siteMap, channel, 
+    ...props 
+
+  }) => 
+  {
   const { id } = useParams();
 
   const nullForm = {
-    collaboratorUsername: [],
-    channelId: "00000000-0000-0000-0000-000000000000",
-    status: "IN_PROGRESS",
-    mediaUrl: "",
-    sector: "TV",
-    summary: "",
-    content: "",
-    start: "2025-05-19T23:30:00",
-    end: "2025-05-20T02:30:00",
-    title: "",
-    rRule: "",
-    body: ""
+    startDate: new Date(),
+    startTime: "00:00:00",
+    duration: 1,
+    siteMapId: null,
+    channelId: null,
+    frequency: null,
+    episodeNumber: 0,
   };
 
-  const [formData, setFormData] = useState(nullForm);
+
+  const fieldProps = {
+    duration: { data: DurationConst, label: "Thời lượng"},
+    frequency: { type: "email", required: true, list: "iw", multiple: true, children: (<DayOfWeekConst id="iw"/>), label: "Lặp lại" },
+    siteMapId: { data: siteMap, label: "Phòng ban" },
+    channelId: { data: channel, label: "Kênh phát sóng" },
+    startDate: { type: "date", label: "Ngày khởi chiếu"},
+    startTime: { type: "time", label: "Khung giờ" },
+    episodeNumber: { type: "number", label: "Số tập", min: 1 },
+  }
+
+  const [cfgForm, setCfgForm] = useState(nullForm);
+  const [title, setTitle] = useState();
+  const [scripts, setScripts] = useState();
+  const [mediaUrl, setMediaUrl] = useState();
 
   useEffect(() => {
+    getChannel();
+    getSiteMap();
     if (id) {
       get(id);
     }
@@ -51,141 +74,136 @@ const ProgramFrameYearDetail = ({ selected, get, update }) => {
 
   useEffect(() => {
     if (selected) {
-      setFormData((prev) => ({
+      console.log(selected)
+      setCfgForm((prev) => ({
         ...prev,
-        ...selected
+        startDate: selected.startDate,
+        startTime: selected.startTime,
+        duration: selected.duration,
+        siteMapId: selected.siteMap?.id,
+        channelId: selected.channel?.id,
+        frequency: selected.frequency,
+        episodeNumber: selected.episodeNumber
       }));
+      setTitle(selected.title);
     }
   }, [selected]);
 
   const handleChange = (key, value) => {
-    setFormData((prev) => ({
+    setCfgForm((prev) => ({
       ...prev,
       [key]: value
     }));
   };
 
   const handleSubmit = () => {
-    console.log(formData)
-    //update(id, formData);
+    console.log(cfgForm);
+    update(id, cfgForm);
   };
 
   const handleApprove = (action) => {
-    update(id, { ...formData, status: action });
+    update(id, { ...cfgForm, status: action });
   };
 
-  const isValidMediaUrl = (url) => {
-  // A basic check: non-empty and likely a playable video format
-  return url && /\.(m3u8|mp4|webm|mov)$/i.test(url);
-    };
 
   return (
     <section className="container bg-white shadow-lg rounded p-4 my-5">
-      <form className="d-grid gap-4">
-        {/* Title & Status Row */}
-        <div className="row align-items-center">
-          <div className="col-auto pe-0">
-            <StatusBox status={formData.status} />
-          </div>
-          <div className="col ps-0">
-            <input
-              type="text"
-              className="form-control border-0"
-              placeholder="Tiêu đề"
-              value={formData.title}
-              onChange={(e) => handleChange('title', e.target.value)}
-            />
-          </div>
-          <div className="col-auto">
-            <div className="form-control">
-              {new Date(formData.start).toLocaleString("vi-VN", {
-                hour: "2-digit",
-                minute: "2-digit",
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-              })}
+
+      
+        <Tab.Container defaultActiveKey="config">
+          <div className="row align-items-center">
+            <div className="col-auto pe-0">
+              <StatusBox status={selected?.status} />
+            </div>
+            <div className="col ps-0">
+              <input
+                type="text"
+                className="form-control border-0"
+                placeholder="Tiêu đề"
+                value={title}
+                onChange={(e) => handleChange('title', e.target.value)}
+              />
             </div>
           </div>
-        </div>
 
-        {/* Sector & Recurrence Rule */}
-        <div className="row">
-          <div className="col">
-            <CustomFormSelect
-                data = { SectorConst}
-                label = "Lĩnh vực"
-                placeholder = ' '
-              value={formData.sector}
-              onChange={(e) => handleChange('sector', e.target.value)}
-            />
-          </div>
+          <Nav variant="tabs">
+            <Nav.Item>
+              <Nav.Link eventKey="config">Tổng quan</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="episodes">Tập phát sóng</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="permission">Phân quyền</Nav.Link>
+            </Nav.Item>
+          </Nav>
 
-          <div className="col">
-            <CustomFormInput
-              label="Chu kỳ phát sóng"
-              type="text"
-              placeholder="e.g., MO, TU"
-              value={formData.rRule}
-              onChange={(e) => handleChange('rRule', e.target.value)}
-            />
-          </div>
-        </div>
 
-        {/* Summary */}
-        <div>
-          <CustomFormInput
-            label="Tóm tắt"
-            as="textarea"
-            rows="5"
-            value={formData.summary}
-            onChange={(e) => handleChange('summary', e.target.value)}
-          />
-        </div>
 
-        {/* Content */}
-        <div>
-          <label className="form-label">Nội dung kịch bản</label>
-          <ReactQuill
-            className="large-editor"
-            theme="snow"
-            value={formData.content}
-            onChange={(value) => handleChange("content", value)}
-            placeholder="Nhập nội dung kịch bản..."
-          />
-        </div>
+          <Tab.Content className="py-3">
+            <Tab.Pane eventKey="config">
+              <FilterForm form={cfgForm} setForm={setCfgForm} fieldProps={fieldProps}/>
+              <CustomSubmitButton type="button" onClick={handleSubmit} className="ms-auto" />
+              {/* <div className="row">
+                <div className="col-auto">
+                  <CustomApproveButton
+                    role={role}
+                    status={selected?.status}
+                    type="button"
+                    onClick={handleApprove}
+                  />
+                </div>
+              </div> */}
+            </Tab.Pane>
+            <Tab.Pane eventKey="episodes">
+              {/* <div>
+                <CustomFormInput
+                  label="Tóm tắt"
+                  as="textarea"
+                  rows="10"
+                  value={scripts}
+                  onChange={(e) => setScripts(e.target.value)}
+                />
+              </div>
 
-        <BootstrapVideoUploader
-          mediaUrl={formData.mediaUrl}
-          onUpload={(url) => handleChange("mediaUrl", url)}
-        />
-    
-        {/* Action Buttons */}
-        <div className="row">
-          <div className="col-auto">
-            <CustomApproveButton
-              role={role}
-              status={formData.status}
-              type="button"
-              onClick={handleApprove}
-            />
-          </div>
-          <div className="col-auto">
-            <CustomSubmitButton type="button" onClick={handleSubmit} />
-          </div>
-        </div>
-      </form>
+              <div>
+                <label className="form-label">Nội dung kịch bản</label>
+                <ReactQuill
+                  className="large-editor"
+                  theme="snow"
+                  value={cfgForm.content}
+                  onChange={(value) => handleChange("content", value)}
+                  placeholder="Nhập nội dung kịch bản..."
+                />
+
+                <BootstrapVideoUploader
+                mediaUrl={mediaUrl}
+                onUpload={(url) => setMediaUrl(url)}
+              />
+              </div> */}
+            </Tab.Pane>
+
+            <Tab.Pane eventKey="permission">
+
+            </Tab.Pane>
+          </Tab.Content>
+        </Tab.Container>
+
     </section>
   );
 };
 
 const mapStateToProps = (state) => ({
-  selected: selectPlan(state)
+  selected: selectPlan(state),
+  siteMap: state.siteMap.list,
+  channel: state.channel.list
 });
 
 const mapDispatchToProps = (dispatch) => ({
   get: (id) => dispatch(planActions.get(id)),
-  update: (id, data) => dispatch(planActions.update(id, data))
+  update: (id, data) => dispatch(planActions.update(id, data)),
+  getSiteMap: () => dispatch(siteMapActions.getList()),
+  getChannel: () => dispatch(channelActions.getList()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameYearDetail);

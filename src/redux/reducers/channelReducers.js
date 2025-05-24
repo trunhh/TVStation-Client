@@ -4,42 +4,32 @@ import {
     UPDATE_SUCCEED,
     CREATE_SUCCEED,
     DELETE_SUCCEED,
-} from "../actions/planActions";
-
-
+    CREATE_FAILED
+} from "../actions/channelActions";
 
 const initState = {
-    selected: null,
     list: [],
-    pageIndex: 1,
-    totalCount: 0,
-    inProgressCount: 0,
-    waitingApprovalCount: 0,
-    approvedCount: 0,
     isUpdated: false,
     isDeleted: false,
     isCreated: false
 }
 
 
-const planReducer = (state = initState, action) => {
+const channelReducer = (state = initState, action) => {
     switch (action.type) {
         // get data
         case GET_SUCCEED:
             return {
                 ...state,
-                selected: action.payload,
                 isUpdated: false,
                 isDeleted: false,
                 isCreated: false
             }
 
         case GET_LIST_SUCCEED:
-            console.log(action.payload)
             return {
                 ...state,
-                ...action.payload,
-                selected: null, 
+                list: action.payload,    
                 isUpdated: false,
                 isDeleted: false,
                 isCreated: false
@@ -49,23 +39,26 @@ const planReducer = (state = initState, action) => {
         case UPDATE_SUCCEED:
             return {
                 ...state,
-                selected: action.payload,
                 isUpdated: true,
             };
 
-
+        // Delete
         case DELETE_SUCCEED:
             return {
                 ...state,
                 isDeleted: true,
-            };  
-
+            };
         // Create
         case CREATE_SUCCEED:
             return {
                 ...state,
-                selected: action.payload,
                 isCreated: true,
+            };
+
+        case CREATE_FAILED:
+            return {
+                ...state,
+                errorMessage: action.payload,
             };
 
         // Default case
@@ -74,4 +67,4 @@ const planReducer = (state = initState, action) => {
     }
 };
 
-export default planReducer;
+export default channelReducer;
