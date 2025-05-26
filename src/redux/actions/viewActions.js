@@ -7,8 +7,8 @@ const clearErrorMessage = () => {
     }
 }
 
-const viewActions = {
+const loadingActions = {
     clearErrorMessage
 }
 
-export default viewActions;
+export default loadingActions;

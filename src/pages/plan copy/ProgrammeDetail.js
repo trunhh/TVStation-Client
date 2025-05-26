@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { createSelector } from 'reselect';
 import planActions from '../../redux/actions/planActions';
 import StatusBox from '../../_sharecomponents/statusbox/StatusBox';
@@ -8,15 +8,17 @@ import 'react-quill/dist/quill.snow.css';
 import { CustomFormSelect, CustomFormInput } from '../../_sharecomponents/customrsuite/CustomRsuite';
 import {
   CustomApproveButton,
+  TextLink,
   CustomSubmitButton
 } from '../../_sharecomponents/customrsuite/CustomRsuite';
 import BootstrapVideoUploader from '../../components/BootstrapVideoUploader';
 import { Tab, Nav } from 'react-bootstrap';
-import FilterForm from '../../components/FilterForm';
+import FilterForm from '../../components/DynamicForm';
 import siteMapActions from '../../redux/actions/siteMapActions';
 import channelActions from '../../redux/actions/channelActions';
 import { DurationConst, DayOfWeekConst } from '../../constants/constants';
-
+import DynamicTable from '../../components/DynamicTable';
+import { PROGRAMME_DETAIL } from '../../constants/routeConstants';
 
 // Redux selector
 const selectPlan = createSelector(
@@ -26,10 +28,10 @@ const selectPlan = createSelector(
 
 const role = localStorage.getItem('role');
 
-const ProgramFrameYearDetail = (
+const ProgrammeDetail = (
   { 
     selected, 
-    get, update,
+    get, create, update,
     getChannel, getSiteMap,
     siteMap, channel, 
     ...props 
@@ -64,12 +66,15 @@ const ProgramFrameYearDetail = (
   const [scripts, setScripts] = useState();
   const [mediaUrl, setMediaUrl] = useState();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     getChannel();
     getSiteMap();
     if (id) {
       get(id);
     }
+    
   }, [id]);
 
   useEffect(() => {
@@ -97,12 +102,24 @@ const ProgramFrameYearDetail = (
   };
 
   const handleSubmit = () => {
-    console.log(cfgForm);
-    update(id, cfgForm);
+    if (id) update(id, {title, ...cfgForm});
+    else create({title, ...cfgForm});
   };
 
   const handleApprove = (action) => {
     update(id, { ...cfgForm, status: action });
+  };
+
+  const handleRowClick = (rowData) => {
+          navigate(`${PROGRAMME_DETAIL}/${rowData.id}`);
+      };
+
+  const handleDeleteClick = (item) => {
+        props.remove(item.id);
+    };
+  
+  const handleAddButtonClick = () => {
+      navigate(`${PROGRAMME_DETAIL}`);
   };
 
 
@@ -155,37 +172,65 @@ const ProgramFrameYearDetail = (
                 </div>
               </div> */}
             </Tab.Pane>
-            <Tab.Pane eventKey="episodes">
-              {/* <div>
-                <CustomFormInput
-                  label="Tóm tắt"
-                  as="textarea"
-                  rows="10"
-                  value={scripts}
-                  onChange={(e) => setScripts(e.target.value)}
+            {(id && selected) && (
+            <>
+              <Tab.Pane eventKey="episodes">
+                <DynamicTable 
+                  data={selected.episodes} 
+                  onRowClick={handleRowClick} 
+                  onRowDelete={handleDeleteClick} 
+                  columns={[
+                      { header: "Tập", body: (rowData) => `Tập ${rowData.index}` },
+                      { header: "Ngày phát sóng", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.start)) },
+                      { header: "Tiêu đề", body: (rowData) => (<TextLink text={rowData.title}/>), focus: true },
+                      { header: "Trạng thái", body: (rowData) => (<StatusBox status={rowData.status} />) }          
+                  ]}
                 />
-              </div>
+                {/* <div>
+                  <CustomFormInput
+                    label="Tóm tắt"
+                    as="textarea"
+                    rows="10"
+                    value={scripts}
+                    onChange={(e) => setScripts(e.target.value)}
+                  />
+                </div>
 
-              <div>
-                <label className="form-label">Nội dung kịch bản</label>
-                <ReactQuill
-                  className="large-editor"
-                  theme="snow"
-                  value={cfgForm.content}
-                  onChange={(value) => handleChange("content", value)}
-                  placeholder="Nhập nội dung kịch bản..."
+                <div>
+                  <label className="form-label">Nội dung kịch bản</label>
+                  <ReactQuill
+                    className="large-editor"
+                    theme="snow"
+                    value={cfgForm.content}
+                    onChange={(value) => handleChange("content", value)}
+                    placeholder="Nhập nội dung kịch bản..."
+                  />
+
+                  <BootstrapVideoUploader
+                  mediaUrl={mediaUrl}
+                  onUpload={(url) => setMediaUrl(url)}
                 />
+                </div> */}
+              </Tab.Pane>
 
-                <BootstrapVideoUploader
-                mediaUrl={mediaUrl}
-                onUpload={(url) => setMediaUrl(url)}
-              />
-              </div> */}
-            </Tab.Pane>
+              <Tab.Pane eventKey="permission">
+                <DynamicTable 
+                  data={selected.collaborators} 
+                  onRowClick={handleRowClick} 
+                  onRowDelete={handleDeleteClick} 
+                  columns={[
+                      // { header: "#", body: () => {index} },
+                      { header: "Phòng ban", body: (rowData) => rowData.siteMapName },
+                      { header: "Người dùng", body: (rowData) => rowData.userName, focus: true },
+                      { header: "Phân quyền", body: (rowData) => rowData.permission }       
+                  ]}
+                />
+              </Tab.Pane>
+              
+            </>
 
-            <Tab.Pane eventKey="permission">
 
-            </Tab.Pane>
+            )}
           </Tab.Content>
         </Tab.Container>
 
@@ -202,8 +247,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   get: (id) => dispatch(planActions.get(id)),
   update: (id, data) => dispatch(planActions.update(id, data)),
+  create: (data) => dispatch(planActions.create(data)),
   getSiteMap: () => dispatch(siteMapActions.getList()),
   getChannel: () => dispatch(channelActions.getList()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameYearDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(ProgrammeDetail);

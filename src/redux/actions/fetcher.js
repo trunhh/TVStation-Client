@@ -17,16 +17,17 @@ export const CREATE_REQUEST = 'PLAN_UPDATE_REQUEST'
 export const CREATE_SUCCEED = 'PLAN_CREATE_SUCCEED'
 export const CREATE_FAILED = 'PLAN_CREATE_FAILED'
 
+export const ROOT_PATH = "https://localhost:7031/"
 
 
-const get = (route,id) => async (dispatch) => {
+const getById = (route, id) => async (dispatch) => {
     dispatch({
         type: GET_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: route + '/' + id,
+            url: ROOT_PATH + route + '/' + id,
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -47,32 +48,20 @@ const get = (route,id) => async (dispatch) => {
     }
 };
 
-const getList = (route,query,pageIndex,pageSize) => async (dispatch) => {
+const getList = (route, query) => async (dispatch) => {
     dispatch({
         type: GET_LIST_REQUEST,
     });
 
-    try {
+    let url = ROOT_PATH + route
 
-        const filteredQuery = Object.fromEntries(
-            Object.entries({
-                ...query,
-                startDate: query.startDate
-                    ? new Date(query.startDate).toISOString()
-                    : null,
-                endDate: query.endDate
-                    ? new Date(query.endDate).toISOString()
-                    : null,
-                airdate: query.airdate
-                    ? new Date(query.airdate).toISOString()
-                    : null,
-                pageIndex: (pageIndex > 0) ? pageIndex : 1,
-                pageSize: (pageSize > 0)? pageSize : 10
-            }).filter(([_, value]) => value !== null) // Remove entries with null values
+    try {
+        const filteredQuery = query && Object.fromEntries(
+          Object.entries(query).filter(([_, v]) => v !== null)
         );
         
         const params = new URLSearchParams(filteredQuery);
-        let url = route + '?' + params.toString();
+        url += '?' + params.toString();
 
         const response = await axios.get(url, {
             headers: {
@@ -92,14 +81,14 @@ const getList = (route,query,pageIndex,pageSize) => async (dispatch) => {
     }
 };
 
-const create = (route,object) => async (dispatch) => {
+const create = (object) => async (dispatch) => {
     dispatch({
         type: CREATE_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: route,
+            url: ROOT_PATH + route,
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -121,14 +110,16 @@ const create = (route,object) => async (dispatch) => {
     }
 };
 
-const update = (route,id,object) => async (dispatch) => {
+const update = (id,object) => async (dispatch) => {
     dispatch({
         type: UPDATE_REQUEST,
     });
 
+    console.log(object);
+
     try {
         const response = await axios({
-            url: route + '/' + id,
+            url: ROOT_PATH + route + '/' + id,
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -150,14 +141,14 @@ const update = (route,id,object) => async (dispatch) => {
     }
 };
 
-const remove = (route,id) => async (dispatch) => {
+const remove = (id) => async (dispatch) => {
     dispatch({
         type: DELETE_REQUEST,
     });
 
     try {
         await axios({
-            url: route + '/' + id,
+            url: ROOT_PATH + route + '/' + id,
             method: 'DELETE',
             headers: {
                 Authorization: 'Bearer ' + token,

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ROOT_PATH } from "../constants/apiConstants";
 
-const BootstrapVideoUploader = ({ mediaUrl, onUpload }) => {
+const BootstrapVideoUploader = ({ mediaUrl, onUpload, placeholder, className, type, ...props}) => {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
@@ -32,7 +32,7 @@ const BootstrapVideoUploader = ({ mediaUrl, onUpload }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
-    if (file?.type.startsWith("video/")) {
+    if (file?.type.startsWith(`${type}/`)) {
       uploadVideo(file);
     }
   };
@@ -41,25 +41,23 @@ const BootstrapVideoUploader = ({ mediaUrl, onUpload }) => {
     e.preventDefault();
     setDragOver(false);
     const file = e.dataTransfer.files[0];
-    if (file?.type.startsWith("video/")) {
+    if (file?.type.startsWith(`${type}/`)) {
       uploadVideo(file);
     }
   };
 
   return (
-    <div className="mb-3">
+    <div>
       {mediaUrl ? (
-        <video controls className="w-100 rounded" style={{ height: 360 }}>
-          <source src={ROOT_PATH + mediaUrl} type="video/mp4" />
+        <video controls className={className} {...props}>
+          <source src={ROOT_PATH + mediaUrl} />
           Trình duyệt của bạn không hỗ trợ video.
         </video>
       ) : (
         <div
-          className={`border border-2 rounded d-flex flex-column justify-content-center align-items-center text-muted text-center p-5 ${
-            dragOver ? "border-primary bg-light" : "border-secondary"
-          }`}
-          style={{ height: 300, cursor: "pointer" }}
-          onClick={() => document.getElementById("videoInput").click()}
+          {...props}
+          className={`${className} ${dragOver ? "border-primary bg-light" : ""} border d-flex flex-column justify-content-center align-items-center text-muted text-center`} 
+          onClick={() => document.getElementById("mediaInput").click()}
           onDragOver={(e) => {
             e.preventDefault();
             setDragOver(true);
@@ -71,14 +69,14 @@ const BootstrapVideoUploader = ({ mediaUrl, onUpload }) => {
             <div className="spinner-border text-primary" />
           ) : (
             <>
-              <i className="bi bi-cloud-arrow-up" style={{ fontSize: "2rem" }}></i>
-              <div>Kéo & thả video vào đây hoặc click để chọn</div>
+              <i className="bi bi-cloud-arrow-up fs-1"/>
+              <small>{placeholder}</small>
             </>
           )}
           <input
-            id="videoInput"
+            id="mediaInput"
             type="file"
-            accept="video/*"
+            accept={`${type}/*`}
             hidden
             onChange={handleFileChange}
           />

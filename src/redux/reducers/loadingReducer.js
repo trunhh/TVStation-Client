@@ -1,37 +1,37 @@
 import { CLEAR_ERROR_MESSAGE } from "../actions/viewActions";
 
 const initialState = {
-    isLoading: false,
+    loading: 0,
     errorMessage: null
 };
 
-const viewReducer = (state = initialState, action) => {
+const loadingReducer = (state = initialState, action) => {
     const { type, payload } = action;
 
-    // Generic isLoading logic
+    // Generic loading logic
     if (type.endsWith('_REQUEST')) {
         return { 
             ...state, 
-            isLoading: true,
+            loading: state.loading+1,
             errorMessage: null
         };
     }
     else if (type.endsWith('_FAILED')) {
         return {
             ...state,
-            isLoading: false,
+            loading: state.loading-1,
             errorMessage: payload.data,
         };
     }
     else if (type.endsWith('_SUCCEED')) {
         return { 
             ...state, 
-            isLoading: false ,
+            loading: state.loading-1 ,
             errorMessage: null
         };
     }
 
-    // View-specific logic
+    // loading-specific logic
     switch (type) {
         case CLEAR_ERROR_MESSAGE:
             return {
@@ -46,4 +46,4 @@ const viewReducer = (state = initialState, action) => {
     }
 };
 
-export default viewReducer;
+export default loadingReducer;

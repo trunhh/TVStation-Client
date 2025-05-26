@@ -55,30 +55,12 @@ const getList = (query,pageIndex,pageSize) => async (dispatch) => {
     let url = apiRoute
 
     try {
-        if (query != null) {
-            const filteredQuery = Object.fromEntries(
-            Object.entries({
-                ...query,
-                startDate: query.startDate
-                    ? new Date(query.startDate).toISOString()
-                    : null,
-                endDate: query.endDate
-                    ? new Date(query.endDate).toISOString()
-                    : null,
-                airdate: query.airdate
-                    ? new Date(query.airdate).toISOString()
-                    : null,
-                pageIndex: (pageIndex > 0) ? pageIndex : 1,
-                pageSize: (pageSize > 0)? pageSize : 10
-            }).filter(([_, value]) => value !== null) // Remove entries with null values
+        const filteredQuery = query && Object.fromEntries(
+          Object.entries(query).filter(([_, v]) => v !== null)
         );
         
         const params = new URLSearchParams(filteredQuery);
         url += '?' + params.toString();
-
-        }
-
-        
 
         const response = await axios.get(url, {
             headers: {

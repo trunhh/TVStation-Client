@@ -1,29 +1,32 @@
 import axios from "axios";
-import { USERS_API } from "../../constants/apiConstants";
-
-export const GET_REQUEST = 'USERS_GET_REQUEST'
-export const GET_SUCCEED = 'USERS_GET_SUCCEED'
-export const GET_FAILED =  'USERS_GET_FAILED'
-export const GET_LIST_REQUEST = 'USERS_GET_LIST_REQUEST'
-export const GET_LIST_SUCCEED = 'USERS_GET_LIST_SUCCEED'
-export const GET_LIST_FAILED =  'USERS_GET_LIST_FAILED'
-export const CREATE_REQUEST = 'USERS_CREATE_REQUEST'
-export const CREATE_SUCCEED = 'USERS_CREATE_SUCCEED'
-export const CREATE_FAILED =  'USERS_CREATE_FAILED'
-export const UPDATE_REQUEST = 'UPDATES_USER_REQUEST'
-export const UPDATE_SUCCEED = 'UPDATES_USER_SUCCEED'
-export const UPDATE_FAILED = 'UPDATES_USER_FAILED'
-
 const token = localStorage.getItem('token');
 
-const get = (userName) => async (dispatch) => {
+export const GET_REQUEST = 'EPISODE_GET_REQUEST'
+export const GET_SUCCEED = 'EPISODE_GET_SUCCEED'
+export const GET_FAILED = 'EPISODE_GET_FAILED'
+export const GET_LIST_REQUEST = 'EPISODE_GET_LIST_REQUEST'
+export const GET_LIST_SUCCEED = 'EPISODE_GET_LIST_SUCCEED'
+export const GET_LIST_FAILED = 'EPISODE_GET_LIST_FAILED'
+export const UPDATE_REQUEST = 'EPISODE_UPDATE_REQUEST'
+export const UPDATE_SUCCEED = 'EPISODE_UPDATE_SUCCEED'
+export const UPDATE_FAILED = 'EPISODE_UPDATE_FAILED'
+export const DELETE_REQUEST = 'EPISODE_UPDATE_REQUEST'
+export const DELETE_SUCCEED = 'EPISODE_UPDATE_SUCCEED'
+export const DELETE_FAILED = 'EPISODE_UPDATE_FAILED'
+export const CREATE_REQUEST = 'EPISODE_UPDATE_REQUEST'
+export const CREATE_SUCCEED = 'EPISODE_CREATE_SUCCEED'
+export const CREATE_FAILED = 'EPISODE_CREATE_FAILED'
+
+const apiRoute = "https://localhost:7031/api/Episode"
+
+const get = (id) => async (dispatch) => {
     dispatch({
         type: GET_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: USERS_API + '/' + userName,
+            url: apiRoute + '/' + id,
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -44,13 +47,20 @@ const get = (userName) => async (dispatch) => {
     }
 };
 
-const getList = () => async (dispatch) => {
+const getList = (query,pageIndex,pageSize) => async (dispatch) => {
     dispatch({
         type: GET_LIST_REQUEST,
     });
 
+    let url = apiRoute
+
     try {
-        const response = await axios.get(USERS_API + '/All', {
+        const params = new URLSearchParams(query);
+        url += '?' + params.toString();
+
+        
+
+        const response = await axios.get(url, {
             headers: {
                 Authorization: 'Bearer ' + token,
             },
@@ -68,14 +78,14 @@ const getList = () => async (dispatch) => {
     }
 };
 
-const create = (object) => async (dispatch) => {
+const create = (progId, object) => async (dispatch) => {
     dispatch({
         type: CREATE_REQUEST,
     });
 
     try {
         const response = await axios({
-            url: USERS_API,
+            url: apiRoute + '/' + progId,
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -97,14 +107,16 @@ const create = (object) => async (dispatch) => {
     }
 };
 
-const update = (object) => async (dispatch) => {
+const update = (id,object) => async (dispatch) => {
     dispatch({
         type: UPDATE_REQUEST,
     });
 
+    console.log(object);
+
     try {
         const response = await axios({
-            url: USERS_API,
+            url: apiRoute + '/' + id,
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + token,
@@ -126,12 +138,37 @@ const update = (object) => async (dispatch) => {
     }
 };
 
+const remove = (id) => async (dispatch) => {
+    dispatch({
+        type: DELETE_REQUEST,
+    });
 
+    try {
+        await axios({
+            url: apiRoute + '/' + id,
+            method: 'DELETE',
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json',
+            }
+        });
 
+        dispatch({
+            type: DELETE_SUCCEED,
+            payload: id,
+        });
+    } catch (error) {
+        dispatch({
+            type: DELETE_FAILED,
+            payload: error.response,
+        });
+    }
+};
 
 export default {
     get,
     getList,
     create,
-    update
+    update,
+    remove
 }

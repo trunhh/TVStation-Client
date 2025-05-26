@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import todoActions from '../../redux/actions/todoActions';
-import { TextLink } from '../../_sharecomponents/customrsuite/CustomRsuite';
+import todoActions from '../redux/actions/todoActions';
+import { TextLink } from '../_sharecomponents/customrsuite/CustomRsuite';
 import { useNavigate } from 'react-router-dom';
 import "./ToDoPanel.css"
 const ToDoListPanel = (props) => {

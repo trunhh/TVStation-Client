@@ -21,6 +21,7 @@ const signin = (form) => async(dispatch) => {
         localStorage.setItem('avatarUrl', response.data.avatarUrl)
         localStorage.setItem('email', response.data.email)
         localStorage.setItem('role', response.data.role)
+        localStorage.setItem('siteMapName', response.data.siteMapName)
 
         dispatch({
             type: SIGNIN_SUCCEED,
@@ -43,4 +44,3 @@ const authActions = {
 }
 
 export default authActions;
-    

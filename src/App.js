@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import {Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import routeConstants from './constants/routeConstants';
-import Signin from './pages/signin/Signin';
+import Signin from './pages/Signin';
 import HomePage from './pages/HomePage';
 
-import UserInfo from './pages/userinfo/UserInfo';
-import ProgramFrameYearList from './pages/plan/ProgramFrameYearList';
-import ProgramFrameYearDetail from './pages/plan/ProgramFrameYearDetail';
-import Dashboard from './pages/dashboard/Dashboard';
-import "./App.css"
+import ProgrammeList from './pages/ProgrammeList';
+import ProgrammeDetail from './pages/ProgrammeDetail';
+import EpisodeDetail from './pages/EpisodeDetail';
+import EpisodeList from './pages/EpisodeList';
+import Dashboard from './pages/Dashboard';
+import LoadingOverlay from './components/LoadingOverlay';
+import UserDetail from './pages/UserDetail';
 
 function App() {
     const navigate = useNavigate();
@@ -37,26 +39,33 @@ function App() {
     const isLoggedIn = localStorage.getItem('token');
 
     return (
-        <Routes>
-            {!isLoggedIn ? (
-                <>
-                    <Route path={routeConstants.SIGN_IN} element={<Signin />} />
-                    <Route path="*" element={<Navigate to={routeConstants.SIGN_IN} />} />
-                </>
-            ) : 
-            (
-                <>
-                    {/* <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} /> */}
-                    <Route path="/" element={<HomePage />}>
-                        <Route path="/" element={<Dashboard />} />
-                        <Route path={routeConstants.USER_INFO} element={<UserInfo />} />
-                        <Route path={routeConstants.PROGRAM_FRAME_YEAR} element={<ProgramFrameYearList />} />
-                        <Route path={routeConstants.PROGRAM_FRAME_YEAR_DETAIL} element={<ProgramFrameYearDetail />} />
-                        <Route path={`${routeConstants.PROGRAM_FRAME_YEAR_DETAIL}/:id`} element={<ProgramFrameYearDetail />} />
-                    </Route>
-                </>
-            )}
-        </Routes>
+        <>
+            <LoadingOverlay />
+            <Routes>
+                {!isLoggedIn ? (
+                    <>
+                        <Route path={routeConstants.SIGN_IN} element={<Signin />} />
+                        <Route path="*" element={<Navigate to={routeConstants.SIGN_IN} />} />
+                    </>
+                ) : 
+                (
+                    <>
+                        {/* <Route path={routeConstants.SIGN_IN} element={<Navigate to="/" />} /> */}
+                        <Route path="/" element={<HomePage />}>
+                            <Route path="/" element={<EpisodeList />} />
+                            <Route path={routeConstants.PROGRAMME} element={<ProgrammeList />} />
+                            <Route path={routeConstants.PROGRAMME_DETAIL} element={<ProgrammeDetail />} />
+                            <Route path={`${routeConstants.PROGRAMME_DETAIL}/:id`} element={<ProgrammeDetail />} />
+                            <Route path={routeConstants.EPISODE_DETAIL} element={<EpisodeDetail />} />
+                            <Route path={`${routeConstants.EPISODE_DETAIL}/:id`} element={<EpisodeDetail />} />
+                            <Route path={routeConstants.EPISODE} element={<EpisodeList />} />
+                            <Route path={`${routeConstants.USER_INFO}/:userName`} element={<UserDetail />} />
+                            <Route path={routeConstants.USER_INFO} element={<UserDetail />} />
+                        </Route>
+                    </>
+                )}
+            </Routes>
+        </>
     );
 }
 

@@ -6,15 +6,30 @@ export const menuLinks = [
         link:'/',
     },
     {
+        text: 'Chương trình',
+        link: routeConstants.PROGRAMME,
+    },
+    {
         text: 'Lịch phát sóng',
-        link: routeConstants.PROGRAM_FRAME_YEAR,
+        link: routeConstants.EPISODE,
     },
     {
-        text: 'Báo cáo',
-        link: '/a',
-    },
-    {
-        text: 'Nhân sự',
-        link: '/b',
+        text: 'Quản lý',
+        link: '',
+        subMenu: [
+            {
+                text: 'Phòng ban',
+                link: routeConstants.ADMIN_SITEMAP,
+            },
+            {
+                text: 'Kênh phát sóng',
+                link: routeConstants.ADMIN_CHANNEL,
+            },
+            {
+                text: 'Nhân sự',
+                link: routeConstants.ADMIN_USERS,
+            },
+
+        ]
     }
 ]

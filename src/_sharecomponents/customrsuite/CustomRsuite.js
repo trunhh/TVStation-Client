@@ -117,8 +117,9 @@ export const CustomFormSelect = ({
   required = false,
   ...props
 }) => {
+  const finalLabel = <>{label}{required && <sup className="text-danger"> *</sup>}</>;
   return (
-    <FloatingLabel label={label} controlId={controlId} className={className}>
+    <FloatingLabel label={finalLabel} controlId={controlId} className={className}>
       <Form.Select
           isInvalid={!!error}
           required={required}
@@ -147,8 +148,9 @@ export const CustomFormInput = ({
   className,
   ...props
 }) => {
+  const finalLabel = <>{label}{props.required && <sup className="text-danger"> *</sup>}</>;
   return (
-    <FloatingLabel label={label} controlId={controlId} className={className}>
+    <FloatingLabel label={finalLabel} controlId={controlId} className={className}>
       <Form.Control
         type={type}
         placeholder={placeholder || label}

@@ -29,11 +29,10 @@ const DynamicTable = ({
           {data.map((rowData, index) => (
             <tr 
               key={`row-${index}`}
-              onClick={() => onRowClick(rowData)}
               style={{ cursor: 'pointer' }}
             >
               {columns.map((col, colIndex) => (
-                <td key={`cell-${index}-${colIndex}`}>
+                <td key={`cell-${index}-${colIndex}`}  onClick={col?.focus ? () => onRowClick(rowData) : undefined}>
                   {col.body(rowData)}
                 </td>
               ))}

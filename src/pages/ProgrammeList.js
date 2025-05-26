@@ -1,40 +1,36 @@
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
-import planActions from '../../redux/actions/planActions';
-import siteMapActions from '../../redux/actions/siteMapActions';
-import channelActions from '../../redux/actions/channelActions';
-import usersActions from '../../redux/actions/usersActions';
-import StatusBox from '../../_sharecomponents/statusbox/StatusBox';
+import planActions from '../redux/actions/planActions';
+import siteMapActions from '../redux/actions/siteMapActions';
+import channelActions from '../redux/actions/channelActions';
+import usersActions from '../redux/actions/usersActions';
+import StatusBox from '../_sharecomponents/statusbox/StatusBox';
 import { useNavigate } from 'react-router-dom';
-import { PROGRAM_FRAME_YEAR_DETAIL } from '../../constants/routeConstants';
-import { PAGE_SIZE } from '../../constants/constants';
-import { 
-    CustomDeleteButton,
-    TextLink
-} from '../../_sharecomponents/customrsuite/CustomRsuite';
+import { PROGRAMME_DETAIL } from '../constants/routeConstants';
+import { TextLink } from '../_sharecomponents/customrsuite/CustomRsuite';
 
-import Summary from '../../components/Summary';
-import FilterForm from '../../components/FilterForm';
+import Summary from '../components/Summary';
+import DynamicForm from '../components/DynamicForm';
 import { Collapse } from 'react-bootstrap';
-import { StatusConst } from '../../constants/constants';
-import DynamicTable from '../../components/DynamicTable';
+import { StatusConst } from '../constants/constants';
+import DynamicTable from '../components/DynamicTable';
 
 
-const ProgramFrameYearList = (props) => {
+const ProgrammeList = (props) => {
     const [form, setForm] = useState({
-        status: null,
-        keyword: null,
+        status: "",
+        keyword: "",
         users: null,
-        channel: null,
-        siteMap: null,
+        channelId: null,
+        siteMapId: null,
     });
 
     const navigate = useNavigate();
 
     const fieldProps = {
         status: { data: StatusConst, label: "Trạng thái" },
-        siteMap: { data: props.siteMap, label: "Phòng ban" },
-        channel: { data: props.channel, label: "Kênh phát sóng" },
+        siteMapId: { data: props.siteMap, label: "Phòng ban" },
+        channelId: { data: props.channel, label: "Kênh phát sóng" },
         users: { data: props.users, label: "Người dùng" },
         keyword: { type: "search", label: "Tìm kiếm" }
     }
@@ -48,16 +44,13 @@ const ProgramFrameYearList = (props) => {
     };
 
     const handleRowClick = (rowData) => {
-        navigate(`${PROGRAM_FRAME_YEAR_DETAIL}/${rowData.id}`);
+        navigate(`${PROGRAMME_DETAIL}/${rowData.id}`);
     };
 
     const handleAddButtonClick = () => {
-        navigate(`${PROGRAM_FRAME_YEAR_DETAIL}`);
+        navigate(`${PROGRAMME_DETAIL}`);
     };
-
-    useEffect(() => {
-        props.getList(form, props.pageIndex);
-    }, [form]);
+    
 
     useEffect(() => {
         if (props.isDeleted || props.isUpdated || props.isCreated) {
@@ -72,6 +65,11 @@ const ProgramFrameYearList = (props) => {
         props.getUsers();
     }, []);
 
+    const handleSubmit = (form) => {
+        props.getList(form);
+    }
+    
+
     const [open, setOpen] = useState(false);
 
 
@@ -79,8 +77,6 @@ const ProgramFrameYearList = (props) => {
         <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
             <Summary {...props}/>
 
-
-            {/* Action Buttons */}
             <div className="d-flex justify-content-end gap-2">
                 <a 
                     className="bi bi-filter-circle-fill link-secondary" 
@@ -92,12 +88,10 @@ const ProgramFrameYearList = (props) => {
                     onClick={handleAddButtonClick}
                 />
             </div>
-
-            {/* Filter Form */}
             
             <Collapse in={open}>
                 <div id="collapse-text">
-                    <FilterForm form={form} setForm={setForm} fieldProps={fieldProps}/>
+                    <DynamicForm form={form} setForm={setForm} fieldProps={fieldProps} autoSubmit={true} onSubmit={handleSubmit}/>
                 </div>
             </Collapse>
 
@@ -120,14 +114,13 @@ const mapStateToProps = (state) => {
         ...state.plan,
         siteMap: state.siteMap.list,
         channel: state.channel.list,
-        users: state.users.list,
-        isLoading: state.view.isLoading,
+        users: state.users.list
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (form, pageIndex) => dispatch(planActions.getList(form, pageIndex, PAGE_SIZE)),
+        getList: (form) => dispatch(planActions.getList(form)),
         get: (id) => dispatch(planActions.get(id)),
         remove: (id) => dispatch(planActions.remove(id)),
         getSiteMap: () => dispatch(siteMapActions.getList()),
@@ -136,4 +129,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProgramFrameYearList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProgrammeList);

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import authActions from "../../redux/actions/authActions";
+import authActions from "../redux/actions/authActions";
 import { connect } from 'react-redux';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { THP_Logo } from "../../components/Logo";
+import { THP_Logo } from "../components/Logo";
 
 const Signin = (props) => {
   const [formData, setFormData] = useState({
@@ -23,17 +23,13 @@ const Signin = (props) => {
     });
   };
 
-  // useEffect(() => {
-  //   props.showLoading(props.isLoading);
-  // }, [props.isLoading]);
-
   return (
     <div 
       className="d-flex justify-content-center align-items-center vh-100"
     >
       <div className="bg-white p-5 rounded shadow-lg">
         <div className="text-center mb-3">
-          <THP_Logo/>
+          <THP_Logo size={8}/>
         </div>
 
         <Form onSubmit={handleSubmitForm}>
@@ -76,7 +72,6 @@ const Signin = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.view.isLoading,
     errorMessage: state.auth.errorMessage
   };
 };

@@ -1,6 +1,6 @@
 import React, { useEffect} from 'react';
 import { Routes, Route, Outlet}  from 'react-router-dom';
-import Header from './header/Header';
+import Header from './Header';
 import { connect } from 'react-redux';
 import viewActions from '../redux/actions/viewActions';
 
@@ -29,7 +29,7 @@ const HomePage = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        ...state.view
+        ...state.loading
     }
 }
 
