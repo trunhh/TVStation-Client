@@ -53,7 +53,8 @@ const UserDetail = (
 
   useEffect(() => {
     if (userName) {
-      get();
+      console.log(userName)
+      get(userName);
     } 
   }, [userName]);
 
@@ -71,7 +72,7 @@ const UserDetail = (
   }, [selected]);
 
   const handleSubmit = (form) => {
-    if (userName) update(form);
+    if (userName) update(userName, form);
     //else create(programme.userName, {title, script, mediaUrl, ...cfgForm});
   };
 

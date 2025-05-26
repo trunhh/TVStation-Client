@@ -1,4 +1,5 @@
 export const SIGN_IN = "/SignIn"
+export const SIGN_UP = "/SignUp"
 export const USER_INFO = "/User"
 export const PROGRAMME = "/Programme"
 export const PROGRAMME_DETAIL = "/Programme/Detail"
@@ -44,7 +45,7 @@ export const MenuLinks = [
 ]
 
 export default {
-    SIGN_IN,
+    SIGN_IN, SIGN_UP,
     USER_INFO,
     PROGRAMME, PROGRAMME_DETAIL,
     EPISODE, EPISODE_DETAIL,

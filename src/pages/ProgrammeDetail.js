@@ -157,16 +157,11 @@ const ProgrammeDetail = (
             {(id && selected) && (
             <>
               <Tab.Pane eventKey="episodes">
-                <div className="d-flex justify-content-end gap-2">
-                  <a 
-                      className="bi bi-plus-circle-fill link-secondary"
-                      onClick={handleAddButtonClick}
-                  />
-                </div>
                 <DynamicTable 
                   data={selected.episodes} 
                   onRowClick={handleRowClick} 
                   onRowDelete={handleDeleteClick} 
+                  onAddClick={handleAddButtonClick}
                   columns={[
                       { header: "Tập", body: (rowData) => `Tập ${rowData.index}` },
                       { header: "Ngày phát sóng", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.start)) },

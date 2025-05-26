@@ -10,6 +10,8 @@ import EpisodeDetail from './pages/EpisodeDetail';
 import EpisodeList from './pages/EpisodeList';
 import LoadingOverlay from './components/LoadingOverlay';
 import UserDetail from './pages/UserDetail';
+import UserList from './pages/UserList';
+import SignUp from './pages/SignUp';
 
 function App() {
     const navigate = useNavigate();
@@ -59,7 +61,8 @@ function App() {
                             <Route path={`${routeConstants.EPISODE_DETAIL}/:id`} element={<EpisodeDetail />} />
                             <Route path={routeConstants.EPISODE} element={<EpisodeList />} />
                             <Route path={`${routeConstants.USER_INFO}/:userName`} element={<UserDetail />} />
-                            <Route path={routeConstants.USER_INFO} element={<UserDetail />} />
+                            <Route path={routeConstants.SIGN_UP} element={<SignUp />} />
+                            <Route path={routeConstants.ADMIN_USER} element={<UserList />} />
                         </Route>
                     </>
                 )}

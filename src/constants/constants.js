@@ -16,6 +16,16 @@ export const DurationConst = [
     { value: 2, label: "2 tiếng" },
 ]
 
+
+export const RoleConst = [
+    { value: "ADMIN", label: "Admin" },
+    { value: "DIRECTOR", label: "Giám đốc" },
+    { value: "MANAGER", label: "Quản lý" },
+    { value: "REPORTER",  label: "Phóng viên" },
+    { value: "SCREENWRITER", label: "Biên kịch" },
+    { value: "VIDEOEDITOR", label: "Dựng phim" }
+]
+
 export const DayOfWeekConst1 = [
     { value: "MO", label: "Thứ hai" },
     { value: "TU", label: "Thứ ba" },

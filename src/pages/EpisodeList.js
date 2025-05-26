@@ -41,6 +41,10 @@ const EpisodeList = (props) => {
         props.getChannel();
     }, []);
 
+    useEffect(() => {
+        console.log(props.temp);
+    }, [props.temp]);
+
     const handleSubmit = (form) => {
         if (form.channelId && form.date) props.getList(form);
     }
@@ -68,6 +72,7 @@ const EpisodeList = (props) => {
 const mapStateToProps = (state) => {
     return {
         ...state.episode,
+        temp: state,
         channel: state.channel.list
     }
 }

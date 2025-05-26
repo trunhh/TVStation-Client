@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { PROGRAMME_DETAIL } from '../constants/routeConstants';
 import { TextLink } from '../components/CustomRsuite';
 import DynamicForm from '../components/DynamicForm';
-import { Collapse } from 'react-bootstrap';
 import { StatusConst } from '../constants/constants';
 import DynamicTable from '../components/DynamicTable';
 
@@ -63,41 +62,21 @@ const ProgrammeList = (props) => {
     const handleSubmit = (form) => {
         props.getList(form);
     }
-
-    useEffect(() => {
-        console.log(props.list)
-    }, [props.list]);
     
-
-    const [open, setOpen] = useState(false);
 
 
     return (
         <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
-            <div className="d-flex justify-content-end gap-2">
-                <a 
-                    className="bi bi-filter-circle-fill link-secondary" 
-                    onClick={() => setOpen(!open)} 
-                    aria-controls="collapse-text" 
-                />
-                <a 
-                    className="bi bi-plus-circle-fill link-secondary"
-                    onClick={handleAddButtonClick}
-                />
-            </div>
-            
-            <Collapse in={open}>
-                <div id="collapse-text">
-                    <DynamicForm form={form} setForm={setForm} fieldProps={fieldProps} autoSubmit={true} onSubmit={handleSubmit}/>
-                </div>
-            </Collapse>
+
+            <DynamicForm form={form} setForm={setForm} fieldProps={fieldProps} autoSubmit={true} onSubmit={handleSubmit}/>
 
             <DynamicTable 
                 data={props.list} 
                 onRowClick={handleRowClick} 
                 onRowDelete={handleDeleteClick} 
+                onAddClick={handleAddButtonClick}
                 columns={[
-                    // { header: "Tập tiếp theo", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.startDate)) },
+                    { header: "Tập tiếp theo", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.startDate)) },
                     { header: "Tiêu đề", body: (rowData) => (<TextLink text={rowData.title}/>), focus: true },
                     { header: "Trạng thái", body: (rowData) => (<StatusBox status={rowData.status} />) }          
                 ]}

@@ -138,7 +138,7 @@ const EpisodeDetail = (
 
           <Tab.Content className="py-3">
             <Tab.Pane eventKey="config">
-              <DynamicForm form={cfgForm} setForm={setCfgForm} fieldProps={fieldProps}/>
+              <DynamicForm form={cfgForm} setForm={setCfgForm} fieldProps={fieldProps} onSubmit={handleSubmit}/>
               
               {/* <div className="row">
                 <div className="col-auto">
@@ -175,8 +175,6 @@ const EpisodeDetail = (
                 accept="video/*"
               />)}
             </Tab.Pane>
-
-            <CustomSubmitButton type="button" onClick={handleSubmit} className="ms-auto" />
           </Tab.Content>
         </Tab.Container>
 

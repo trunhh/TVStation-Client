@@ -1,37 +1,23 @@
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
-import planActions from '../redux/actions/planActions';
-import siteMapActions from '../redux/actions/siteMapActions';
-import channelActions from '../redux/actions/channelActions';
-import usersActions from '../redux/actions/usersActions';
-import StatusBox from '../components/StatusBox';
+
+import { userActions, siteMapActions } from '../redux/reduxes';
 import { useNavigate } from 'react-router-dom';
-import { USER_DETAIL } from '../constants/routeConstants';
 import { TextLink } from '../components/CustomRsuite';
-
-import Summary from '../components/Summary';
 import DynamicForm from '../components/DynamicForm';
-import { Collapse } from 'react-bootstrap';
-import { StatusConst } from '../constants/constants';
 import DynamicTable from '../components/DynamicTable';
+import { USER_INFO, SIGN_UP } from '../constants/routeConstants';
 
-
-const UsersList = (props) => {
+const UserList = (props) => {
     const [form, setForm] = useState({
-        status: "",
         keyword: "",
-        users: null,
-        channelId: null,
-        siteId: null,
+        siteMapId: null,
     });
 
     const navigate = useNavigate();
 
     const fieldProps = {
-        status: { data: StatusConst, label: "Trạng thái" },
-        siteId: { data: props.siteMap, label: "Phòng ban" },
-        channelId: { data: props.channel, label: "Kênh phát sóng" },
-        users: { data: props.users, label: "Người dùng" },
+        siteMapId: { data: props.siteMap, label: "Phòng ban" },
         keyword: { type: "search", label: "Tìm kiếm" }
     }
 
@@ -40,15 +26,15 @@ const UsersList = (props) => {
     };
 
     const handleDeleteClick = (item) => {
-        props.remove(item.id);
+        props.remove(item.userName);
     };
 
     const handleRowClick = (rowData) => {
-        navigate(`${USER_DETAIL}/${rowData.id}`);
+        navigate(`${USER_INFO}/${rowData.userName}`);
     };
 
     const handleAddButtonClick = () => {
-        navigate(`${USER_DETAIL}`);
+        navigate(`${SIGN_UP}`);
     };
     
 
@@ -59,10 +45,8 @@ const UsersList = (props) => {
     }, [props.isDeleted, props.isUpdated, props.isCreated]);
 
     useEffect(() => {
-        props.getList(form, props.pageIndex);
+        props.getList(form);
         props.getSiteMap();
-        props.getChannel();
-        props.getUsers();
     }, []);
 
     const handleSubmit = (form) => {
@@ -70,39 +54,22 @@ const UsersList = (props) => {
     }
     
 
-    const [open, setOpen] = useState(false);
-
 
     return (
         <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
-            <Summary {...props}/>
-
-            <div className="d-flex justify-content-end gap-2">
-                <a 
-                    className="bi bi-filter-circle-fill link-secondary" 
-                    onClick={() => setOpen(!open)} 
-                    aria-controls="collapse-text" 
-                />
-                <a 
-                    className="bi bi-plus-circle-fill link-secondary"
-                    onClick={handleAddButtonClick}
-                />
-            </div>
-            
-            <Collapse in={open}>
-                <div id="collapse-text">
-                    <DynamicForm form={form} setForm={setForm} fieldProps={fieldProps} autoSubmit={true} onSubmit={handleSubmit}/>
-                </div>
-            </Collapse>
+            <DynamicForm form={form} setForm={setForm} fieldProps={fieldProps} autoSubmit={true} onSubmit={handleSubmit}/>
 
             <DynamicTable 
-                data={props.list} 
+                data={props.user} 
                 onRowClick={handleRowClick} 
-                onRowDelete={handleDeleteClick} 
+                onRowDelete={handleDeleteClick}
+                onAddClick={handleAddButtonClick}
                 columns={[
-                    { header: "Tập tiếp theo", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.createdDate)) },
-                    { header: "Tiêu đề", body: (rowData) => (<TextLink text={rowData.title}/>), focus: true },
-                    { header: "Trạng thái", body: (rowData) => (<StatusBox status={rowData.status} />) }          
+                    { header: "Username", body: (rowData) => rowData.userName },
+                    { header: "Họ và tên", body: (rowData) => rowData.name, focus: true },     
+                    { header: "Số điện thoại", body: (rowData) => rowData.phoneNumber },
+                    { header: "Email", body: (rowData) => rowData.email },
+
                 ]}
             />
         </section>
@@ -113,20 +80,15 @@ const mapStateToProps = (state) => {
     return {
         ...state.plan,
         siteMap: state.siteMap.list,
-        channel: state.channel.list,
-        users: state.users.list
+        user: state.user.list
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: () => dispatch(usersActions.getList()),
-        get: (id) => dispatch(planActions.get(id)),
-        remove: (id) => dispatch(planActions.remove(id)),
+        getList: (form) => dispatch(userActions.getList(form)),
         getSiteMap: () => dispatch(siteMapActions.getList()),
-        getChannel: () => dispatch(channelActions.getList()),
-        getUsers: () => dispatch(usersActions.getList()),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersList);
+export default connect(mapStateToProps, mapDispatchToProps)(UserList);

@@ -54,8 +54,8 @@ const DynamicForm = ({
       })}
 
       {!autoSubmit && (
-        <div className="mt-3">
-          <Button variant="primary" type="submit">
+        <div className="w-100">
+          <Button variant="primary" type="submit" className="w-100">
             Lưu
           </Button>
         </div>
