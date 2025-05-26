@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import userActions from '../redux/actions/userActions';
 import { Tab, Nav } from 'react-bootstrap';
 import DynamicForm from '../components/DynamicForm';
-import siteMapActions from '../redux/actions/siteMapActions';
 import BootstrapVideoUploader from '../components/BootstrapVideoUploader';
+import { userActions, siteMapActions } from '../redux/reduxes';
+import { updatePassword } from '../redux/authActions';
 
 const role = localStorage.getItem('role');
 const siteMapName = localStorage.getItem('siteMapName');
@@ -13,7 +13,7 @@ const myUserName = localStorage.getItem('userName');
 
 const UserDetail = (
   {
-    user,
+    selected,
     get, update, updatePassword,
     getSiteMap,
     ...props 
@@ -58,17 +58,17 @@ const UserDetail = (
   }, [userName]);
 
   useEffect(() => {
-    if (user) {
-      console.log(user)
+    if (selected) {
+      console.log(selected)
       setCfgForm((prev) => ({
         ...prev,
-        name: user.name,
-        email: user.email,
-        phoneNumber: user.phoneNumber
+        name: selected.name,
+        email: selected.email,
+        phoneNumber: selected.phoneNumber
       }));
-      setMediaUrl(user.mediaUrl);
+      setMediaUrl(selected.mediaUrl);
     }
-  }, [user]);
+  }, [selected]);
 
   const handleSubmit = (form) => {
     if (userName) update(form);
@@ -113,7 +113,7 @@ const UserDetail = (
             </Tab.Pane>
 
             <Tab.Pane eventKey="password">
-            {(userName && user) && (
+            {(userName && selected) && (
               <div className="d-flex">
                 <DynamicForm form={pwdForm} setForm={setPwdForm} fieldProps={pwFieldProps} onSubmit={handleSubmitPassword}/>
               </div>
@@ -126,14 +126,14 @@ const UserDetail = (
 };
 
 const mapStateToProps = (state) => ({
-  siteMap: state.siteMap.user,
+  siteMap: state.siteMap.list,
   ...state.user
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  get: () => dispatch(userActions.get()),
-  update: (data) => dispatch(userActions.update(data)),
-  updatePassword: (data) => dispatch(userActions.updatePassword(data)),
+  get: (userName) => dispatch(userActions.get(userName)),
+  update: (userName,data) => dispatch(userActions.update(userName,data)),
+  updatePassword: (data) => dispatch(updatePassword(data)),
   getSiteMap: () => dispatch(siteMapActions.getList())
 });
 
