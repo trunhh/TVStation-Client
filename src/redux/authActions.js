@@ -46,7 +46,7 @@ export const signin = (form) => async(dispatch) => {
 
 export const updatePassword = (formData) => async (dispatch) => {
     dispatch({
-        type: UPDATE_REQUEST,
+        type: CHANGE_PASSWORD_REQUEST,
     });
 
     try {
@@ -61,13 +61,13 @@ export const updatePassword = (formData) => async (dispatch) => {
         });
 
         dispatch({
-            type: UPDATE_SUCCEED,
+            type: CHANGE_PASSWORD_SUCCEED,
             payload: response.data,
         });
 
     } catch (error) {
         dispatch({
-            type: UPDATE_FAILED,
+            type: CHANGE_PASSWORD_FAILED,
             payload: error.response
         });
     }

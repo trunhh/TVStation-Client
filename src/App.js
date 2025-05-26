@@ -8,7 +8,6 @@ import ProgrammeList from './pages/ProgrammeList';
 import ProgrammeDetail from './pages/ProgrammeDetail';
 import EpisodeDetail from './pages/EpisodeDetail';
 import EpisodeList from './pages/EpisodeList';
-import Dashboard from './pages/Dashboard';
 import LoadingOverlay from './components/LoadingOverlay';
 import UserDetail from './pages/UserDetail';
 

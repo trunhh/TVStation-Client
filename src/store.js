@@ -10,7 +10,6 @@ const rootReducer = combineReducers({
     programme: programmeReducer,
     siteMap: siteMapReducer,
     channel: channelReducer,
-    todo: todoReducer,
     episode: episodeReducer
 })
 

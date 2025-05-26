@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { channelActions, episodeActions } from '../redux/reduxes';
-import StatusBox from '../_sharecomponents/statusbox/StatusBox';
+import StatusBox from '../components/StatusBox';
 import { useNavigate } from 'react-router-dom';
 import { EPISODE_DETAIL } from '../constants/routeConstants';
-import { TextLink } from '../_sharecomponents/customrsuite/CustomRsuite';
+import { TextLink } from '../components/CustomRsuite';
 import DynamicForm from '../components/DynamicForm';
 import DynamicTable from '../components/DynamicTable';
 

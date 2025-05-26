@@ -16,11 +16,11 @@ export const MenuLinks = [
     },
     {
         text: 'Chương trình',
-        link: routeConstants.PROGRAMME,
+        link: PROGRAMME,
     },
     {
         text: 'Lịch phát sóng',
-        link: routeConstants.EPISODE,
+        link: EPISODE,
     },
     {
         text: 'Quản lý',
@@ -28,15 +28,15 @@ export const MenuLinks = [
         subMenu: [
             {
                 text: 'Phòng ban',
-                link: routeConstants.ADMIN_SITEMAP,
+                link: ADMIN_SITEMAP,
             },
             {
                 text: 'Kênh phát sóng',
-                link: routeConstants.ADMIN_CHANNEL,
+                link: ADMIN_CHANNEL,
             },
             {
                 text: 'Nhân sự',
-                link: routeConstants.ADMIN_USER,
+                link: ADMIN_USER,
             },
 
         ]

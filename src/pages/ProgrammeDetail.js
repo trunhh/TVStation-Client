@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createSelector } from 'reselect';
 import { programmeActions, siteMapActions, episodeActions, channelActions } from '../redux/reduxes';
-import StatusBox from '../_sharecomponents/statusbox/StatusBox';
+import StatusBox from '../components/StatusBox';
 import {
   TextLink,
   CustomSubmitButton
-} from '../_sharecomponents/customrsuite/CustomRsuite';
+} from '../components/CustomRsuite';
 import { Tab, Nav } from 'react-bootstrap';
 import DynamicForm from '../components/DynamicForm';
 import { DurationConst, DayOfWeekConst } from '../constants/constants';

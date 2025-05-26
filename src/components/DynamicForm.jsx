@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { CustomFormInput } from '../_sharecomponents/customrsuite/CustomRsuite';
-import { CustomFormSelect } from '../_sharecomponents/customrsuite/CustomRsuite';
+import { CustomFormInput } from './CustomRsuite';
+import { CustomFormSelect } from './CustomRsuite';
 import { Form, Button } from 'react-bootstrap';
 
 const DynamicForm = ({ 

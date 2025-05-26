@@ -4,10 +4,10 @@ import planActions from '../redux/actions/planActions';
 import siteMapActions from '../redux/actions/siteMapActions';
 import channelActions from '../redux/actions/channelActions';
 import usersActions from '../redux/actions/usersActions';
-import StatusBox from '../_sharecomponents/statusbox/StatusBox';
+import StatusBox from '../components/StatusBox';
 import { useNavigate } from 'react-router-dom';
 import { USER_DETAIL } from '../constants/routeConstants';
-import { TextLink } from '../_sharecomponents/customrsuite/CustomRsuite';
+import { TextLink } from '../components/CustomRsuite';
 
 import Summary from '../components/Summary';
 import DynamicForm from '../components/DynamicForm';

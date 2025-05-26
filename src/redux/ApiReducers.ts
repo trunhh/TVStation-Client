@@ -24,7 +24,6 @@ export default class ApiReducers {
 
       // Get list
       case this.dispatchType.getList.succeed:
-        console.log(action.payload);
         return {
           ...state,
           list: action.payload,

@@ -1,4 +1,4 @@
-import { ActionConst, RoleActionConst} from '../../constants/constants';
+import { ActionConst, RoleActionConst} from '../constants/constants';
 import React, { useState, forwardRef } from 'react';
 
 

@@ -1,4 +1,4 @@
-import { CustomDeleteButton } from "../_sharecomponents/customrsuite/CustomRsuite";
+import { CustomDeleteButton } from "./CustomRsuite";
 
 const DynamicTable = ({ 
   data = [], 

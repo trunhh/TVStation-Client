@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { programmeActions, siteMapActions, channelActions, userActions } from '../redux/reduxes';
-import StatusBox from '../_sharecomponents/statusbox/StatusBox';
+import StatusBox from '../components/StatusBox';
 import { useNavigate } from 'react-router-dom';
 import { PROGRAMME_DETAIL } from '../constants/routeConstants';
-import { TextLink } from '../_sharecomponents/customrsuite/CustomRsuite';
+import { TextLink } from '../components/CustomRsuite';
 import DynamicForm from '../components/DynamicForm';
 import { Collapse } from 'react-bootstrap';
 import { StatusConst } from '../constants/constants';
@@ -63,6 +63,10 @@ const ProgrammeList = (props) => {
     const handleSubmit = (form) => {
         props.getList(form);
     }
+
+    useEffect(() => {
+        console.log(props.list)
+    }, [props.list]);
     
 
     const [open, setOpen] = useState(false);
@@ -93,7 +97,7 @@ const ProgrammeList = (props) => {
                 onRowClick={handleRowClick} 
                 onRowDelete={handleDeleteClick} 
                 columns={[
-                    { header: "Tập tiếp theo", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.createdDate)) },
+                    // { header: "Tập tiếp theo", body: (rowData) => new Intl.DateTimeFormat('en-GB').format(new Date(rowData.startDate)) },
                     { header: "Tiêu đề", body: (rowData) => (<TextLink text={rowData.title}/>), focus: true },
                     { header: "Trạng thái", body: (rowData) => (<StatusBox status={rowData.status} />) }          
                 ]}

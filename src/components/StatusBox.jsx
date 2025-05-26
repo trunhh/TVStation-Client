@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusConst } from '../../constants/constants';
+import { StatusConst } from '../constants/constants';
 
 const StatusBox = ({ status }) => {
     if (!status) return null;
