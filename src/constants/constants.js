@@ -15,17 +15,6 @@ export const StatusConst = [
     { value: "CANCELLED", label: "Đã hủy", style: "danger" },
 ];
 
-export const SectorConst = [
-    { value: "NEWS", label: "Bản tin" },
-    { value: "PROGRAM", label: "Chương trình" },
-    { value: "WEATHER_FORECAST", label: "Dự báo thời tiết" },
-    { value: "MOVIE", label: "Phim lẻ" },
-    { value: "TV_SHOWS", label: "Phim bộ" },
-    { value: "DOCUMENTARY", label: "Phim tài liệu" },
-    { value: "REPORTS", label: "Phóng sự" },
-    { value: "PROMOTION", label: "Quảng cáo" }
-]
-
 export const DurationConst = [
     { value: 0.25, label: "15 phút" },
     { value: 0.5, label: "Nửa tiếng" },

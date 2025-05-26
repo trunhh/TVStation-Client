@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container, NavDropdown, Overlay, Popover, ListGroup } from "react-bootstrap";
-import { menuLinks } from '../data/data';
+import { MenuLinks } from '../constants/routeConstants';
 import { USER_INFO, SIGN_IN } from '../constants/routeConstants';
 import { THP_Logo } from '../components/Logo';
 
@@ -30,7 +30,7 @@ const Header = (props) => {
                 
                 <Navbar.Collapse id="navbar-nav">
                     <Nav className="fw-bold text-uppercase me-auto">
-                        {menuLinks.map(({ text, link, subMenu }) => (
+                        {MenuLinks.map(({ text, link, subMenu }) => (
                             subMenu ? (
                                 <NavDropdown title={text} id={`dropdown-${link}`} key={text} >
                                     {subMenu.map(({ text: subText, link: subLink }) => (

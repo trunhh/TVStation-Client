@@ -1,15 +1,10 @@
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
-import planActions from '../redux/actions/planActions';
-import siteMapActions from '../redux/actions/siteMapActions';
-import channelActions from '../redux/actions/channelActions';
-import usersActions from '../redux/actions/usersActions';
+import { programmeActions, siteMapActions, channelActions, userActions } from '../redux/reduxes';
 import StatusBox from '../_sharecomponents/statusbox/StatusBox';
 import { useNavigate } from 'react-router-dom';
 import { PROGRAMME_DETAIL } from '../constants/routeConstants';
 import { TextLink } from '../_sharecomponents/customrsuite/CustomRsuite';
-
-import Summary from '../components/Summary';
 import DynamicForm from '../components/DynamicForm';
 import { Collapse } from 'react-bootstrap';
 import { StatusConst } from '../constants/constants';
@@ -20,7 +15,7 @@ const ProgrammeList = (props) => {
     const [form, setForm] = useState({
         status: "",
         keyword: "",
-        users: null,
+        userName: null,
         channelId: null,
         siteMapId: null,
     });
@@ -31,7 +26,7 @@ const ProgrammeList = (props) => {
         status: { data: StatusConst, label: "Trạng thái" },
         siteMapId: { data: props.siteMap, label: "Phòng ban" },
         channelId: { data: props.channel, label: "Kênh phát sóng" },
-        users: { data: props.users, label: "Người dùng" },
+        userName: { data: props.user, label: "Người dùng" },
         keyword: { type: "search", label: "Tìm kiếm" }
     }
 
@@ -62,7 +57,7 @@ const ProgrammeList = (props) => {
         props.getList(form, props.pageIndex);
         props.getSiteMap();
         props.getChannel();
-        props.getUsers();
+        props.getUser();
     }, []);
 
     const handleSubmit = (form) => {
@@ -75,8 +70,6 @@ const ProgrammeList = (props) => {
 
     return (
         <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
-            <Summary {...props}/>
-
             <div className="d-flex justify-content-end gap-2">
                 <a 
                     className="bi bi-filter-circle-fill link-secondary" 
@@ -111,21 +104,21 @@ const ProgrammeList = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        ...state.plan,
+        ...state.programme,
         siteMap: state.siteMap.list,
         channel: state.channel.list,
-        users: state.users.list
+        user: state.user.list
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getList: (form) => dispatch(planActions.getList(form)),
-        get: (id) => dispatch(planActions.get(id)),
-        remove: (id) => dispatch(planActions.remove(id)),
+        getList: (form) => dispatch(programmeActions.getList(form)),
+        get: (id) => dispatch(programmeActions.get(id)),
+        remove: (id) => dispatch(programmeActions.remove(id)),
         getSiteMap: () => dispatch(siteMapActions.getList()),
         getChannel: () => dispatch(channelActions.getList()),
-        getUsers: () => dispatch(usersActions.getList()),
+        getUser: () => dispatch(userActions.getList()),
     }
 }
 

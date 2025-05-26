@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import authActions from "../redux/actions/authActions";
+import { signin } from "../redux/authActions";
 import { connect } from 'react-redux';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -58,9 +58,6 @@ const Signin = (props) => {
               />
             </InputGroup>
           </Form.Group>
-
-          <p className="text-danger">{props.errorMessage}</p>
-
           <Button variant="primary" type="submit" className="w-100">
             Đăng nhập
           </Button>
@@ -70,16 +67,11 @@ const Signin = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    errorMessage: state.auth.errorMessage
-  };
-};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signin: (formData) => dispatch(authActions.signin(formData))
+    signin: (formData) => dispatch(signin(formData))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+export default connect(null, mapDispatchToProps)(Signin);

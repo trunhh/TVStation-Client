@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createSelector } from 'reselect';
-import episodeActions from '../redux/actions/episodeActions';
+import { episodeActions } from '../redux/reduxes';
 import StatusBox from '../_sharecomponents/statusbox/StatusBox';
 import { CustomFormInput } from '../_sharecomponents/customrsuite/CustomRsuite';
 import { CustomSubmitButton } from '../_sharecomponents/customrsuite/CustomRsuite';
@@ -186,7 +186,7 @@ const EpisodeDetail = (
 
 const mapStateToProps = (state) => ({
   selected: selectEpisode(state),
-  defaultProgramme: state.plan.selected,
+  defaultProgramme: state.programme.selected,
   ...state.episode
 });
 

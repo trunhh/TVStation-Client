@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ROOT_PATH } from "../constants/apiConstants";
 
 const BootstrapVideoUploader = ({ mediaUrl, onUpload, placeholder, className, type, ...props}) => {
   const [uploading, setUploading] = useState(false);
@@ -11,7 +10,7 @@ const BootstrapVideoUploader = ({ mediaUrl, onUpload, placeholder, className, ty
 
     try {
       setUploading(true);
-      console.log(formData);
+
       const res = await fetch("https://localhost:7031/api/Media/upload", {
         method: "POST",
         body: formData,
@@ -50,7 +49,7 @@ const BootstrapVideoUploader = ({ mediaUrl, onUpload, placeholder, className, ty
     <div>
       {mediaUrl ? (
         <video controls className={className} {...props}>
-          <source src={ROOT_PATH + mediaUrl} />
+          <source src={"https://localhost:7031/" + mediaUrl} />
           Trình duyệt của bạn không hỗ trợ video.
         </video>
       ) : (

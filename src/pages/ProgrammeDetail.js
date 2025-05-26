@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createSelector } from 'reselect';
-import planActions from '../redux/actions/planActions';
+import { programmeActions, siteMapActions, episodeActions, channelActions } from '../redux/reduxes';
 import StatusBox from '../_sharecomponents/statusbox/StatusBox';
 import {
   TextLink,
@@ -10,17 +10,14 @@ import {
 } from '../_sharecomponents/customrsuite/CustomRsuite';
 import { Tab, Nav } from 'react-bootstrap';
 import DynamicForm from '../components/DynamicForm';
-import siteMapActions from '../redux/actions/siteMapActions';
-import channelActions from '../redux/actions/channelActions';
 import { DurationConst, DayOfWeekConst } from '../constants/constants';
 import DynamicTable from '../components/DynamicTable';
 import { EPISODE_DETAIL, PROGRAMME } from '../constants/routeConstants';
-import episodeActions from '../redux/actions/episodeActions';
 
 // Redux selector
 const selectPlan = createSelector(
-  (state) => state.plan,
-  (planState) => planState.selected
+  (state) => state.programme,
+  (programmeState) => programmeState.selected
 );
 
 const role = localStorage.getItem('role');
@@ -207,13 +204,13 @@ const mapStateToProps = (state) => ({
   selected: selectPlan(state),
   siteMap: state.siteMap.list,
   channel: state.channel.list,
-  ...state.plan
+  ...state.programme
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  get: (id) => dispatch(planActions.get(id)),
-  update: (id, data) => dispatch(planActions.update(id, data)),
-  create: (data) => dispatch(planActions.create(data)),
+  get: (id) => dispatch(programmeActions.get(id)),
+  update: (id, data) => dispatch(programmeActions.update(id, data)),
+  create: (data) => dispatch(programmeActions.create(data)),
   deleteEpisode: (id) => dispatch(episodeActions.remove(id)),
   getSiteMap: () => dispatch(siteMapActions.getList()),
   getChannel: () => dispatch(channelActions.getList()),

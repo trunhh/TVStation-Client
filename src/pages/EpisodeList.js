@@ -1,13 +1,10 @@
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
-import episodeActions from '../redux/actions/episodeActions';
-import channelActions from '../redux/actions/channelActions';
+import { channelActions, episodeActions } from '../redux/reduxes';
 import StatusBox from '../_sharecomponents/statusbox/StatusBox';
 import { useNavigate } from 'react-router-dom';
 import { EPISODE_DETAIL } from '../constants/routeConstants';
 import { TextLink } from '../_sharecomponents/customrsuite/CustomRsuite';
-
-import Summary from '../components/Summary';
 import DynamicForm from '../components/DynamicForm';
 import DynamicTable from '../components/DynamicTable';
 
@@ -52,9 +49,6 @@ const EpisodeList = (props) => {
 
     return (
         <section className="d-flex flex-column mx-auto px-3 py-5 my-5 row-gap-3 bg-white shadow-lg rounded">
-            <Summary {...props}/>
-
-
             <DynamicForm form={form} setForm={setForm} fieldProps={fieldProps} onSubmit={handleSubmit} autoSubmit/>
 
             <DynamicTable 

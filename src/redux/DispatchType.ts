@@ -1,4 +1,4 @@
-class DispatchType {
+export default class DispatchType {
   private prefix: string;
 
   constructor(prefix: string) {

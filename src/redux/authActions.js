@@ -4,9 +4,13 @@ import axios from "axios";
 export const SIGNIN_REQUEST = 'SIGNIN_REQUEST'
 export const SIGNIN_SUCCEED = 'SIGNIN_SUCCEED'
 export const SIGNIN_FAILED = 'SIGNIN_FAILED'
+export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST'
+export const CHANGE_PASSWORD_SUCCEED = 'CHANGE_PASSWORD_SUCCEED'
+export const CHANGE_PASSWORD_FAILED = 'CHANGE_PASSWORD_FAILED'
 
+const token = localStorage.getItem('token');
 
-const signin = (form) => async(dispatch) => {
+export const signin = (form) => async(dispatch) => {
     dispatch({
         type: SIGNIN_REQUEST
     })
@@ -32,6 +36,7 @@ const signin = (form) => async(dispatch) => {
 
     }catch (error) {
         console.log(error);
+        alert(error)
         dispatch({
             type: SIGNIN_FAILED,
             payload: error.response
@@ -39,8 +44,31 @@ const signin = (form) => async(dispatch) => {
     }
 }
 
-const authActions = {
-    signin
-}
+export const updatePassword = (formData) => async (dispatch) => {
+    dispatch({
+        type: UPDATE_REQUEST,
+    });
 
-export default authActions;
+    try {
+        const response = await axios({
+            url: 'https://localhost:7031/api/Auth/Password',
+            method: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + token,
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify(formData),
+        });
+
+        dispatch({
+            type: UPDATE_SUCCEED,
+            payload: response.data,
+        });
+
+    } catch (error) {
+        dispatch({
+            type: UPDATE_FAILED,
+            payload: error.response
+        });
+    }
+};
