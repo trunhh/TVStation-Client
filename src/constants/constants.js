@@ -27,13 +27,13 @@ export const RoleConst = [
 ]
 
 export const DayOfWeekConst = [
-    { value: "MO", label: "Thứ hai" },
-    { value: "TU", label: "Thứ ba" },
-    { value: "WE", label: "Thứ tư" },
-    { value: "TH", label: "Thứ năm" },
-    { value: "FR", label: "Thứ sáu" },
-    { value: "SA", label: "Thứ bảy" },
-    { value: "SU", label: "Chủ nhật" },
+    { value: "Monday", label: "Thứ hai" },
+    { value: "Tuesday", label: "Thứ ba" },
+    { value: "Wednesday", label: "Thứ tư" },
+    { value: "Thursday", label: "Thứ năm" },
+    { value: "Friday", label: "Thứ sáu" },
+    { value: "Saturday", label: "Thứ bảy" },
+    { value: "Sunday", label: "Chủ nhật" },
 ]
 
 export const DayOfWeekConst1 = ({id}) => {
