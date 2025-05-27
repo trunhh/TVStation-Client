@@ -26,7 +26,7 @@ export const RoleConst = [
     { value: "VIDEOEDITOR", label: "Dựng phim" }
 ]
 
-export const DayOfWeekConst1 = [
+export const DayOfWeekConst = [
     { value: "MO", label: "Thứ hai" },
     { value: "TU", label: "Thứ ba" },
     { value: "WE", label: "Thứ tư" },
@@ -36,7 +36,7 @@ export const DayOfWeekConst1 = [
     { value: "SU", label: "Chủ nhật" },
 ]
 
-export const DayOfWeekConst = ({id}) => {
+export const DayOfWeekConst1 = ({id}) => {
   return (
     <datalist id = {id}>
       <option value="Monday">Thứ Hai</option>

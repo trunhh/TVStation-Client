@@ -101,10 +101,9 @@ const EpisodeDetail = (
 
 
   return (
-    <section className="container bg-white shadow-lg rounded p-4 my-5">
+    <section className="container bg-white shadow-lg rounded p-4 my-5 gap-3">
 
-      
-        <Tab.Container defaultActiveKey="config">
+    
           <div className="row align-items-center">
             <div className="col-auto pe-0">
               <StatusBox status={selected?.status} />
@@ -118,65 +117,32 @@ const EpisodeDetail = (
                 value={title}
                 onChange={(e) => handleTitleChange(e)}
               />
-              {programme?.name}
+              <small className='text-muted ps-1'>@{programme?.name}</small>
             </div>
           </div>
 
-          <Nav variant="tabs">
-            <Nav.Item>
-              <Nav.Link eventKey="config">Tổng quan</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="script">Kịch bản</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="media">Media</Nav.Link>
-            </Nav.Item>
-          </Nav>
+          {(id && selected) && (
+          <BootstrapVideoUploader
+            mediaUrl={mediaUrl}
+            onUpload={(url) => setMediaUrl(url)}
+            className="w-100 rounded fixed-height mb-3"
+            placeholder="Kéo & thả video vào đây hoặc click để chọn"
+            accept="video/*"
+          />)}
 
-
-
-          <Tab.Content className="py-3">
-            <Tab.Pane eventKey="config">
-              <DynamicForm form={cfgForm} setForm={setCfgForm} fieldProps={fieldProps} onSubmit={handleSubmit}/>
-              
-              {/* <div className="row">
-                <div className="col-auto">
-                  <CustomApproveButton
-                    role={role}
-                    status={selected?.status}
-                    type="button"
-                    onClick={handleApprove}
-                  />
-                </div>
-              </div> */}
-            </Tab.Pane>
-
-            <Tab.Pane eventKey="script">
-            {(id && selected) && (
-                <div>
-                  <CustomFormInput
-                    label="Tóm tắt"
-                    as="textarea"
-                    rows="10"
-                    value={script}
-                    onChange={(e) => setScript(e.target.value)}
-                  />
-                </div>)}
-            </Tab.Pane>
-
-            <Tab.Pane eventKey="media">
               {(id && selected) && (
-              <BootstrapVideoUploader
-                mediaUrl={mediaUrl}
-                onUpload={(url) => setMediaUrl(url)}
-                className="w-100 rounded fixed-height"
-                placeholder="Kéo & thả video vào đây hoặc click để chọn"
-                accept="video/*"
-              />)}
-            </Tab.Pane>
-          </Tab.Content>
-        </Tab.Container>
+                  <div className="mb-3">
+                    <CustomFormInput
+                      label="Tóm tắt"
+                      as="textarea"
+                      rows="10"
+                      value={script}
+                      onChange={(e) => setScript(e.target.value)}
+                    />
+                  </div>)}
+              <DynamicForm form={cfgForm} setForm={setCfgForm} fieldProps={fieldProps} onSubmit={handleSubmit}/>
+
+
 
     </section>
   );

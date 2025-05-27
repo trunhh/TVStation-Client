@@ -5,9 +5,7 @@ export const PROGRAMME = "/Programme"
 export const PROGRAMME_DETAIL = "/Programme/Detail"
 export const EPISODE = "/Episode"
 export const EPISODE_DETAIL = "/Episode/Detail"
-export const ADMIN = "/Admin"
-export const ADMIN_SITEMAP = "/Admin/SiteMap"
-export const ADMIN_CHANNEL = "/Admin/Channel"
+export const ADMIN = "/Admin/General"
 export const ADMIN_USER = "/Admin/User"
 
 export const MenuLinks = [
@@ -28,12 +26,8 @@ export const MenuLinks = [
         link: '',
         subMenu: [
             {
-                text: 'Phòng ban',
-                link: ADMIN_SITEMAP,
-            },
-            {
-                text: 'Kênh phát sóng',
-                link: ADMIN_CHANNEL,
+                text: 'Chung',
+                link: ADMIN,
             },
             {
                 text: 'Nhân sự',
@@ -49,5 +43,5 @@ export default {
     USER_INFO,
     PROGRAMME, PROGRAMME_DETAIL,
     EPISODE, EPISODE_DETAIL,
-    ADMIN_SITEMAP, ADMIN_CHANNEL, ADMIN_USER
+    ADMIN, ADMIN_USER
 }

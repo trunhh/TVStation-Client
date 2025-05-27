@@ -12,6 +12,7 @@ import LoadingOverlay from './components/LoadingOverlay';
 import UserDetail from './pages/UserDetail';
 import UserList from './pages/UserList';
 import SignUp from './pages/SignUp';
+import Admin from './pages/Admin';
 
 function App() {
     const navigate = useNavigate();
@@ -62,6 +63,7 @@ function App() {
                             <Route path={routeConstants.EPISODE} element={<EpisodeList />} />
                             <Route path={`${routeConstants.USER_INFO}/:userName`} element={<UserDetail />} />
                             <Route path={routeConstants.SIGN_UP} element={<SignUp />} />
+                            <Route path={routeConstants.ADMIN} element={<Admin />} />
                             <Route path={routeConstants.ADMIN_USER} element={<UserList />} />
                         </Route>
                     </>

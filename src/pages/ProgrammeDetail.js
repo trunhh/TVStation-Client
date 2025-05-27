@@ -26,7 +26,7 @@ const ProgrammeDetail = (
   { 
     selected, 
     get, create, update,
-    deleteEpisode,
+    deleteEpisode, createEpisode, episodeCreated,
     getChannel, getSiteMap,
     siteMap, channel, 
     ...props 
@@ -38,9 +38,9 @@ const ProgrammeDetail = (
   const nullForm = {
     startDate: new Date(),
     startTime: "00:00:00",
-    duration: 1,
     siteMapId: null,
     channelId: null,
+    duration: 1,
     frequency: null,
     episodeNumber: 0,
   };
@@ -48,7 +48,7 @@ const ProgrammeDetail = (
 
   const fieldProps = {
     duration: { data: DurationConst, label: "Thời lượng", disabled: (id != null) },
-    frequency: { type: "email", required: true, list: "iw", multiple: true, children: (<DayOfWeekConst id="iw"/>), label: "Lặp lại", disabled: (id != null) },
+    frequency: { data: DayOfWeekConst, required: true, label: "Lặp lại", disabled: (id != null) },
     siteMapId: { data: siteMap, label: "Phòng ban" },
     channelId: { data: channel, label: "Kênh phát sóng" },
     startDate: { type: "date", label: "Ngày khởi chiếu", required: true},
@@ -69,6 +69,13 @@ const ProgrammeDetail = (
     }
     
   }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      get(id);
+    }
+    
+  }, [episodeCreated]);
 
   useEffect(() => {
     if (selected) {
@@ -107,7 +114,7 @@ const ProgrammeDetail = (
   };
   
   const handleAddButtonClick = () => {
-      navigate(`${EPISODE_DETAIL}`);
+      createEpisode( {value: id});
   };
 
   const handleTitleChange = (e) => {
@@ -199,6 +206,7 @@ const mapStateToProps = (state) => ({
   selected: selectPlan(state),
   siteMap: state.siteMap.list,
   channel: state.channel.list,
+  episodeCreated: state.episode.isCreated,
   ...state.programme
 });
 
@@ -206,6 +214,7 @@ const mapDispatchToProps = (dispatch) => ({
   get: (id) => dispatch(programmeActions.get(id)),
   update: (id, data) => dispatch(programmeActions.update(id, data)),
   create: (data) => dispatch(programmeActions.create(data)),
+  createEpisode: (data) => dispatch(episodeActions.create(data)),
   deleteEpisode: (id) => dispatch(episodeActions.remove(id)),
   getSiteMap: () => dispatch(siteMapActions.getList()),
   getChannel: () => dispatch(channelActions.getList()),
