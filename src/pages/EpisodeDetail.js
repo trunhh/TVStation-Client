@@ -127,7 +127,7 @@ const EpisodeDetail = (
             onUpload={(url) => setMediaUrl(url)}
             className="w-100 rounded fixed-height mb-3"
             placeholder="Kéo & thả video vào đây hoặc click để chọn"
-            accept="video/*"
+            type="video"
           />)}
 
               {(id && selected) && (
